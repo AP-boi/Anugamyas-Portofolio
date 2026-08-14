@@ -100,7 +100,10 @@ export const ProjectsApp: React.FC = () => {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <span className="text-xs font-semibold text-slate-900">Projects & Architecture</span>
+          <div className="flex items-center space-x-1.5">
+            <img src="/icons/finder.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
+            <span className="text-xs font-semibold text-slate-900">Projects & Architecture</span>
+          </div>
           <span className="text-[11px] font-mono text-slate-500">({filteredProjects.length} items)</span>
         </div>
 

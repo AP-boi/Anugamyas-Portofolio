@@ -1,34 +1,15 @@
 'use client';
 
-import React, { memo, useCallback, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useOSStore, APP_REGISTRY } from '@/store/useOSStore';
+import React, { memo } from 'react';
+import { useOSStore } from '@/store/useOSStore';
 import { AppId } from '@/types/os';
-import { LiquidGlassContainer } from '@/components/ui/liquid-glass';
-import {
-  Award,
-  FolderGit2,
-  Github,
-  Terminal,
-  Bot,
-  Activity,
-  Compass,
-  FileText,
-  Image as ImageIcon,
-  User,
-  Settings as SettingsIcon,
-  Trash2,
-  ExternalLink,
-  Camera,
-  Gamepad2
-} from 'lucide-react';
+import { Dock as BaseDock, DockIcon } from '@/components/ui/dock';
+import { ExternalLink } from 'lucide-react';
 
 interface DockIconConfig {
   id: AppId;
   label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  color: string;
-  gradient: string;
+  iconSrc: string;
   isExternal?: boolean;
   externalUrl?: string;
 }
@@ -36,185 +17,135 @@ interface DockIconConfig {
 const DOCK_ITEMS: DockIconConfig[] = [
   {
     id: 'projects',
-    label: 'Finder / Projects',
-    icon: FolderGit2,
-    color: 'text-cyan-300',
-    gradient: 'from-cyan-500/30 to-blue-600/30 border-cyan-400/50',
+    label: 'Finder',
+    iconSrc: '/icons/finder.png',
   },
   {
-    id: 'tetris',
-    label: 'Tetris AI Game',
-    icon: Gamepad2,
-    color: 'text-orange-400',
-    gradient: 'from-orange-500/30 to-amber-600/30 border-orange-400/50',
-  },
-  {
-    id: 'camera',
-    label: 'Camera / Motion Grid',
-    icon: Camera,
-    color: 'text-emerald-300',
-    gradient: 'from-emerald-500/30 to-cyan-600/30 border-emerald-400/50',
-  },
-  {
-    id: 'achievements',
-    label: 'Safari / Resume',
-    icon: Compass,
-    color: 'text-blue-300',
-    gradient: 'from-blue-500/30 to-indigo-600/30 border-blue-400/50',
+    id: 'github',
+    label: 'Safari / GitHub',
+    iconSrc: '/icons/safari.png',
   },
   {
     id: 'achievements',
     label: 'Notes / Achievements',
-    icon: FileText,
-    color: 'text-amber-300',
-    gradient: 'from-amber-500/30 to-yellow-600/30 border-amber-400/50',
-  },
-  {
-    id: 'github',
-    label: 'Photos / Showcase',
-    icon: ImageIcon,
-    color: 'text-pink-300',
-    gradient: 'from-pink-500/30 to-rose-600/30 border-pink-400/50',
-  },
-  {
-    id: 'ai-assistant',
-    label: 'Contact / AI Assistant',
-    icon: User,
-    color: 'text-amber-200',
-    gradient: 'from-amber-600/30 to-yellow-700/30 border-amber-500/50',
+    iconSrc: '/icons/notes.png',
   },
   {
     id: 'terminal',
-    label: 'Terminal CLI',
-    icon: Terminal,
-    color: 'text-emerald-300',
-    gradient: 'from-emerald-500/30 to-teal-600/30 border-emerald-400/50',
+    label: 'Terminal',
+    iconSrc: '/icons/terminal.png',
+  },
+  {
+    id: 'camera',
+    label: 'Camera / Photo Booth',
+    iconSrc: '/icons/camera.png',
+  },
+  {
+    id: 'tetris',
+    label: 'Game Center / Tetris',
+    iconSrc: '/icons/games.png',
+  },
+  {
+    id: 'ai-assistant',
+    label: 'Apple Intelligence Siri',
+    iconSrc: '/icons/siri.png',
+  },
+  {
+    id: 'github',
+    label: 'Photos',
+    iconSrc: '/icons/photos.png',
   },
   {
     id: 'system-info',
     label: 'System Settings',
-    icon: SettingsIcon,
-    color: 'text-slate-200',
-    gradient: 'from-slate-600/30 to-slate-800/30 border-slate-400/50',
+    iconSrc: '/icons/settings.png',
   },
   {
     id: 'system-info',
     label: 'Trash',
-    icon: Trash2,
-    color: 'text-slate-300',
-    gradient: 'from-slate-700/30 to-slate-900/30 border-slate-500/50',
+    iconSrc: '/icons/trash.png',
   },
 ];
 
 export const Dock: React.FC = memo(() => {
   const { windows, activeAppId, openWindow, focusWindow } = useOSStore();
-  const mouseX = useMotionValue<number>(Infinity);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    mouseX.set(e.pageX);
-  }, [mouseX]);
-
-  const handleMouseLeave = useCallback(() => {
-    mouseX.set(Infinity);
-  }, [mouseX]);
 
   return (
     <div className="fixed bottom-3 left-0 right-0 z-[9999] flex justify-center pointer-events-none">
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="pointer-events-auto"
-      >
-        <LiquidGlassContainer className="flex items-end gap-2 px-3 py-2.5 rounded-2xl">
-          {DOCK_ITEMS.map((item, index) => (
-            <DockItem
-              key={`${item.id}-${index}`}
-              item={item}
-              mouseX={mouseX}
-              isOpen={windows[item.id]?.isOpen}
-              isActive={activeAppId === item.id}
-              onClick={() => {
-                if (item.isExternal) {
-                  window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
-                  openWindow(item.id);
-                } else {
-                  if (windows[item.id]?.isOpen) {
-                    focusWindow(item.id);
-                  } else {
+      <div className="pointer-events-auto">
+        <BaseDock
+          iconSize={58}
+          iconMagnification={92}
+          iconDistance={160}
+          direction="middle"
+          className="liquid-glass-surface mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[22px] backdrop-saturate-[150%]"
+        >
+          {/* Subtle liquid refraction orbs */}
+          <span className="glass-orb glass-orb--one -top-12 -left-10 w-36 h-36 opacity-30" />
+          <span className="glass-orb glass-orb--two -bottom-12 -right-10 w-36 h-36 opacity-30" />
+          {DOCK_ITEMS.map((item, index) => {
+            const isOpen = windows[item.id]?.isOpen;
+            const isActive = activeAppId === item.id;
+
+            return (
+              <DockIcon
+                key={`${item.id}-${item.label}-${index}`}
+                className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square"
+                onClick={() => {
+                  if (item.isExternal) {
+                    window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
                     openWindow(item.id);
+                  } else {
+                    if (windows[item.id]?.isOpen) {
+                      focusWindow(item.id);
+                    } else {
+                      openWindow(item.id);
+                    }
                   }
-                }
-              }}
-            />
-          ))}
-        </LiquidGlassContainer>
-      </motion.div>
+                }}
+              >
+                {/* Tooltip on Hover */}
+                <div
+                  className="absolute -top-11 opacity-0 group-hover:opacity-100 pointer-events-none px-3.5 py-1.5 rounded-xl bg-slate-950/90 text-white text-xs font-medium border border-white/15 backdrop-blur-md whitespace-nowrap shadow-2xl z-30 transition-opacity duration-150"
+                >
+                  <span className="flex items-center gap-1.5">
+                    {item.label}
+                    {item.isExternal && <ExternalLink className="w-3 h-3 text-purple-300" />}
+                  </span>
+                </div>
+
+                {/* Real Apple macOS App Icon with Clean Transparency & Specular Sheen */}
+                <div className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all">
+                  <img
+                    src={item.iconSrc}
+                    alt={item.label}
+                    className="w-full h-full object-contain select-none pointer-events-none transform transition-transform group-hover/icon:scale-105"
+                    draggable={false}
+                  />
+                  {/* Ambient Specular Glass Reflection Sheen */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover/icon:opacity-100 pointer-events-none rounded-2xl transition-opacity duration-200"
+                  />
+                </div>
+
+                {/* Open / Active Dot Indicator */}
+                {isOpen && (
+                  <div
+                    className={`absolute -bottom-1.5 rounded-full ${
+                      isActive ? 'w-2 h-1 bg-slate-900 shadow-sm' : 'w-1 h-1 bg-slate-600'
+                    }`}
+                    style={{ transition: 'all 0.2s ease-out' }}
+                  />
+                )}
+              </DockIcon>
+            );
+          })}
+        </BaseDock>
+      </div>
     </div>
   );
 });
 
 Dock.displayName = 'Dock';
+export default Dock;
 
-interface DockItemProps {
-  item: DockIconConfig;
-  mouseX: any;
-  isOpen: boolean;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-const DockItem: React.FC<DockItemProps> = memo(({ item, mouseX, isOpen, isActive, onClick }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const distance = useTransform(mouseX, (val: number) => {
-    const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-    return val - bounds.x - bounds.width / 2;
-  });
-
-  const widthSync = useTransform(distance, [-150, 0, 150], [48, 72, 48]);
-  // Lighter spring for snappier dock animation with less CPU overhead
-  const width = useSpring(widthSync, { mass: 0.08, stiffness: 250, damping: 18 });
-
-  const IconComponent = item.icon;
-
-  return (
-    <div id={`dock-item-${item.id}`} className="relative group flex flex-col items-center">
-      {/* Label Tooltip */}
-      <div className="absolute -top-10 opacity-0 group-hover:opacity-100 pointer-events-none px-2.5 py-1 rounded-md bg-slate-900/90 text-white text-[11px] font-medium border border-white/10 backdrop-blur-md whitespace-nowrap shadow-xl" style={{ transition: 'opacity 0.15s ease-out' }}>
-        <span className="flex items-center gap-1">
-          {item.label}
-          {item.isExternal && <ExternalLink className="w-3 h-3 text-purple-300" />}
-        </span>
-      </div>
-
-      {/* Magnifying Motion Container with Liquid Glass Card Styling */}
-      <motion.div
-        ref={ref}
-        style={{ width, height: width, willChange: 'transform, width, height' }}
-        onClick={onClick}
-        whileTap={{ scale: 0.88 }}
-        className={`relative flex items-center justify-center rounded-xl bg-gradient-to-b ${item.gradient} bg-white/40 backdrop-blur-xl border border-white/80 shadow-[0_8px_25px_rgba(0,0,0,0.08),0_0_15px_rgba(255,255,255,0.7)_inset] ring-1 ring-white/60 cursor-pointer overflow-hidden group/item`}
-      >
-        <IconComponent className={`w-1/2 h-1/2 ${item.color} drop-shadow`} />
-
-        {/* Aceternity Ambient Specular Shimmer */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/35 to-transparent opacity-0 group-hover/item:opacity-100 pointer-events-none" style={{ transition: 'opacity 0.2s ease-out' }} />
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white to-transparent opacity-90" />
-      </motion.div>
-
-      {/* Open / Active Dot Indicator */}
-      <div className="h-1.5 flex items-center justify-center mt-1">
-        {isOpen && (
-          <div
-            className={`rounded-full ${
-              isActive ? 'w-2 h-1 bg-slate-900 shadow-sm' : 'w-1 h-1 bg-slate-600'
-            }`}
-            style={{ transition: 'all 0.2s ease-out' }}
-          />
-        )}
-      </div>
-    </div>
-  );
-});
-
-DockItem.displayName = 'DockItem';

@@ -60,10 +60,14 @@ export const CalendarWidget: React.FC = () => {
   };
 
   return (
-    <div className="w-48 bg-white/70 backdrop-blur-2xl border border-white/80 rounded-2xl p-3 shadow-xl flex flex-col justify-between text-slate-900 hover:border-white transition-all select-none">
+    <div className="liquid-glass-card w-48 p-3.5 text-slate-900 select-none flex flex-col justify-between">
+      <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
+      <span className="glass-orb glass-orb--two -bottom-10 -left-8 w-28 h-28 opacity-30" />
+
       {/* Header: Month & Navigation */}
-      <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/80">
-        <div className="flex items-center space-x-1">
+      <div className="relative z-10 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+        <div className="flex items-center space-x-1.5">
+          <img src="/icons/calendar.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
           <span className="text-[11px] font-bold text-red-600 uppercase tracking-wide">
             {monthNames[month].slice(0, 3)}
           </span>

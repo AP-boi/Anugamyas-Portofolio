@@ -244,9 +244,11 @@ export const TerminalApp: React.FC = () => {
     >
       {/* Security Status Header */}
       <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] text-slate-400 select-none">
-        <span className="flex items-center gap-1 text-emerald-400">
-          <ShieldCheck className="w-3.5 h-3.5" /> SECURE SHELL ACTIVE (SANITY_VERIFIED)
-        </span>
+        <div className="flex items-center gap-1.5 text-emerald-400">
+          <img src="/icons/terminal.png" alt="" className="w-3.5 h-3.5 rounded object-cover" />
+          <ShieldCheck className="w-3 h-3 text-emerald-400" />
+          <span>SECURE SHELL ACTIVE (SANITY_VERIFIED)</span>
+        </div>
         <span>zsh 5.9</span>
       </div>
 

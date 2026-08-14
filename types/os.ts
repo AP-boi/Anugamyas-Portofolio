@@ -20,6 +20,7 @@ export interface WindowState {
   position: WindowPosition;
   size: WindowSize;
   iconName: string;
+  iconSrc?: string;
 }
 
 export interface AppMetadata {
@@ -27,6 +28,7 @@ export interface AppMetadata {
   title: string;
   description: string;
   iconName: string;
+  iconSrc?: string;
   defaultPosition: WindowPosition;
   defaultSize: WindowSize;
   isExternalLink?: boolean;

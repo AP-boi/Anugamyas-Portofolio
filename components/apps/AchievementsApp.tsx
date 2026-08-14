@@ -106,8 +106,8 @@ export const AchievementsApp: React.FC = () => {
       {/* Authentic macOS Notes App Toolbar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
-          <div className="flex items-center space-x-1.5 text-amber-600">
-            <FileText className="w-4 h-4 fill-amber-500/20" />
+          <div className="flex items-center space-x-1.5">
+            <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
             <span className="font-bold text-xs text-slate-900">Notes</span>
           </div>
           <div className="h-3 w-px bg-slate-300" />

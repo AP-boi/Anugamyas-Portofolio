@@ -24,9 +24,7 @@ export const TetrisApp: React.FC = () => {
       {/* App Header Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-slate-100/90 border-b border-slate-200 backdrop-blur-md z-10">
         <div className="flex items-center space-x-2.5">
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-orange-100 border border-orange-300 text-orange-600 shadow-xs">
-            <Gamepad2 className="w-4 h-4" />
-          </div>
+          <img src="/icons/games.png" alt="Game Center" className="w-7 h-7 rounded-lg object-cover shadow-xs" />
           <div>
             <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
               Autonomous AI Tetris

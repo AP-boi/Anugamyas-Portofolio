@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Safari } from '@/components/ui/safari';
 import {
   Github,
   Star,
@@ -105,7 +106,7 @@ export const GitHubApp: React.FC = () => {
               : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
           }`}
         >
-          <Github className="w-3.5 h-3.5 text-purple-600" />
+          <img src="/icons/github.png" alt="" className="w-3.5 h-3.5 rounded object-cover shadow-2xs" />
           <span>Overview</span>
         </button>
         <button
@@ -137,8 +138,8 @@ export const GitHubApp: React.FC = () => {
         {/* GitHub Profile Banner Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-50 via-slate-50 to-blue-50 border border-purple-200 shadow-sm gap-4">
           <div className="flex items-center space-x-3">
-            <div className="p-3 rounded-xl bg-purple-100 border border-purple-200 text-purple-700">
-              <Github className="w-8 h-8" />
+            <div className="p-1 rounded-2xl bg-white border border-purple-200 shadow-sm flex items-center justify-center">
+              <img src="/icons/github.png" alt="GitHub" className="w-10 h-10 rounded-xl object-cover" />
             </div>
             <div>
               <div className="flex items-center space-x-2">

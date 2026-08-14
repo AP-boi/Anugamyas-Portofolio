@@ -196,15 +196,17 @@ export default function Home() {
             <AnalogClockWidget />
 
             {/* 2. Weather Widget */}
-            <div className="w-48 bg-white/65 backdrop-blur-2xl border border-white/80 rounded-2xl p-3.5 shadow-xl text-slate-900 flex flex-col justify-between hover:border-white transition-colors">
-              <div className="flex items-center justify-between">
+            <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
+              <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
+              <span className="glass-orb glass-orb--two -bottom-10 -left-8 w-28 h-28 opacity-30" />
+              <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <span className="text-2xl font-light text-slate-900">30°</span>
                   <p className="text-[10px] text-slate-600 font-medium">Partly Cloudy</p>
                 </div>
                 <Sun className="w-7 h-7 text-amber-500 drop-shadow" />
               </div>
-              <span className="text-[9px] text-slate-500 font-mono mt-2">New Delhi, India</span>
+              <span className="relative z-10 text-[9px] text-slate-500 font-mono mt-2">New Delhi, India</span>
             </div>
 
             {/* 3. macOS Interactive Month Calendar Grid Widget */}

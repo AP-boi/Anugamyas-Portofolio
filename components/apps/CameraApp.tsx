@@ -25,9 +25,7 @@ export const CameraApp: React.FC = () => {
       {/* Top Header Controls Bar */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100/90 border-b border-slate-200 backdrop-blur-md z-20">
         <div className="flex items-center space-x-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-cyan-100 border border-cyan-300 text-cyan-700">
-            <Camera className="w-4 h-4" />
-          </div>
+          <img src="/icons/camera.png" alt="Camera" className="w-8 h-8 rounded-lg object-cover shadow-sm" />
           <div>
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               Camera & Motion Grid
