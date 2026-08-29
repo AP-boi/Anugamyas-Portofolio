@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { MenuBar } from '@/components/macOS/MenuBar';
 import { Dock } from '@/components/macOS/Dock';
 import { Window } from '@/components/macOS/Window';
@@ -11,21 +11,44 @@ import { GitHubApp } from '@/components/apps/GitHubApp';
 import { AIAssistantDrawer } from '@/components/apps/AIAssistantDrawer';
 import { CameraApp } from '@/components/apps/CameraApp';
 import TetrisApp from '@/components/apps/TetrisApp';
+import { AnalyticsApp } from '@/components/apps/AnalyticsApp';
 import { useOSStore } from '@/store/useOSStore';
-import { Activity, Folder, Sun, CloudSun, Calendar as CalendarIcon, Clock as ClockIcon } from 'lucide-react';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
 import { AnimatedWallpaper } from '@/components/ui/animated-wallpaper';
 import { AppleBootScreen } from '@/components/macOS/AppleBootScreen';
+import { MacOSLockScreen } from '@/components/macOS/MacOSLockScreen';
+import { SpotlightSearch } from '@/components/macOS/SpotlightSearch';
+import { DesktopContextMenu } from '@/components/macOS/DesktopContextMenu';
 import { AnalogClockWidget } from '@/components/ui/analog-clock';
 import { CalendarWidget } from '@/components/ui/calendar-widget';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { Activity, Sun } from 'lucide-react';
 
 const DESKTOP_FOLDERS = [
   {
     id: 'f-1',
-    name: 'Paranoia',
+    name: 'Bharat Dekho',
+    images: [
+      'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=80',
+    ],
+  },
+  {
+    id: 'f-2',
+    name: 'Cyber Ascension',
+    images: [
+      'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
+    ],
+  },
+  {
+    id: 'f-3',
+    name: 'Portfolio OS',
     images: [
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
@@ -33,38 +56,20 @@ const DESKTOP_FOLDERS = [
     ],
   },
   {
-    id: 'f-2',
-    name: 'Vikas Bhi, Virasat Bhi',
-    images: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=400&q=80',
-    ],
-  },
-  {
-    id: 'f-3',
-    name: 'The Last Ember',
-    images: [
-      'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
-      'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80',
-    ],
-  },
-  {
     id: 'f-4',
-    name: 'Xeon Horizon',
+    name: 'AirPure Delhi',
     images: [
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=400&q=80',
     ],
   },
   {
     id: 'f-5',
-    name: 'Echo Motion',
+    name: 'Gravity Client',
     images: [
-      'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80',
+      'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=400&q=80',
       'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80',
     ],
   },
@@ -79,76 +84,92 @@ const DESKTOP_FOLDERS = [
   },
 ];
 
+const WALLPAPERS = ['/custom-wallpaper.jpg', '/spiderman-wallpaper.jpg'];
+
 export default function Home() {
-  const { windows, openWindow, focusWindow, telemetry } = useOSStore();
-  const [isBooting, setIsBooting] = useState(true);
-  const [currentTime, setCurrentTime] = useState({
-    timeStr: '8:45',
-    ampm: 'PM',
-    dayStr: 'Thu, Aug 13',
-    monthStr: 'AUGUST',
-    dateNum: '13',
-    weekdayFull: 'Thursday',
-    menuDate: 'Thu Aug 13 8:45 PM',
+  const { openWindow, telemetry, currentUser, isLocked, lockScreen } = useOSStore();
+  const [wallpaperIndex, setWallpaperIndex] = useState(0);
+  const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
+
+  // Desktop Context Menu State
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; isOpen: boolean }>({
+    x: 0,
+    y: 0,
+    isOpen: false,
   });
 
+  // Track initial visit on mount in Node.js backend
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const hours = now.getHours();
-      const mins = now.getMinutes();
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      const formattedHours = hours % 12 || 12;
-      const formattedMins = mins < 10 ? `0${mins}` : mins;
-      
-      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const dayShorts = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-      const monthShorts = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-      setCurrentTime({
-        timeStr: `${formattedHours}:${formattedMins}`,
-        ampm,
-        dayStr: `${dayShorts[now.getDay()]}, ${monthShorts[now.getMonth()]} ${now.getDate()}`,
-        monthStr: monthNames[now.getMonth()].toUpperCase(),
-        dateNum: `${now.getDate()}`,
-        weekdayFull: dayNames[now.getDay()],
-        menuDate: `${dayShorts[now.getDay()]} ${monthShorts[now.getMonth()]} ${now.getDate()} ${formattedHours}:${formattedMins} ${ampm}`,
-      });
-    };
-
-    updateTime();
-    const timer = setInterval(updateTime, 30000);
-    return () => clearInterval(timer);
+    fetch('/api/visitors/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'visit' }),
+    }).catch(() => {});
   }, []);
 
-  // Keyboard shortcut listener: Cmd+K / Ctrl+K opens Terminal CLI
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        openWindow('terminal');
-      }
-    };
+  // Global Keyboard Shortcuts (Cmd+Space Spotlight, Cmd+K Terminal, Cmd+L Lock)
+  useKeyboardShortcuts({
+    onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),
+  });
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [openWindow]);
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    // Only trigger desktop context menu if clicking directly on workspace surface
+    const target = e.target as HTMLElement;
+    if (target.closest('.liquid-glass-surface') || target.closest('button') || target.closest('input')) {
+      return;
+    }
+    e.preventDefault();
+    setContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      isOpen: true,
+    });
+  }, []);
+
+  const handleCycleWallpaper = () => {
+    setWallpaperIndex((prev) => (prev + 1) % WALLPAPERS.length);
+  };
 
   return (
-    <main className="relative w-screen h-screen overflow-hidden select-none bg-slate-100">
+    <main
+      onContextMenu={handleContextMenu}
+      className="relative w-screen h-screen overflow-hidden select-none bg-slate-100"
+    >
       {/* Authentic macOS Startup Boot Screen */}
-      <AppleBootScreen />
+      <AppleBootScreen
+        onComplete={() => {
+          if (!currentUser) {
+            lockScreen();
+          }
+        }}
+      />
+
+      {/* macOS Sonoma Interactive Lock Screen */}
+      <MacOSLockScreen />
+
+      {/* Spotlight Search Overlay (⌘Space) */}
+      <SpotlightSearch
+        isOpen={isSpotlightOpen}
+        onClose={() => setIsSpotlightOpen(false)}
+      />
+
+      {/* Desktop Right-Click Context Menu */}
+      <DesktopContextMenu
+        x={contextMenu.x}
+        y={contextMenu.y}
+        isOpen={contextMenu.isOpen}
+        onClose={() => setContextMenu((prev) => ({ ...prev, isOpen: false }))}
+        onChangeWallpaper={handleCycleWallpaper}
+      />
 
       {/* Main Desktop Background: Animated Wallpaper */}
-      <AnimatedWallpaper imageSrc="/custom-wallpaper.jpg" />
+      <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
 
       {/* Top System Menu Bar */}
       <MenuBar />
 
       {/* Desktop Main Workspace Surface Area */}
       <div className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between">
-        
         {/* Desktop Layout Grid (Folders on left, Hero in middle, Widgets on right) */}
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
           
@@ -162,7 +183,7 @@ export default function Home() {
                 onClick={() => openWindow('projects')}
                 folderSize={{ width: 52, height: 38 }}
                 hoverImageSize={{ width: 84, height: 56 }}
-                className="hover:scale-105 transition-transform"
+                className="hover:scale-105 transition-transform cursor-pointer"
               />
             ))}
           </div>
@@ -191,7 +212,6 @@ export default function Home() {
 
           {/* Right Desktop Widgets Column */}
           <div className="col-span-3 flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
-            
             {/* 1. macOS Live Analog Clock Widget */}
             <AnalogClockWidget />
 
@@ -211,85 +231,94 @@ export default function Home() {
 
             {/* 3. macOS Interactive Month Calendar Grid Widget */}
             <CalendarWidget />
-
           </div>
-
         </div>
+      </div>
 
-        {/* Window Containers Ecosystem */}
+      {/* Window Containers Ecosystem */}
 
-        {/* 1. Projects.app / Finder Window */}
-        <Window id="projects">
-          <ProjectsApp />
-        </Window>
+      {/* 1. Projects.app / Finder Window */}
+      <Window id="projects">
+        <ProjectsApp />
+      </Window>
 
-        {/* 2. Achievements.app Window */}
-        <Window id="achievements">
-          <AchievementsApp />
-        </Window>
+      {/* 2. Achievements.app Window */}
+      <Window id="achievements">
+        <AchievementsApp />
+      </Window>
 
-        {/* 3. Terminal.app CLI Window */}
-        <Window id="terminal">
-          <TerminalApp />
-        </Window>
+      {/* 3. Terminal.app CLI Window */}
+      <Window id="terminal">
+        <TerminalApp />
+      </Window>
 
-        {/* 4. GitHub Telemetry & Metrics Window */}
-        <Window id="github">
-          <GitHubApp />
-        </Window>
+      {/* 4. GitHub Telemetry & Metrics Window */}
+      <Window id="github">
+        <GitHubApp />
+      </Window>
 
-        {/* 5. Portfolio AI Assistant Window */}
-        <Window id="ai-assistant">
-          <AIAssistantDrawer />
-        </Window>
+      {/* 5. Portfolio AI Assistant Window */}
+      <Window id="ai-assistant">
+        <AIAssistantDrawer />
+      </Window>
 
-        {/* 6. System Telemetry Window */}
-        <Window id="system-info">
-          <div className="p-4 space-y-4 text-xs font-mono text-slate-800">
-            <div className="flex items-center space-x-2 text-cyan-600 font-bold text-sm border-b border-slate-200 pb-2">
-              <Activity className="w-4 h-4" />
+      {/* 6. Visitor Intelligence & Login Tracker Window */}
+      <Window id="analytics">
+        <AnalyticsApp />
+      </Window>
+
+      {/* 7. System Telemetry Window */}
+      <Window id="system-info">
+        <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+            <div className="flex items-center space-x-2 text-slate-900 font-bold text-xs">
+              <Activity className="w-4 h-4 text-cyan-600" />
               <span>Real-Time Edge Node Telemetry</span>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-white/80 p-3 rounded-lg border border-slate-200 shadow-sm">
-                <span className="text-[10px] text-slate-500 uppercase">Target Frame Rate</span>
-                <p className="text-base font-bold text-emerald-600 mt-1">{telemetry.fps} FPS (Smoothed)</p>
-              </div>
-              <div className="bg-white/80 p-3 rounded-lg border border-slate-200 shadow-sm">
-                <span className="text-[10px] text-slate-500 uppercase">Edge Connection Latency</span>
-                <p className="text-base font-bold text-cyan-600 mt-1">{telemetry.latencyMs} ms</p>
-              </div>
-              <div className="bg-white/80 p-3 rounded-lg border border-slate-200 shadow-sm">
-                <span className="text-[10px] text-slate-500 uppercase">Active Memory</span>
-                <p className="text-base font-bold text-purple-600 mt-1">{telemetry.activeMemoryMb} MB</p>
-              </div>
-              <div className="bg-white/80 p-3 rounded-lg border border-slate-200 shadow-sm">
-                <span className="text-[10px] text-slate-500 uppercase">Deployed Region</span>
-                <p className="text-base font-bold text-amber-600 mt-1">{telemetry.region}</p>
-              </div>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold">
+              SYSTEM ONLINE
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-500 uppercase font-semibold">Target Frame Rate</span>
+              <p className="text-base font-bold text-emerald-600 mt-1">{telemetry.fps} FPS (Smoothed)</p>
             </div>
-            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-[11px]">
-              Edge Health: {telemetry.edgeStatus} • {telemetry.websocketConnections} active WebSocket connections.
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-500 uppercase font-semibold">Edge Connection Latency</span>
+              <p className="text-base font-bold text-cyan-600 mt-1">{telemetry.latencyMs} ms</p>
+            </div>
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-500 uppercase font-semibold">Active Memory</span>
+              <p className="text-base font-bold text-purple-600 mt-1">{telemetry.activeMemoryMb} MB</p>
+            </div>
+            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
+              <span className="text-[10px] text-slate-500 uppercase font-semibold">Deployed Region</span>
+              <p className="text-base font-bold text-amber-600 mt-1">{telemetry.region}</p>
             </div>
           </div>
-        </Window>
+          <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] flex items-center justify-between">
+            <span>Edge Health: <strong>{telemetry.edgeStatus}</strong></span>
+            <span><strong>{telemetry.websocketConnections}</strong> active WebSockets</span>
+          </div>
+        </div>
+      </Window>
 
-        {/* 7. Camera & Motion Grid App Window */}
-        <Window id="camera">
-          <CameraApp />
-        </Window>
+      {/* 8. Camera & Motion Grid App Window */}
+      <Window id="camera">
+        <CameraApp />
+      </Window>
 
-        {/* 8. Autonomous Tetris AI Game Window */}
-        <Window id="tetris">
-          <TetrisApp />
-        </Window>
-      </div>
+      {/* 9. Autonomous Tetris AI Game Window */}
+      <Window id="tetris">
+        <TetrisApp />
+      </Window>
 
       {/* Dock Launcher */}
       <Dock />
 
       {/* Originkit Custom User Cursor Follower */}
-      <UserCursor name="Anugamya" />
+      <UserCursor name={currentUser?.name || "Anugamya"} />
     </main>
   );
 }

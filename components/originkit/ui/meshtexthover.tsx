@@ -393,6 +393,16 @@ export default function MeshText(props: any) {
             vy: 0,
             inside: false,
         }
+        let isSleeping = false;
+        let rafId = 0;
+
+        const wakeUp = () => {
+            if (isSleeping) {
+                isSleeping = false;
+                rafId = requestAnimationFrame(tick);
+            }
+        };
+
         const onMove = (e: PointerEvent) => {
             const rect = canvas.getBoundingClientRect()
             const nx = (e.clientX - rect.left) / rect.width
@@ -406,6 +416,7 @@ export default function MeshText(props: any) {
             }
             cursor.x = x
             cursor.y = y
+            wakeUp();
         }
         const onLeave = () => {
             cursor.inside = false
@@ -418,8 +429,9 @@ export default function MeshText(props: any) {
         wrapper.addEventListener("pointerleave", onLeave)
 
         // ── Animation loop ──────────────────────────────────────────────
-        let rafId = 0
         const tick = () => {
+            if (cancelled) return;
+
             cursor.vx = cursor.x - cursor.px
             cursor.vy = cursor.y - cursor.py
             const vmag = Math.hypot(cursor.vx, cursor.vy)
@@ -429,6 +441,8 @@ export default function MeshText(props: any) {
             }
             cursor.px = cursor.x
             cursor.py = cursor.y
+
+            let maxEnergy = 0;
 
             // Drag only — mesh vertices pulled along the cursor's motion.
             for (let i = 0; i < vertCount; i++) {
@@ -467,6 +481,9 @@ export default function MeshText(props: any) {
                 else if (ndy < -1) ndy = -1
                 disp[i2] = ndx
                 disp[i2 + 1] = ndy
+
+                const energy = Math.abs(ndx) + Math.abs(ndy) + Math.abs(vx) + Math.abs(vy);
+                if (energy > maxEnergy) maxEnergy = energy;
             }
 
             gl.bindBuffer(gl.ARRAY_BUFFER, dispBuf)
@@ -505,6 +522,12 @@ export default function MeshText(props: any) {
 
             gl.bindVertexArray(vao)
             gl.drawElements(gl.TRIANGLES, indexCount, gl.UNSIGNED_INT, 0)
+
+            // If cursor is outside and physics has completely settled, sleep the loop to save GPU
+            if (!cursor.inside && maxEnergy < 0.0001 && !colorSplitRef.current) {
+                isSleeping = true;
+                return;
+            }
 
             rafId = requestAnimationFrame(tick)
         }

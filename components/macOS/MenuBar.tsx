@@ -17,16 +17,35 @@ import {
   Maximize2,
   RefreshCw,
   Sun,
-  Search
+  Search,
+  Lock,
+  LogOut,
+  User,
+  Shield,
+  BarChart3,
+  Users,
 } from 'lucide-react';
 
 export const MenuBar: React.FC = () => {
-  const { activeAppId, windows, telemetry, ambientLight, openWindow, updateAmbientLight } = useOSStore();
+  const {
+    activeAppId,
+    windows,
+    telemetry,
+    ambientLight,
+    currentUser,
+    isAdmin,
+    openWindow,
+    lockScreen,
+    logout,
+    updateAmbientLight,
+  } = useOSStore();
+
   const [timeString, setTimeString] = useState<string>('');
   const [dateString, setDateString] = useState<string>('');
   const [batteryLevel, setBatteryLevel] = useState<number>(98);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState<boolean>(false);
   const [isAppleMenuOpen, setIsAppleMenuOpen] = useState<boolean>(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const updateClock = () => {
@@ -50,7 +69,7 @@ export const MenuBar: React.FC = () => {
     updateClock();
     const interval = setInterval(updateClock, 10000);
 
-    // Battery API detection (fallback graceful if unsupported)
+    // Battery API detection
     if (typeof window !== 'undefined' && 'getBattery' in navigator) {
       (navigator as any).getBattery().then((battery: any) => {
         setBatteryLevel(Math.round(battery.level * 100));
@@ -63,7 +82,17 @@ export const MenuBar: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const activeAppTitle = activeAppId ? APP_REGISTRY[activeAppId]?.title || 'Finder' : 'Finder';
+  // Keyboard shortcut listener: Cmd+L / Ctrl+L locks the screen
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'l') {
+        e.preventDefault();
+        lockScreen();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lockScreen]);
 
   return (
     <header className="fixed top-0 left-0 right-0 h-8 z-[9999] select-none flex items-center justify-between px-3 liquid-glass-surface rounded-none border-t-0 border-x-0 border-b border-white/25 backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]">
@@ -79,6 +108,7 @@ export const MenuBar: React.FC = () => {
             onClick={() => {
               setIsAppleMenuOpen(!isAppleMenuOpen);
               setIsControlCenterOpen(false);
+              setIsUserMenuOpen(false);
             }}
             className="p-1 hover:bg-black/5 rounded transition-colors focus:outline-none"
             aria-label="Apple Menu"
@@ -87,12 +117,32 @@ export const MenuBar: React.FC = () => {
           </button>
 
           {isAppleMenuOpen && (
-            <div className="liquid-glass-card absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1.5 text-slate-800 z-[10000] border border-white/30 backdrop-blur-[22px]">
+            <div className="liquid-glass-card absolute top-7 left-0 w-64 rounded-2xl shadow-2xl p-1.5 text-slate-800 z-[10000] border border-white/30 backdrop-blur-[22px]">
               <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
               <div className="relative z-10 px-3 py-1.5 font-semibold text-slate-900 border-b border-slate-200/60 text-[11px] flex items-center justify-between">
                 <span>Anugamya OS v1.0</span>
-                <span className="text-[10px] text-cyan-700 bg-cyan-50/80 px-1.5 py-0.5 rounded border border-cyan-200 font-semibold">PROD</span>
+                <span className="text-[10px] text-cyan-700 bg-cyan-50/80 px-1.5 py-0.5 rounded border border-cyan-200 font-semibold">
+                  NODE FULLSTACK
+                </span>
               </div>
+
+              {/* Visitor Intelligence App */}
+              <button
+                onClick={() => {
+                  openWindow('analytics');
+                  setIsAppleMenuOpen(false);
+                }}
+                className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-[11px] flex items-center justify-between transition-colors group"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3.5 h-3.5 rounded bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center text-white">
+                    <Activity className="w-2.5 h-2.5" />
+                  </div>
+                  <span>Visitor Intelligence & Logs</span>
+                </div>
+                <Users className="w-3 h-3 text-cyan-600 group-hover:text-white" />
+              </button>
+
               <button
                 onClick={() => {
                   openWindow('system-info');
@@ -106,6 +156,7 @@ export const MenuBar: React.FC = () => {
                 </div>
                 <Activity className="w-3 h-3 text-cyan-600 group-hover:text-white" />
               </button>
+
               <button
                 onClick={() => {
                   openWindow('terminal');
@@ -119,6 +170,7 @@ export const MenuBar: React.FC = () => {
                 </div>
                 <TerminalIcon className="w-3 h-3 text-emerald-600 group-hover:text-white" />
               </button>
+
               <button
                 onClick={() => {
                   openWindow('ai-assistant');
@@ -132,34 +184,41 @@ export const MenuBar: React.FC = () => {
                 </div>
                 <Bot className="w-3 h-3 text-purple-600 group-hover:text-white" />
               </button>
+
+              <div className="my-1 border-t border-slate-200" />
+
+              {/* Lock Screen & Switch User Actions */}
               <button
                 onClick={() => {
-                  openWindow('camera');
+                  lockScreen();
                   setIsAppleMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-[11px] flex items-center justify-between transition-colors group"
               >
                 <div className="flex items-center space-x-2">
-                  <img src="/icons/camera.png" alt="" className="w-3.5 h-3.5 rounded object-cover" />
-                  <span>Camera & Motion Grid</span>
+                  <Lock className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+                  <span>Lock Screen</span>
                 </div>
+                <span className="text-[10px] text-slate-400 group-hover:text-white font-mono">⌘L</span>
               </button>
-              <div className="my-1 border-t border-slate-200" />
+
               <button
-                onClick={() => window.open('https://github.com/AP-boi', '_blank')}
-                className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-[11px] flex items-center justify-between transition-colors group"
+                onClick={() => {
+                  logout();
+                  setIsAppleMenuOpen(false);
+                }}
+                className="w-full text-left px-3 py-1.5 hover:bg-rose-600 hover:text-white rounded text-[11px] flex items-center justify-between transition-colors group"
               >
-                <div className="flex items-center space-x-2">
-                  <img src="/icons/github.png" alt="" className="w-3.5 h-3.5 rounded object-cover" />
-                  <span>View Source on GitHub</span>
+                <div className="flex items-center space-x-2 text-rose-600 group-hover:text-white">
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Log Out Visitor Session</span>
                 </div>
-                <Github className="w-3 h-3 text-slate-500 group-hover:text-white" />
               </button>
             </div>
           )}
         </div>
 
-        {/* Navigation Items Matching Reference Image */}
+        {/* Navigation Items */}
         <div className="flex items-center space-x-3 text-[11px]">
           <button onClick={() => openWindow('projects')} className="font-bold text-slate-900 hover:text-blue-600 transition-colors">
             Finder
@@ -167,8 +226,9 @@ export const MenuBar: React.FC = () => {
           <button onClick={() => openWindow('projects')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
             Projects
           </button>
-          <button onClick={() => openWindow('ai-assistant')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
-            Contact
+          <button onClick={() => openWindow('analytics')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium flex items-center gap-1">
+            <span>Analytics</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
           </button>
           <button onClick={() => openWindow('achievements')} className="text-slate-700 hover:text-blue-600 transition-colors font-medium">
             Resume
@@ -176,11 +236,74 @@ export const MenuBar: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Control & Telemetry Bar */}
-      <div className="flex items-center space-x-3 text-[11px]">
-        {/* Latency & Edge Status Telemetry Pill */}
+      {/* Right Control & User Profile Bar */}
+      <div className="flex items-center space-x-2.5 text-[11px]">
+        {/* Logged in User Profile Pill */}
+        {currentUser && (
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsUserMenuOpen(!isUserMenuOpen);
+                setIsAppleMenuOpen(false);
+                setIsControlCenterOpen(false);
+              }}
+              className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-white/70 hover:bg-white border border-slate-300 text-slate-800 transition-all font-semibold shadow-2xs cursor-pointer"
+            >
+              <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white text-[9px] font-bold flex items-center justify-center">
+                {isAdmin ? '👑' : currentUser.name.charAt(0).toUpperCase()}
+              </div>
+              <span className="max-w-[110px] truncate">{currentUser.name}</span>
+            </button>
+
+            {isUserMenuOpen && (
+              <div className="liquid-glass-card absolute top-7 right-0 w-56 rounded-2xl shadow-2xl p-2.5 text-slate-800 z-[10000] border border-white/30 backdrop-blur-[22px] space-y-2">
+                <div className="pb-1.5 border-b border-slate-200">
+                  <div className="font-bold text-slate-900 text-xs">{currentUser.name}</div>
+                  <div className="text-[10px] text-slate-500 font-mono">
+                    {currentUser.role} • {currentUser.company}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => {
+                    openWindow('analytics');
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-blue-600 hover:text-white text-[11px] flex items-center space-x-2 transition-colors group"
+                >
+                  <Activity className="w-3.5 h-3.5 text-blue-600 group-hover:text-white" />
+                  <span>View Visitor Stats</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    lockScreen();
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-blue-600 hover:text-white text-[11px] flex items-center space-x-2 transition-colors group"
+                >
+                  <Lock className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+                  <span>Lock Screen (⌘L)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-rose-600 hover:text-white text-[11px] text-rose-600 flex items-center space-x-2 transition-colors group"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Switch User</span>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Latency Telemetry Pill */}
         <div
-          onClick={() => openWindow('system-info')}
+          onClick={() => openWindow('analytics')}
           className="hidden sm:flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-300 text-emerald-800 cursor-pointer hover:bg-emerald-100 transition-all font-semibold"
           title="Edge Latency & Node Telemetry"
         >
@@ -193,6 +316,7 @@ export const MenuBar: React.FC = () => {
           onClick={() => {
             setIsControlCenterOpen(!isControlCenterOpen);
             setIsAppleMenuOpen(false);
+            setIsUserMenuOpen(false);
           }}
           className="p-1 rounded hover:bg-black/5 text-slate-700 transition-colors"
           aria-label="Theme Settings"
@@ -277,13 +401,13 @@ export const MenuBar: React.FC = () => {
             </button>
             <button
               onClick={() => {
-                openWindow('achievements');
+                openWindow('analytics');
                 setIsControlCenterOpen(false);
               }}
               className="flex items-center space-x-2 p-2 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200 transition-colors text-[10px] text-slate-800 font-medium"
             >
-              <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-cover shadow-xs" />
-              <span>Achievements</span>
+              <Activity className="w-4 h-4 text-cyan-600" />
+              <span>Visitor Analytics</span>
             </button>
             <button
               onClick={() => {
@@ -311,3 +435,5 @@ export const MenuBar: React.FC = () => {
     </header>
   );
 };
+
+export default MenuBar;

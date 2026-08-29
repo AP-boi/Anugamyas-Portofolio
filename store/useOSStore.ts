@@ -1,10 +1,19 @@
 import { create } from 'zustand';
-import { AppId, WindowState, AppMetadata, TelemetryData, AmbientLightState, WindowPosition, WindowSize } from '@/types/os';
+import {
+  AppId,
+  WindowState,
+  AppMetadata,
+  TelemetryData,
+  AmbientLightState,
+  WindowPosition,
+  WindowSize,
+  VisitorSession,
+} from '@/types/os';
 
 export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   achievements: {
     id: 'achievements',
-    title: 'Achievements.app',
+    title: 'Notes — Achievements',
     description: 'Scrollytelling timeline of accomplishments, hackathons, and certifications',
     iconName: 'FileText',
     iconSrc: '/icons/notes.png',
@@ -13,7 +22,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   projects: {
     id: 'projects',
-    title: 'Projects & Architecture (Finder)',
+    title: 'Finder — Projects',
     description: 'Bento-grid showcase with live API tester, code inspector & system topologies',
     iconName: 'FolderGit2',
     iconSrc: '/icons/finder.png',
@@ -22,7 +31,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   github: {
     id: 'github',
-    title: 'GitHub Telemetry (Safari)',
+    title: 'Safari — GitHub (@AP-boi)',
     description: 'In-OS GitHub profile metrics, repositories & live commit streak',
     iconName: 'Github',
     iconSrc: '/icons/safari.png',
@@ -31,7 +40,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   terminal: {
     id: 'terminal',
-    title: 'Terminal.app',
+    title: 'anugamya — zsh — 80×24',
     description: 'Interactive CLI shell with command parser & system utilities',
     iconName: 'Terminal',
     iconSrc: '/icons/terminal.png',
@@ -40,16 +49,25 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   'ai-assistant': {
     id: 'ai-assistant',
-    title: 'Apple Intelligence Siri Assistant',
+    title: 'Apple Intelligence Siri',
     description: 'RAG conversational agent trained on codebase & system architecture',
     iconName: 'Bot',
     iconSrc: '/icons/siri.png',
     defaultPosition: { x: 320, y: 80 },
     defaultSize: { width: 440, height: 620 },
   },
+  analytics: {
+    id: 'analytics',
+    title: 'Activity Monitor — Visitor Intelligence',
+    description: 'Real-time visitor logs, login tracker, telemetry and aggregate analytics',
+    iconName: 'Activity',
+    iconSrc: '/icons/settings.png',
+    defaultPosition: { x: 120, y: 70 },
+    defaultSize: { width: 960, height: 620 },
+  },
   'system-info': {
     id: 'system-info',
-    title: 'System Telemetry & Settings',
+    title: 'System Settings — Telemetry',
     description: 'Real-time connection performance, memory & edge telemetry monitor',
     iconName: 'Activity',
     iconSrc: '/icons/settings.png',
@@ -58,7 +76,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   camera: {
     id: 'camera',
-    title: 'Camera & Motion Grid',
+    title: 'Camera',
     description: 'Interactive 3D webcam pixel grid & cyber motion matrix app',
     iconName: 'Camera',
     iconSrc: '/icons/camera.png',
@@ -67,7 +85,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   tetris: {
     id: 'tetris',
-    title: 'Tetris AI Game (Game Center)',
+    title: 'Game Center — Tetris AI',
     description: 'Autonomous self-playing Tetris AI game engine',
     iconName: 'Gamepad2',
     iconSrc: '/icons/games.png',
@@ -83,6 +101,12 @@ interface OSStoreState {
   telemetry: TelemetryData;
   ambientLight: AmbientLightState;
 
+  // Visitor & Authentication State
+  currentUser: VisitorSession | null;
+  isLocked: boolean;
+  isAdmin: boolean;
+  totalLoginsCount: number;
+
   // Window Management Actions
   openWindow: (id: AppId) => void;
   closeWindow: (id: AppId) => void;
@@ -90,6 +114,13 @@ interface OSStoreState {
   toggleMaximizeWindow: (id: AppId) => void;
   focusWindow: (id: AppId) => void;
   updateWindowBounds: (id: AppId, position?: WindowPosition, size?: WindowSize) => void;
+
+  // Auth & Visitor Actions
+  setCurrentUser: (user: VisitorSession | null) => void;
+  lockScreen: () => void;
+  unlockScreen: () => void;
+  logout: () => void;
+  trackAppOpen: (appId: string) => void;
 
   // System Settings Actions
   updateTelemetry: (data: Partial<TelemetryData>) => void;
@@ -103,7 +134,7 @@ const initialWindows: Record<AppId, WindowState> = Object.keys(APP_REGISTRY).red
     acc[appKey] = {
       id: appKey,
       title: meta.title,
-      isOpen: false, // Desktop background is fully visible on initial load
+      isOpen: false,
       isMinimized: false,
       isMaximized: false,
       zIndex: appKey === 'projects' ? 10 : appKey === 'terminal' ? 11 : 1,
@@ -119,7 +150,7 @@ const initialWindows: Record<AppId, WindowState> = Object.keys(APP_REGISTRY).red
 
 export const useOSStore = create<OSStoreState>((set, get) => ({
   windows: initialWindows,
-  activeAppId: null, // No apps open or active on web startup
+  activeAppId: null,
   maxZIndex: 12,
   telemetry: {
     fps: 60,
@@ -137,10 +168,56 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
     particleCount: 80,
   },
 
+  currentUser: null,
+  isLocked: false,
+  isAdmin: false,
+  totalLoginsCount: 48,
+
+  setCurrentUser: (user: VisitorSession | null) => {
+    set({
+      currentUser: user,
+      isAdmin: !!user?.isAdmin,
+      isLocked: false,
+    });
+  },
+
+  lockScreen: () => {
+    set({ isLocked: true });
+  },
+
+  unlockScreen: () => {
+    set({ isLocked: false });
+  },
+
+  logout: () => {
+    set({
+      currentUser: null,
+      isAdmin: false,
+      isLocked: true,
+    });
+  },
+
+  trackAppOpen: (appId: string) => {
+    const { currentUser } = get();
+    if (typeof window !== 'undefined') {
+      fetch('/api/visitors/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: currentUser?.id,
+          appOpened: appId,
+        }),
+      }).catch(() => {});
+    }
+  },
+
   openWindow: (id: AppId) => {
-    const { windows, maxZIndex } = get();
+    const { windows, maxZIndex, trackAppOpen } = get();
     const target = windows[id];
     if (!target) return;
+
+    // Track app opening on backend
+    trackAppOpen(id);
 
     const nextZ = maxZIndex + 1;
     set({
@@ -172,7 +249,6 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
       },
     };
 
-    // Find highest zIndex open window to re-focus
     let nextActive: AppId | null = null;
     let highestZ = -1;
     (Object.keys(updatedWindows) as AppId[]).forEach((key) => {

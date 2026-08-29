@@ -1,4 +1,4 @@
-export type AppId = 'achievements' | 'projects' | 'github' | 'terminal' | 'ai-assistant' | 'system-info' | 'camera' | 'tetris';
+export type AppId = 'achievements' | 'projects' | 'github' | 'terminal' | 'ai-assistant' | 'system-info' | 'camera' | 'tetris' | 'analytics';
 
 export interface WindowPosition {
   x: number;
@@ -35,11 +35,71 @@ export interface AppMetadata {
   externalUrl?: string;
 }
 
+export interface VisitorSession {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  contact?: string;
+  message?: string;
+  isGuest: boolean;
+  isAdmin: boolean;
+  loginTime: string;
+  lastActive: string;
+  token?: string;
+}
+
+export interface VisitorRecord {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  contact?: string;
+  message?: string;
+  isGuest: boolean;
+  isAdmin: boolean;
+  loginTime: string;
+  lastActive: string;
+  device: string;
+  os: string;
+  browser: string;
+  ip?: string;
+  city?: string;
+  country?: string;
+  pagesVisited: string[];
+  sessionCount: number;
+}
+
+export interface GuestbookEntry {
+  id: string;
+  author: string;
+  role?: string;
+  company?: string;
+  message: string;
+  timestamp: string;
+  verified: boolean;
+}
+
+export interface AnalyticsSummary {
+  totalVisits: number;
+  totalLogins: number;
+  uniqueVisitors: number;
+  todayVisits: number;
+  activeSessions: number;
+  recentLogins: VisitorRecord[];
+  guestbook: GuestbookEntry[];
+  dailyStats: { date: string; visits: number; logins: number }[];
+  deviceBreakdown: { desktop: number; mobile: number; tablet: number };
+  browserBreakdown: { chrome: number; safari: number; firefox: number; edge: number; other: number };
+  osBreakdown: { macos: number; windows: number; ios: number; android: number; linux: number; other: number };
+  topApps: { appId: string; title: string; count: number }[];
+}
+
 export interface AchievementItem {
   id: string;
   title: string;
   organization: string;
-  category: 'Hackathon' | 'Certification' | 'Engineering Milestone' | 'Open Source';
+  category: 'Project Launch' | 'Game Release' | 'Engineering Milestone' | 'Open Source' | 'Hackathon' | 'Certification' | string;
   date: string;
   description: string;
   metrics: {
@@ -56,7 +116,7 @@ export interface ProjectItem {
   id: string;
   title: string;
   tagline: string;
-  category: 'Distributed Systems' | 'Interactive Graphics' | 'AI / Machine Learning' | 'Security & Infrastructure';
+  category: 'AI & WebGL' | 'Game Development' | 'Full-Stack & WebGL' | 'Systems & Java' | 'UI/UX & Web' | 'Tools & Utilities' | 'Distributed Systems' | 'Interactive Graphics' | 'AI / Machine Learning' | 'Security & Infrastructure' | string;
   description: string;
   architectureNotes: string;
   metrics: {

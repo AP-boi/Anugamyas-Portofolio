@@ -10,6 +10,7 @@ import {
   animate,
   type SpringOptions,
 } from "framer-motion";
+import { useOSStore } from "@/store/useOSStore";
 
 type ClassNames = {
   root?: string;
@@ -41,18 +42,18 @@ type Props = {
 };
 
 const COMPONENT_DEFAULTS = {
-  color: "#FF8C8C",
-  size: 32,
+  color: "#3B82F6",
+  size: 28,
   pressScale: 1.1,
   offsetX: 0,
   offsetY: 0,
   showLabel: true,
   name: "Anugamya",
   textColor: "#FFFFFF",
-  labelTiltStrength: 30,
+  labelTiltStrength: 24,
   labelOffsetUseDefault: true,
-  labelOffsetX: 25,
-  labelOffsetY: 12,
+  labelOffsetX: 22,
+  labelOffsetY: 10,
 };
 
 export function UserCursor(props: Props) {
@@ -75,6 +76,9 @@ export function UserCursor(props: Props) {
     classNames,
   } = mergedProps;
 
+  const { currentUser } = useOSStore();
+  const displayName = currentUser?.name ? currentUser.name.split(' ')[0] : (label || name);
+
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [pressed, setPressed] = useState(false);
@@ -88,13 +92,13 @@ export function UserCursor(props: Props) {
     return () => mql.removeEventListener?.("change", onChange);
   }, []);
 
-  // Spring physics
+  // Spring physics tuned for buttery smooth tracking
   const arrowSpring = useMemo<SpringOptions>(
-    () => ({ stiffness: 450, damping: 30, mass: 0.5 }),
+    () => ({ stiffness: 600, damping: 36, mass: 0.4 }),
     []
   );
   const labelSpringCfg = useMemo<SpringOptions>(
-    () => ({ stiffness: 260, damping: 24, mass: 0.6 }),
+    () => ({ stiffness: 320, damping: 28, mass: 0.5 }),
     []
   );
 
@@ -119,22 +123,33 @@ export function UserCursor(props: Props) {
 
   const labelTiltTarget = useMotionValue(0);
   const labelRotation = useSpring(labelTiltTarget, {
-    stiffness: 220,
-    damping: 22,
+    stiffness: 240,
+    damping: 24,
     mass: 0.5,
   });
 
   const lastSampleRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
-  // Global mouse tracking across full viewport
+  // Global mouse tracking across full viewport with rAF throttle
   useEffect(() => {
     if (isTouchDevice || typeof window === "undefined") return;
 
-    // Apply global CSS rule to hide default cursor while component is mounted
     const styleTag = document.createElement("style");
     styleTag.id = "originkit-usercursor-style";
     styleTag.innerHTML = `* { cursor: none !important; }`;
     document.head.appendChild(styleTag);
+
+    let rafId = 0;
+    let pendingX = 0;
+    let pendingY = 0;
+    let isDirty = false;
+
+    const flushMove = () => {
+      rafId = 0;
+      mouseX.set(pendingX + offsetX);
+      mouseY.set(pendingY + offsetY);
+      isDirty = false;
+    };
 
     const onMove = (e: MouseEvent) => {
       setHovering(true);
@@ -152,8 +167,12 @@ export function UserCursor(props: Props) {
       }
       lastSampleRef.current = { x, y, t: now };
 
-      mouseX.set(x + offsetX);
-      mouseY.set(y + offsetY);
+      pendingX = x;
+      pendingY = y;
+      if (!isDirty) {
+        isDirty = true;
+        rafId = requestAnimationFrame(flushMove);
+      }
 
       const speed = Math.hypot(vx, vy);
       const norm = Math.min(1, speed / 1500);
@@ -165,9 +184,9 @@ export function UserCursor(props: Props) {
     const onUp = () => setPressed(false);
     const onLeave = () => setHovering(false);
 
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mousedown", onDown);
-    window.addEventListener("mouseup", onUp);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mousedown", onDown, { passive: true });
+    window.addEventListener("mouseup", onUp, { passive: true });
     document.addEventListener("mouseleave", onLeave);
 
     return () => {
@@ -175,6 +194,7 @@ export function UserCursor(props: Props) {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
       document.removeEventListener("mouseleave", onLeave);
+      if (rafId) cancelAnimationFrame(rafId);
       const existing = document.getElementById("originkit-usercursor-style");
       if (existing) existing.remove();
     };
@@ -210,7 +230,7 @@ export function UserCursor(props: Props) {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
-      {/* Label trailing pill */}
+      {/* Label trailing pill with dynamic visitor name */}
       {showLabel && (
         <motion.div
           className={classNames?.label}
@@ -225,7 +245,7 @@ export function UserCursor(props: Props) {
             background: color,
             borderRadius: 999,
             padding: `${size * 0.18}px ${size * 0.36}px`,
-            boxShadow: "0 4px 14px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.1)",
+            boxShadow: "0 4px 14px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.1)",
             opacity: hovering ? 1 : 0,
             transformOrigin: "0% 50%",
             transition: "opacity 140ms ease",
@@ -246,7 +266,7 @@ export function UserCursor(props: Props) {
               letterSpacing: 0.2,
             }}
           >
-            {label || name}
+            {displayName}
           </div>
         </motion.div>
       )}

@@ -116,12 +116,12 @@ export const TerminalApp: React.FC = () => {
       case 'whoami':
         outputResult = (
           <div className="space-y-1 text-slate-200">
-            <p className="font-bold text-white">Anugamya - Lead Full-Stack Architect & Security Engineer</p>
+            <p className="font-bold text-white">Anugamya (@AP-boi) - Creative Full-Stack & 3D WebGL Developer</p>
             <p className="text-slate-400 text-xs">
-              Specializing in high-throughput distributed systems, WebGL creative engineering, and RAG AI infrastructure.
+              Building AI-powered web experiences (Bharat Dekho), 2D cyberpunk game engines (Cyber Ascension), and desktop OS simulators in Next.js, Three.js & Canvas.
             </p>
             <p className="text-emerald-400 font-mono text-[11px]">
-              Status: Available for Senior / Staff Engineering Leadership Roles
+              GitHub: https://github.com/AP-boi • Open Source Contributor
             </p>
           </div>
         );
@@ -143,11 +143,11 @@ export const TerminalApp: React.FC = () => {
           openWindow('achievements');
           outputResult = (
             <div className="space-y-1 text-amber-300 font-mono text-xs">
-              <p className="font-bold">[=== ACHIEVEMENTS & CREDENTIALS FILE ===]</p>
-              <p>• 1st Place Winner - Global Distributed Systems Hackathon 2025 (Rust / WASM / Raft)</p>
-              <p>• AWS Certified Solutions Architect – Professional (SAP-C02)</p>
-              <p>• pgvector HNSW RAG Optimization (26x latency reduction, sub-18ms queries)</p>
-              <p>• OpenSSF & CNCF Security Contributor (3 Critical CVEs Remediated)</p>
+              <p className="font-bold">[=== REAL PROJECTS & MILESTONES ===]</p>
+              <p>• Bharat Dekho: AI-powered Indian Tourism & 3D Heritage Portal (Next.js 15 + Gemini AI + Three.js)</p>
+              <p>• Cyber Ascension: 2D Cyberpunk Action Game Engine with Branching Narrative (HTML5 Canvas)</p>
+              <p>• macOS Portfolio OS: Interactive Desktop OS Simulator with Liquid Glassmorphism</p>
+              <p>• AirPure Delhi: iOS-styled Real-time AQI tracking and air purifier web application</p>
             </div>
           );
         } else {
@@ -240,18 +240,8 @@ export const TerminalApp: React.FC = () => {
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-2 rounded-lg selection:bg-cyan-500 selection:text-slate-950"
+      className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-3.5 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
     >
-      {/* Security Status Header */}
-      <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] text-slate-400 select-none">
-        <div className="flex items-center gap-1.5 text-emerald-400">
-          <img src="/icons/terminal.png" alt="" className="w-3.5 h-3.5 rounded object-cover" />
-          <ShieldCheck className="w-3 h-3 text-emerald-400" />
-          <span>SECURE SHELL ACTIVE (SANITY_VERIFIED)</span>
-        </div>
-        <span>zsh 5.9</span>
-      </div>
-
       {/* History Log Container */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-1">
         {history.map((item) => (

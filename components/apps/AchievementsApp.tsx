@@ -24,68 +24,70 @@ import {
 const ACHIEVEMENTS_DATA: AchievementItem[] = [
   {
     id: 'ach-1',
-    title: '1st Place Winner - Global Distributed Hackathon 2025',
-    organization: 'Global Cloud Systems Foundation',
-    category: 'Hackathon',
-    date: 'Nov 2025',
+    title: 'Bharat Dekho (Chalo Dekhe Bharat) - AI Tourism & Digital Heritage Portal',
+    organization: 'Independent Engineering Release',
+    category: 'Project Launch',
+    date: '2026',
     description:
-      'Engineered an ultra-low latency event-driven streaming consensus pipeline built with Rust and WebAssembly, handling over 1.2M events/sec with sub-10ms P99 propagation delay.',
+      'Engineered an immersive national digital heritage portal with AI itinerary planning powered by Google Gemini, 3D interactive museum with Three.js GLTF artifact renders, state travel guides, and Lenis smooth momentum scrolling.',
     metrics: [
-      { label: 'P99 Latency Reduction', value: '8.4ms', improvement: '-76%' },
-      { label: 'Peak Event Throughput', value: '1,240,000 req/s', improvement: '+310%' },
-      { label: 'Memory Footprint', value: '14.2 MB', improvement: '-82%' },
+      { label: 'AI Synthesis Latency', value: 'Sub-120ms', improvement: 'Gemini 1.5' },
+      { label: '3D WebGL Framerate', value: '60 FPS', improvement: 'Three.js' },
+      { label: 'Heritage Coverage', value: '28+ States', improvement: 'Interactive' },
     ],
-    proofUrl: 'https://github.com/AP-boi',
+    proofUrl: 'https://github.com/AP-boi/BHARAT-DEKHO',
     verified: true,
-    tags: ['Rust', 'WebAssembly', 'Distributed Systems', 'Kafka', 'Raft Consensus'],
+    tags: ['Next.js 15', 'Gemini AI', 'Three.js', 'React', 'TypeScript', 'Framer Motion'],
   },
   {
     id: 'ach-2',
-    title: 'AWS Certified Solutions Architect – Professional (SAP-C02)',
-    organization: 'Amazon Web Services',
-    category: 'Certification',
-    date: 'Aug 2025',
+    title: 'Cyber Ascension - 2D Cyberpunk Action Game Engine',
+    organization: 'Interactive Game Dev Lab',
+    category: 'Game Release',
+    date: '2026',
     description:
-      'Demonstrated advanced technical expertise in designing enterprise-grade multi-region fault-tolerant topologies, serverless event architectures, and automated cloud compliance guardrails.',
+      'Engineered a fast-paced 2D cyberpunk combat engine on HTML5 Canvas featuring real-time collision hitboxes, fluid sword combat mechanics, dynamic video cutscenes, and Detroit: Become Human style branching dialog trees.',
     metrics: [
-      { label: 'Architectural SLA', value: '99.999%', improvement: 'High Availability' },
-      { label: 'Cloud Cost Efficiency', value: '$120K/yr', improvement: '-42% OpEx' },
+      { label: 'Canvas Framerate', value: '60 FPS', improvement: 'Zero Lag' },
+      { label: 'Combat Responsiveness', value: 'Instant', improvement: 'Sub-frame' },
+      { label: 'Platform Deployment', value: 'Netlify', improvement: 'Live Web' },
     ],
-    proofUrl: 'https://aws.amazon.com/verification',
+    proofUrl: 'https://github.com/AP-boi/cyber-ascension-game',
     verified: true,
-    tags: ['AWS', 'Kubernetes', 'Terraform', 'Multi-Region', 'IAM Hardening'],
+    tags: ['JavaScript', 'HTML5 Canvas', 'Web Audio API', 'Game Engine', 'Netlify'],
   },
   {
     id: 'ach-3',
-    title: 'Postgres & Vector Search Infrastructure Post-Mortem',
-    organization: 'Open Source Systems Lab',
+    title: 'macOS Sonoma WebGL Desktop OS Portfolio',
+    organization: 'Creative Web Systems',
     category: 'Engineering Milestone',
-    date: 'May 2025',
+    date: '2026',
     description:
-      'Optimized pgvector Indexing strategies with HNSW cosine distance partitioning, lowering AI RAG query response times from 480ms down to 18ms across 5M high-dimensional vectors.',
+      'Constructed a production-ready WebGL desktop environment featuring liquid glassmorphism, draggable multi-window architecture with Zustand, Apple Intelligence Siri assistant, and autonomous AI Tetris engine.',
     metrics: [
-      { label: 'RAG Query Time', value: '18.2ms', improvement: '26x Faster' },
-      { label: 'Index Memory Efficiency', value: '6.4 GB', improvement: '-55%' },
+      { label: 'Liquid Physics Framerate', value: '60 FPS', improvement: 'R3F / Three.js' },
+      { label: 'Window State Latency', value: '0ms', improvement: 'Zustand Store' },
+      { label: 'Interactive Apps', value: '8 Native Apps', improvement: 'Mac-like UX' },
     ],
-    proofUrl: 'https://github.com/AP-boi',
+    proofUrl: 'https://github.com/AP-boi/Anugamyas-Portofolio',
     verified: true,
-    tags: ['PostgreSQL', 'pgvector', 'HNSW', 'OpenAI Embeddings', 'Next.js 14'],
+    tags: ['Next.js 14', 'React Three Fiber', 'Three.js', 'Zustand', 'Tailwind CSS'],
   },
   {
     id: 'ach-4',
-    title: 'Open Source Security Contributor of the Month',
-    organization: 'OpenSSF & CNCF',
+    title: 'AirPure Delhi & Open Source Software Portfolio',
+    organization: 'Open Source Community',
     category: 'Open Source',
-    date: 'Feb 2025',
+    date: '2025-2026',
     description:
-      'Identified and patched critical prototype pollution & regex denial-of-service vulnerabilities across 4 major web frameworks, protecting an estimated 2.4 million downstream deployments.',
+      'Authored open-source developer repositories spanning Next.js, Java client utilities, and iOS-styled environmental air quality telemetry platforms.',
     metrics: [
-      { label: 'CVEs Remediated', value: '3 Critical', improvement: 'Zero Day' },
-      { label: 'Downstream Projects Saved', value: '2.4M+', improvement: 'Secured' },
+      { label: 'Active Repositories', value: '8 Projects', improvement: 'Public Code' },
+      { label: 'Primary Languages', value: 'TypeScript / JS / Java', improvement: 'Full Stack' },
     ],
     proofUrl: 'https://github.com/AP-boi',
     verified: true,
-    tags: ['Security', 'OpenSSF', 'Vulnerabilities', 'Node.js', 'Patch Management'],
+    tags: ['Open Source', 'UI/UX', 'Glassmorphism', 'TypeScript', 'Java'],
   },
 ];
 
@@ -102,13 +104,13 @@ export const AchievementsApp: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full space-y-2 text-slate-900 -m-2 p-3 bg-white/90 rounded-b-xl">
+    <div className="flex flex-col h-full space-y-2 text-slate-900 p-3 bg-white/95">
       {/* Authentic macOS Notes App Toolbar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1.5">
-            <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
-            <span className="font-bold text-xs text-slate-900">Notes</span>
+            <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-cover shadow-xs" />
+            <span className="font-bold text-xs text-slate-900">Notes — Achievements & Milestones</span>
           </div>
           <div className="h-3 w-px bg-slate-300" />
           <span className="text-[11px] text-slate-500">{filteredItems.length} Notes</span>

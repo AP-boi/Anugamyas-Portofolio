@@ -36,6 +36,11 @@ const DOCK_ITEMS: DockIconConfig[] = [
     iconSrc: '/icons/terminal.png',
   },
   {
+    id: 'analytics',
+    label: 'Visitor Intelligence & Logs',
+    iconSrc: '/icons/settings.png',
+  },
+  {
     id: 'camera',
     label: 'Camera / Photo Booth',
     iconSrc: '/icons/camera.png',
@@ -51,11 +56,6 @@ const DOCK_ITEMS: DockIconConfig[] = [
     iconSrc: '/icons/siri.png',
   },
   {
-    id: 'github',
-    label: 'Photos',
-    iconSrc: '/icons/photos.png',
-  },
-  {
     id: 'system-info',
     label: 'System Settings',
     iconSrc: '/icons/settings.png',
@@ -68,7 +68,7 @@ const DOCK_ITEMS: DockIconConfig[] = [
 ];
 
 export const Dock: React.FC = memo(() => {
-  const { windows, activeAppId, openWindow, focusWindow } = useOSStore();
+  const { windows, activeAppId, openWindow, focusWindow, minimizeWindow } = useOSStore();
 
   return (
     <div className="fixed bottom-3 left-0 right-0 z-[9999] flex justify-center pointer-events-none">
@@ -85,19 +85,27 @@ export const Dock: React.FC = memo(() => {
           <span className="glass-orb glass-orb--two -bottom-12 -right-10 w-36 h-36 opacity-30" />
           {DOCK_ITEMS.map((item, index) => {
             const isOpen = windows[item.id]?.isOpen;
-            const isActive = activeAppId === item.id;
+            const isMinimized = windows[item.id]?.isMinimized;
+            const isActive = activeAppId === item.id && isOpen && !isMinimized;
 
             return (
               <DockIcon
+                id={`dock-icon-${item.id}`}
                 key={`${item.id}-${item.label}-${index}`}
-                className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square"
+                className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square cursor-pointer"
                 onClick={() => {
                   if (item.isExternal) {
                     window.open(item.externalUrl, '_blank', 'noopener,noreferrer');
                     openWindow(item.id);
                   } else {
                     if (windows[item.id]?.isOpen) {
-                      focusWindow(item.id);
+                      if (windows[item.id]?.isMinimized) {
+                        openWindow(item.id);
+                      } else if (isActive) {
+                        minimizeWindow(item.id);
+                      } else {
+                        focusWindow(item.id);
+                      }
                     } else {
                       openWindow(item.id);
                     }

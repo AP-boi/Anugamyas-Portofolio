@@ -15,62 +15,120 @@ import {
   Layers,
   Activity,
   CheckCircle2,
+  Play,
 } from 'lucide-react';
 
 const PROJECTS_DATA: ProjectItem[] = [
   {
     id: 'proj-1',
-    title: 'AegisMesh',
-    tagline: 'Zero-Trust Distributed Mesh Gateway in Rust & eBPF',
-    category: 'Distributed Systems',
+    title: 'Bharat Dekho (Chalo Dekhe Bharat)',
+    tagline: 'AI-Powered Indian Tourism & Digital Heritage Portal in Next.js 15 & Gemini AI',
+    category: 'AI & WebGL',
     description:
-      'Engineered an enterprise edge security gateway enforcing zero-trust identity verification via eBPF kernel probes. Replaced traditional Envoy proxy bottleneck to sustain 150K concurrent streams.',
-    architectureNotes: 'Reduced context-switch overhead by compiling proxy routing logic down to eBPF bytecode loaded directly into Linux kernel sockets.',
+      'Engineered an immersive national digital heritage portal featuring Gemini AI-powered personalized itinerary generator, 3D interactive cultural artifacts museum via Three.js, state-by-state travel guides, and Lenis smooth momentum scrolling.',
+    architectureNotes: 'Integrated Google Gemini 1.5 Flash API for multi-day contextual itineraries, custom Three.js GLTF artifact loaders with OrbitControls, and Framer Motion layout transitions.',
     metrics: {
-      latency: '2.1 ms P99',
-      throughput: '150,000 req/s',
-      uptime: '99.999% SLA',
+      latency: 'Sub-120ms AI',
+      throughput: '60 FPS 3D Canvas',
+      uptime: 'Live on Web',
     },
-    technologies: ['Rust', 'eBPF', 'gRPC', 'PostgreSQL', 'Docker', 'Kubernetes'],
-    githubUrl: 'https://github.com/AP-boi',
-    liveDemoUrl: 'https://github.com/AP-boi',
-    apiEndpoint: '/api/v1/gateway/healthcheck',
+    technologies: ['Next.js 15', 'Gemini AI', 'Three.js', 'React', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Lenis Scroll'],
+    githubUrl: 'https://github.com/AP-boi/BHARAT-DEKHO',
+    liveDemoUrl: 'https://ap-boi.github.io/BHARAT-DEKHO/',
+    apiEndpoint: 'https://ap-boi.github.io/BHARAT-DEKHO/',
     featured: true,
   },
   {
     id: 'proj-2',
-    title: 'VectorRAG Engine',
-    tagline: 'Sub-20ms Vector Search powered by pgvector & HNSW',
-    category: 'AI / Machine Learning',
+    title: 'Cyber Ascension Game',
+    tagline: '2D Cyberpunk Action Game Engine with Detroit-Style Branching Narrative',
+    category: 'Game Development',
     description:
-      'Built a custom retrieval-augmented generation engine with streaming LLM token delivery and custom HNSW index tuning for semantic documentation search.',
-    architectureNotes: 'Tuned pgvector HNSW m=16, ef_construction=64 to maximize recall rate while executing vector distance queries in under 18ms.',
+      'Constructed a 2D cyberpunk action and movement game engine with custom hitboxes, dynamic video cutscenes, fluid sword and dash combat, and interactive branching dialog systems.',
+    architectureNotes: 'Engineered with 60 FPS HTML5 Canvas render loop, delta-time sprite animator, state-machine character physics, and custom Web Audio ambient soundscapes.',
     metrics: {
-      latency: '18.4 ms',
-      throughput: '12,500 qps',
-      uptime: '99.98%',
+      latency: '16.6ms (60 FPS)',
+      throughput: 'Zero Frame Drops',
+      uptime: 'Live on Netlify',
     },
-    technologies: ['Next.js 14', 'Supabase', 'pgvector', 'OpenAI API', 'TypeScript'],
-    githubUrl: 'https://github.com/AP-boi',
-    apiEndpoint: '/api/v1/vector/search',
+    technologies: ['JavaScript', 'HTML5 Canvas', 'Web Audio API', 'CSS3 FX', 'Netlify'],
+    githubUrl: 'https://github.com/AP-boi/cyber-ascension-game',
+    liveDemoUrl: 'https://neondrift2.netlify.app',
+    apiEndpoint: 'https://neondrift2.netlify.app',
     featured: true,
   },
   {
     id: 'proj-3',
-    title: 'Portfolio OS',
-    tagline: 'Interactive WebGL Desktop Simulator with 3D Scenery',
-    category: 'Interactive Graphics',
+    title: 'Anugamya Portfolio OS',
+    tagline: 'Interactive macOS Sonoma Desktop OS Simulator with Liquid Glass Physics',
+    category: 'Full-Stack & WebGL',
     description:
-      'Constructed a production-ready WebGL desktop environment featuring glassmorphic physics, isolated window state engine, and interactive 3D camera parallax.',
-    architectureNotes: 'Utilized R3F dynamic imports ({ ssr: false }) and on-demand frame loops to lock LCP under 1.2 seconds and CLS to 0.00.',
+      'Developed a fully interactive Apple macOS desktop environment simulator featuring draggable multi-window management, liquid glassmorphism, Siri AI assistant, autonomous Tetris AI, and 3D camera motion grid.',
+    architectureNotes: 'Built with Next.js 14 App Router, Zustand reactive window manager, Framer Motion spring physics, and React Three Fiber liquid canvas shaders.',
     metrics: {
-      latency: '16.6 ms (60 FPS)',
+      latency: 'Sub-16ms Framerate',
       throughput: '100% Client-Side',
+      uptime: '99.99%',
+    },
+    technologies: ['Next.js 14', 'TypeScript', 'React Three Fiber', 'Three.js', 'Framer Motion', 'Zustand', 'Tailwind CSS'],
+    githubUrl: 'https://github.com/AP-boi/Anugamyas-Portofolio',
+    liveDemoUrl: 'https://github.com/AP-boi/Anugamyas-Portofolio',
+    apiEndpoint: '/api/v1/telemetry/ping',
+    featured: true,
+  },
+  {
+    id: 'proj-4',
+    title: 'AirPure Delhi',
+    tagline: 'iOS-Inspired Air Quality Telemetry & Smart Purifier Platform',
+    category: 'UI/UX & Web',
+    description:
+      'Designed and coded an Apple iOS-style web platform tracking real-time Delhi NCR Air Quality Index (AQI), PM2.5 concentrations, and interactive air purification hardware controllers.',
+    architectureNotes: 'Implemented responsive glassmorphism with CSS backdrop-filter blur, CSS custom properties, and real-time metric gauges.',
+    metrics: {
+      latency: 'Instant Render',
+      throughput: '100% Mobile Ready',
+      uptime: 'Live on GitHub',
+    },
+    technologies: ['HTML5', 'CSS3 Glassmorphism', 'JavaScript', 'Responsive UI'],
+    githubUrl: 'https://github.com/AP-boi/airpure-delhi',
+    liveDemoUrl: 'https://ap-boi.github.io/airpure-delhi/',
+    apiEndpoint: 'https://ap-boi.github.io/airpure-delhi/',
+    featured: false,
+  },
+  {
+    id: 'proj-5',
+    title: 'Gravity Client',
+    tagline: 'High-Performance Java Game Client & Runtime Architecture Engine',
+    category: 'Systems & Java',
+    description:
+      'Engineered a custom Java client engine with custom event dispatching, runtime bytecode manipulation, optimized OpenGL rendering pipelines, and modular HUD components.',
+    architectureNotes: 'Designed modular event-bus architecture with minimal JVM garbage collection overhead and custom graphical overlay hooks.',
+    metrics: {
+      latency: 'Zero GC Stutters',
+      throughput: 'Multi-threaded',
       uptime: '100%',
     },
-    technologies: ['React Three Fiber', 'Three.js', 'Framer Motion', 'Zustand', 'Tailwind CSS'],
-    githubUrl: 'https://github.com/AP-boi',
-    apiEndpoint: '/api/v1/telemetry/ping',
+    technologies: ['Java', 'JVM Bytecode', 'Event System', 'OpenGL', 'Game Architecture'],
+    githubUrl: 'https://github.com/AP-boi/gravity-client',
+    apiEndpoint: 'https://github.com/AP-boi/gravity-client',
+    featured: false,
+  },
+  {
+    id: 'proj-6',
+    title: 'Diesel LDR',
+    tagline: 'Lightweight Dynamic Resource Loader & Stream Parser in TypeScript',
+    category: 'Tools & Utilities',
+    description:
+      'Created an asynchronous resource loading pipeline in TypeScript designed for rapid module resolution, intelligent in-memory caching, and streaming buffer parsing.',
+    architectureNotes: 'Constructed with strict TypeScript typing, Node.js stream pipelining, and zero runtime dependencies.',
+    metrics: {
+      latency: 'Sub-5ms Parsing',
+      throughput: 'Async Stream',
+      uptime: '100%',
+    },
+    technologies: ['TypeScript', 'Node.js', 'Streams', 'CLI Automation'],
+    githubUrl: 'https://github.com/AP-boi/diesel-ldr',
+    apiEndpoint: 'https://github.com/AP-boi/diesel-ldr',
     featured: false,
   },
 ];
@@ -79,16 +137,19 @@ export const ProjectsApp: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All Projects');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  const categories = ['All Projects', 'AI & WebGL', 'Game Development', 'Full-Stack & WebGL', 'Systems & Java', 'UI/UX & Web'];
+
   const filteredProjects = PROJECTS_DATA.filter((proj) => {
     const matchesCategory = selectedCategory === 'All Projects' || proj.category === selectedCategory;
     const matchesSearch =
       proj.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      proj.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       proj.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 -m-2 p-3 bg-white/90 rounded-b-xl">
+    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95">
       {/* macOS Finder Navigation Toolbar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
@@ -101,8 +162,8 @@ export const ProjectsApp: React.FC = () => {
             </button>
           </div>
           <div className="flex items-center space-x-1.5">
-            <img src="/icons/finder.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
-            <span className="text-xs font-semibold text-slate-900">Projects & Architecture</span>
+            <img src="/icons/finder.png" alt="" className="w-4 h-4 rounded object-cover shadow-xs" />
+            <span className="text-xs font-semibold text-slate-900">Projects & Repositories</span>
           </div>
           <span className="text-[11px] font-mono text-slate-500">({filteredProjects.length} items)</span>
         </div>
@@ -116,7 +177,7 @@ export const ProjectsApp: React.FC = () => {
               placeholder="Search Projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none outline-none text-[11px] text-slate-900 placeholder:text-slate-400 w-32"
+              className="bg-transparent border-none outline-none text-[11px] text-slate-900 placeholder:text-slate-400 w-36"
             />
           </div>
         </div>
@@ -125,22 +186,21 @@ export const ProjectsApp: React.FC = () => {
       {/* Dual Pane Finder Viewport */}
       <div className="flex-1 flex flex-col md:flex-row gap-3 overflow-hidden">
         {/* Finder Left Sidebar */}
-        <div className="w-full md:w-44 bg-slate-100/80 border border-slate-200 rounded-xl p-2 space-y-1.5">
-          <span className="px-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">Favorites</span>
+        <div className="w-full md:w-48 bg-slate-100/80 border border-slate-200 rounded-xl p-2 space-y-1.5">
+          <span className="px-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">Categories</span>
           <div className="space-y-0.5">
-            {['All Projects', 'Distributed Systems', 'AI / Machine Learning', 'Interactive Graphics'].map((cat) => {
-              const label = cat === 'AI / Machine Learning' ? 'AI / ML' : cat;
-              const isSelected = selectedCategory === (cat === 'AI / ML' ? 'AI / Machine Learning' : cat);
+            {categories.map((cat) => {
+              const isSelected = selectedCategory === cat;
               return (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat === 'AI / ML' ? 'AI / Machine Learning' : cat)}
+                  onClick={() => setSelectedCategory(cat)}
                   className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center space-x-2 ${
-                    isSelected ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-slate-700 hover:bg-slate-200/70 hover:text-slate-900'
+                    isSelected ? 'bg-blue-600 text-white font-semibold shadow-xs' : 'text-slate-700 hover:bg-slate-200/70 hover:text-slate-900'
                   }`}
                 >
                   <Folder className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-blue-600'}`} />
-                  <span className="truncate">{label}</span>
+                  <span className="truncate">{cat}</span>
                 </button>
               );
             })}
@@ -153,7 +213,7 @@ export const ProjectsApp: React.FC = () => {
             {filteredProjects.map((proj) => (
               <div
                 key={proj.id}
-                className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-sm hover:border-blue-500/60 transition-colors space-y-3"
+                className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs hover:border-blue-500/60 transition-all space-y-3"
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -162,19 +222,38 @@ export const ProjectsApp: React.FC = () => {
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-semibold">
                         {proj.category}
                       </span>
+                      {proj.featured && (
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 font-semibold">
+                          FEATURED
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs text-slate-600 font-medium mt-1">{proj.tagline}</p>
                   </div>
 
-                  <a
-                    href={proj.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
-                    title="View Source on GitHub"
-                  >
-                    <Github className="w-4 h-4" />
-                  </a>
+                  <div className="flex items-center space-x-1.5">
+                    {proj.liveDemoUrl && (
+                      <a
+                        href={proj.liveDemoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors border border-blue-200 text-xs font-semibold flex items-center gap-1"
+                        title="Open Live Demo"
+                      >
+                        <span>Demo</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    <a
+                      href={proj.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
+                      title="View Source on GitHub"
+                    >
+                      <Github className="w-4 h-4" />
+                    </a>
+                  </div>
                 </div>
 
                 <p className="text-xs text-slate-700 leading-relaxed">{proj.description}</p>
@@ -182,15 +261,15 @@ export const ProjectsApp: React.FC = () => {
                 {/* Key Metrics Row */}
                 <div className="grid grid-cols-3 gap-2 pt-1">
                   <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">P99 Latency</span>
+                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Performance</span>
                     <div className="text-xs font-bold text-cyan-700 font-mono mt-0.5">{proj.metrics.latency}</div>
                   </div>
                   <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Throughput</span>
+                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Architecture</span>
                     <div className="text-xs font-bold text-emerald-700 font-mono mt-0.5">{proj.metrics.throughput}</div>
                   </div>
                   <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">SLA Uptime</span>
+                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Availability</span>
                     <div className="text-xs font-bold text-purple-700 font-mono mt-0.5">{proj.metrics.uptime}</div>
                   </div>
                 </div>

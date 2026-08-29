@@ -12,9 +12,9 @@ interface ChatMessage {
 }
 
 const PRESET_PROMPTS = [
-  'What distributed systems architectural patterns are used in AegisMesh?',
-  'How did you reduce RAG query latency down to 18ms with pgvector?',
-  'What security credentials and CVE patches have you delivered?',
+  'How did you build the AI Heritage Portal in Bharat Dekho?',
+  'What architecture powers the Cyber Ascension game engine?',
+  'How does the macOS Liquid Glass desktop portfolio work?',
 ];
 
 export const AIAssistantDrawer: React.FC = () => {
@@ -22,8 +22,8 @@ export const AIAssistantDrawer: React.FC = () => {
     {
       id: 'init-ai',
       sender: 'assistant',
-      text: "Hello! I'm your context-aware macOS Siri Intelligence Assistant. Ask me anything about system architecture, latency optimizations, or engineering milestones!",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      text: "Hello! I'm your context-aware Siri Intelligence Assistant. Ask me anything about Anugamya's projects like Bharat Dekho (Gemini AI + Three.js), Cyber Ascension (Canvas 2D Engine), or WebGL systems!",
+      timestamp: 'Just now',
     },
   ]);
   const [inputQuery, setInputQuery] = useState<string>('');
@@ -63,17 +63,23 @@ export const AIAssistantDrawer: React.FC = () => {
       let aiResponseText = '';
       const lower = cleanQuery.toLowerCase();
 
-      if (lower.includes('aegismesh') || lower.includes('distributed')) {
+      if (lower.includes('bharat') || lower.includes('heritage') || lower.includes('gemini') || lower.includes('tourism')) {
         aiResponseText =
-          'AegisMesh employs eBPF kernel socket probes combined with Rust and gRPC consensus channels. By loading zero-trust packet filter bytecode directly into Linux kernel sockets, context switches are avoided, sustaining 150K req/sec with sub-2.1ms P99 latency.';
-      } else if (lower.includes('pgvector') || lower.includes('rag') || lower.includes('latency')) {
+          'Bharat Dekho (Chalo Dekhe Bharat) is built with Next.js 15, Google Gemini AI, and Three.js. It features an AI-powered personalized itinerary planner, a 3D interactive museum with GLTF heritage artifact models, WebGL photo gallery, state travel guides, and Lenis smooth momentum scrolling.';
+      } else if (lower.includes('cyber') || lower.includes('game') || lower.includes('ascension')) {
         aiResponseText =
-          'The VectorRAG engine tuned pgvector with HNSW index parameters (m=16, ef_construction=64). By combining cosine distance partitioning with Next.js 14 Server Actions, RAG vector query times dropped from 480ms to 18.2ms.';
-      } else if (lower.includes('security') || lower.includes('cve') || lower.includes('credentials')) {
+          'Cyber Ascension is a fast-paced 2D cyberpunk action game engine built with JavaScript and HTML5 Canvas running at a locked 60 FPS. It features custom hitboxes, dynamic video cutscenes, fluid sword and dash combat, and Detroit: Become Human style branching narrative choice systems.';
+      } else if (lower.includes('portfolio') || lower.includes('macos') || lower.includes('desktop') || lower.includes('glass')) {
         aiResponseText =
-          'Security milestones include remediating 3 critical CVEs across open-source web frameworks (protecting 2.4M+ deployments) and holding the AWS Certified Solutions Architect – Professional (SAP-C02) credential.';
+          'This macOS Desktop Portfolio is engineered in Next.js 14, React Three Fiber, Framer Motion, and Zustand. It implements real-time draggable multi-window architecture, liquid glassmorphism shaders, an autonomous Dellacherie AI Tetris engine, and interactive 3D webcam pixel grid.';
+      } else if (lower.includes('airpure') || lower.includes('aqi') || lower.includes('delhi')) {
+        aiResponseText =
+          'AirPure Delhi is an iOS-styled glassmorphic web application built to monitor real-time Delhi NCR air pollution index (AQI) and PM2.5 levels with responsive hardware controller telemetry.';
+      } else if (lower.includes('gravity') || lower.includes('java')) {
+        aiResponseText =
+          'Gravity Client is a custom Java client architecture engine featuring modular HUD overlays, runtime bytecode manipulation, low-latency event bus dispatching, and optimized OpenGL rendering.';
       } else {
-        aiResponseText = `Based on the candidate's architecture portfolio: They specialize in high-throughput distributed systems, WebGL creative graphics (Next.js 14 / R3F), and zero-trust security infrastructure with proven P99 latency optimizations.`;
+        aiResponseText = `Based on Anugamya's GitHub portfolio (@AP-boi): Anugamya is a creative developer and software engineer specializing in Next.js 15, Three.js 3D WebGL graphics, Gemini AI integration, 2D HTML5 Canvas game engines, and full-stack interactive applications.`;
       }
 
       const aiMsg: ChatMessage = {
@@ -89,27 +95,19 @@ export const AIAssistantDrawer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 -m-2 p-3 bg-white/90 rounded-b-xl">
-      {/* Siri Header & Intelligence Glow Orb */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-        <div className="flex items-center space-x-3">
-          {/* Animated Siri Intelligence Glow Ring with authentic icon */}
-          <div className="relative flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 via-pink-500 to-cyan-400 p-[1.5px] shadow-[0_0_15px_rgba(168,85,247,0.3)]">
-            <img src="/icons/siri.png" alt="Siri" className="w-full h-full rounded-full object-cover" />
+    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95">
+      {/* Siri Neural Engine Status Bar */}
+      <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
+        <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 text-purple-800 text-[10px] font-semibold shadow-2xs">
+            <Sparkles className="w-3 h-3 text-purple-600 animate-pulse" />
+            <span>Neural RAG Engine Active</span>
           </div>
-          <div>
-            <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-              Apple Siri Intelligence
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-200 font-semibold">
-                RAG ON-DEVICE
-              </span>
-            </h3>
-            <p className="text-[10px] text-slate-500 font-medium">Contextual Codebase Neural Engine</p>
-          </div>
+          <span className="text-[10px] text-slate-400 font-mono">• Contextual</span>
         </div>
 
-        <div className="flex items-center space-x-1.5 text-slate-500">
-          <Volume2 className="w-3.5 h-3.5" />
+        <div className="flex items-center space-x-1 text-slate-400 text-[10px]">
+          <Volume2 className="w-3.5 h-3.5 text-slate-500" />
         </div>
       </div>
 
