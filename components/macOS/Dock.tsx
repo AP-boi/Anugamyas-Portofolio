@@ -95,9 +95,6 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
           direction="middle"
           className="liquid-glass-surface mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[22px] backdrop-saturate-[150%]"
         >
-          <span className="glass-orb glass-orb--one -top-12 -left-10 w-36 h-36 opacity-30" />
-          <span className="glass-orb glass-orb--two -bottom-12 -right-10 w-36 h-36 opacity-30" />
-
           {DOCK_ITEMS.map((item, index) => {
             if (item.id === 'launchpad') {
               return (

@@ -96,22 +96,8 @@
   pointer-events: none;
 }
 
-/* Subtle Glass Orbs for Refraction Underneath Surface */
 .glass-orb {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(6px);
-  opacity: 0.55;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.glass-orb--one {
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), #9f7aea 35%, transparent 70%);
-}
-
-.glass-orb--two {
-  background: radial-gradient(circle at 70% 30%, #b9fff1, #00c6a7 35%, transparent 70%);
+  display: none !important;
 }
 
 .liquid-glass-card {

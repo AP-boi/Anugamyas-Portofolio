@@ -69,9 +69,6 @@ export const AnalogClockWidget: React.FC = memo(() => {
 
   return (
     <div className="liquid-glass-card w-48 p-4 text-slate-900 select-none flex flex-col items-center justify-between">
-      <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
-      <span className="glass-orb glass-orb--two -bottom-10 -left-8 w-28 h-28 opacity-30" />
-      
       {/* Analog Clock Dial */}
       <div className="relative z-10 w-28 h-28 rounded-full bg-slate-100/90 border border-slate-200/90 shadow-inner flex items-center justify-center">
         {/* Hour Markers (12, 3, 6, 9 emphasized) */}

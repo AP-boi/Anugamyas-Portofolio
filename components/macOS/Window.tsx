@@ -112,10 +112,6 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             isActive ? 'ring-1 ring-white/60' : 'opacity-95'
           }`}
         >
-          {/* Subtle liquid refraction orbs */}
-          <span className="glass-orb glass-orb--one -top-16 -right-12 w-48 h-48 opacity-20" />
-          <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-52 h-52 opacity-20" />
-
           {/* macOS Window Titlebar with double-click maximize */}
           <div
             onPointerDown={(e) => {

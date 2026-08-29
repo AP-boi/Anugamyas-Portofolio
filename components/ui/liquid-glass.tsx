@@ -1,45 +1,29 @@
 'use client';
 
-import React, { useRef, memo } from 'react';
+import React, { memo, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface LiquidGlassProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
-  glowColor?: string;
-  enableTilt?: boolean;
+  intensity?: 'subtle' | 'medium' | 'deep';
   interactive?: boolean;
 }
 
 export const LiquidGlassCard: React.FC<LiquidGlassProps> = memo(({
   children,
   className,
-  glowColor = 'rgba(255, 255, 255, 0.45)',
-  enableTilt = true,
   interactive = true,
   ...props
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-
-  // Mouse position tracking for Aceternity UI radial sheen & tilt
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 20 });
-
-  const rotateX = useTransform(springY, [0, 1], enableTilt ? [5, -5] : [0, 0]);
-  const rotateY = useTransform(springX, [0, 1], enableTilt ? [-5, 5] : [0, 0]);
-
-  const sheenX = useTransform(springX, [0, 1], [0, 100]);
-  const sheenY = useTransform(springY, [0, 1], [0, 100]);
-
-  const sheenBackground = useTransform(
-    [sheenX, sheenY],
-    ([sx, sy]: number[]) =>
-      `radial-gradient(400px circle at ${sx}% ${sy}%, ${glowColor}, transparent 60%)`
-  );
+  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!interactive || !cardRef.current) return;
@@ -51,22 +35,24 @@ export const LiquidGlassCard: React.FC<LiquidGlassProps> = memo(({
   };
 
   const handleMouseLeave = () => {
+    if (!interactive) return;
     mouseX.set(0.5);
     mouseY.set(0.5);
   };
+
+  const sheenX = useTransform(smoothX, [0, 1], ['0%', '100%']);
+  const sheenY = useTransform(smoothY, [0, 1], ['0%', '100%']);
+  const sheenBackground = useTransform(
+    [sheenX, sheenY],
+    ([x, y]) => `radial-gradient(400px circle at ${x} ${y}, rgba(255, 255, 255, 0.4), transparent 80%)`
+  );
 
   return (
     <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: 'preserve-3d',
-        willChange: 'transform',
-      }}
-      whileHover={interactive ? { scale: 1.015, y: -2 } : undefined}
+      whileHover={interactive ? { y: -2, transition: { duration: 0.2 } } : undefined}
       whileTap={interactive ? { scale: 0.98 } : undefined}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
       className={cn(
@@ -75,10 +61,6 @@ export const LiquidGlassCard: React.FC<LiquidGlassProps> = memo(({
       )}
       {...(props as any)}
     >
-      {/* Refraction Glass Orbs */}
-      <span className="glass-orb glass-orb--one -top-20 -right-16 w-52 h-52" />
-      <span className="glass-orb glass-orb--two -bottom-24 -left-16 w-60 h-60" />
-
       {/* Interactive Cursor Follower Specular Light Sheen */}
       <motion.div
         className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 rounded-3xl z-10"
@@ -110,10 +92,6 @@ export const LiquidGlassContainer: React.FC<LiquidGlassProps> = memo(({
       style={{ willChange: 'transform', transform: 'translateZ(0)' }}
       {...(props as any)}
     >
-      {/* Refraction Glass Orbs */}
-      <span className="glass-orb glass-orb--one -top-16 -right-12 w-40 h-40 opacity-40" />
-      <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-44 h-44 opacity-40" />
-
       <div className="relative z-10">{children}</div>
     </div>
   );
@@ -122,4 +100,3 @@ export const LiquidGlassContainer: React.FC<LiquidGlassProps> = memo(({
 LiquidGlassContainer.displayName = 'LiquidGlassContainer';
 
 export default LiquidGlassCard;
-

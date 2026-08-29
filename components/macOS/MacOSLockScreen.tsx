@@ -213,9 +213,6 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
 
           {/* Login Card Surface */}
           <div className="liquid-glass-card w-full max-w-[440px] p-6 text-slate-900 border border-white/40 shadow-2xl backdrop-blur-2xl bg-white/75 rounded-3xl">
-            <span className="glass-orb glass-orb--one -top-12 -right-8 w-32 h-32 opacity-30" />
-            <span className="glass-orb glass-orb--two -bottom-12 -left-8 w-36 h-36 opacity-30" />
-
             {/* Profile Avatar & Header */}
             <div className="relative z-10 flex flex-col items-center text-center mb-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 p-0.5 shadow-xl flex items-center justify-center mb-2">

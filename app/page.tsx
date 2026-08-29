@@ -262,8 +262,6 @@ export default function Home() {
             <AnalogClockWidget />
 
             <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
-              <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
-              <span className="glass-orb glass-orb--two -bottom-10 -left-8 w-28 h-28 opacity-30" />
               <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <span className="text-2xl font-light text-slate-900">30°</span>

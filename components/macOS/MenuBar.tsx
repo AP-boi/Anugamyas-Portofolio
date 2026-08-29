@@ -77,10 +77,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
 
   return (
     <header className="fixed top-0 left-0 right-0 h-8 z-[9999] select-none flex items-center justify-between px-3 liquid-glass-surface rounded-none border-t-0 border-x-0 border-b border-white/25 backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]">
-      <span className="glass-orb glass-orb--one -top-6 left-12 w-28 h-28 opacity-25" />
-      <span className="glass-orb glass-orb--two -bottom-6 right-20 w-32 h-32 opacity-25" />
-
-      {/* Left Apple Menu & App Navigation */}
+      {/* Left AP Menu & App Navigation */}
       <div className="flex items-center space-x-3.5 relative z-10">
         <div className="relative">
           <button
