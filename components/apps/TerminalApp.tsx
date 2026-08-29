@@ -2,22 +2,25 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
-import { TerminalHistory } from '@/types/os';
-import { CornerDownLeft } from 'lucide-react';
+import { TerminalHistory, VisitorRecord } from '@/types/os';
+import { CornerDownLeft, ShieldCheck, Lock } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 
-const INITIAL_WELCOME = `Last login: ${new Date().toLocaleDateString()} on ttys002
-Anugamya OS zsh (x86_64-apple-darwin23.0)
-Type "help" to view available system commands.`;
-
 export const TerminalApp: React.FC = () => {
-  const { openWindow, telemetry } = useOSStore();
+  const { openWindow, telemetry, isAdmin, currentUser } = useOSStore();
   const [inputCommand, setInputCommand] = useState<string>('');
+
+  const welcomeBanner = `Last login: ${new Date().toLocaleDateString()} on ttys002
+Anugamya OS zsh (x86_64-apple-darwin23.0)${
+    isAdmin ? ' — 👑 [ADMINISTRATOR SESSION ACTIVE]' : ''
+  }
+Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view available commands.`;
+
   const [history, setHistory] = useState<TerminalHistory[]>([
     {
       id: 'init-1',
       command: '',
-      output: INITIAL_WELCOME,
+      output: welcomeBanner,
       type: 'system',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
@@ -34,7 +37,7 @@ export const TerminalApp: React.FC = () => {
     }
   }, [history]);
 
-  const handleCommandExecute = (e: React.FormEvent) => {
+  const handleCommandExecute = async (e: React.FormEvent) => {
     e.preventDefault();
     const rawInput = inputCommand.trim();
     if (!rawInput) return;
@@ -52,7 +55,14 @@ export const TerminalApp: React.FC = () => {
       case 'help':
         outputResult = (
           <div className="space-y-1 text-slate-300 text-xs">
-            <p className="text-cyan-400 font-bold">System Commands:</p>
+            <p className="text-cyan-400 font-bold">Available System Commands:</p>
+            {isAdmin && (
+              <p className="bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 font-semibold flex items-center gap-1.5">
+                <ShieldCheck className="w-3 h-3 text-amber-400" />
+                <span className="font-bold w-24 inline-block text-amber-400">check</span>
+                <span>[ADMIN] View live visitor database & logins</span>
+              </p>
+            )}
             <p><span className="text-emerald-400 font-bold w-28 inline-block">help</span> Display available commands</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">neofetch</span> Print system summary & ASCII art</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">ls</span> List files and directories</p>
@@ -65,6 +75,83 @@ export const TerminalApp: React.FC = () => {
             <p><span className="text-emerald-400 font-bold w-28 inline-block">clear</span> Clear terminal buffer</p>
           </div>
         );
+        break;
+
+      case 'check':
+      case 'visitors':
+      case 'audit':
+        if (!isAdmin) {
+          outputResult = (
+            <div className="space-y-1 text-rose-400 text-xs">
+              <p className="font-bold flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5" />
+                <span>zsh: permission denied: 'check' is an Administrator-only command.</span>
+              </p>
+              <p className="text-slate-400">
+                Please log in with administrator passcode <strong className="text-white">2026</strong> from the lock screen (⌘L) to unlock.
+              </p>
+            </div>
+          );
+          outputType = 'error';
+        } else {
+          try {
+            const res = await fetch('/api/admin/visitors');
+            const data = await res.json();
+            const visitors: VisitorRecord[] = data.analytics?.recentLogins || [];
+            const summary = data.analytics;
+
+            outputResult = (
+              <div className="space-y-2 text-xs font-mono text-slate-200">
+                <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
+                  <div className="font-bold flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                      <span>VISITOR DATABASE AUDIT — REAL-TIME TELEMETRY</span>
+                    </span>
+                    <span className="text-[10px] text-emerald-400 font-bold">● NODE SYNCED</span>
+                  </div>
+                  <div className="flex space-x-4 mt-1 text-[11px] text-slate-300">
+                    <span>Total Visits: <strong className="text-white">{summary?.totalVisits || 0}</strong></span>
+                    <span>Total Logins: <strong className="text-white">{summary?.totalLogins || 0}</strong></span>
+                    <span>Active Now: <strong className="text-emerald-400">{summary?.activeSessions || 1}</strong></span>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px] border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/20 text-slate-400 uppercase text-[10px]">
+                        <th className="py-1 pr-3">Visitor Name</th>
+                        <th className="py-1 pr-3">Role</th>
+                        <th className="py-1 pr-3">Company</th>
+                        <th className="py-1 pr-3">Device / OS</th>
+                        <th className="py-1 pr-3">Location</th>
+                        <th className="py-1 text-right">Logins</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {visitors.map((v) => (
+                        <tr key={v.id} className="hover:bg-white/5 transition-colors">
+                          <td className="py-1 pr-3 font-semibold text-white truncate max-w-[120px]">
+                            {v.name} {v.isAdmin ? '👑' : ''}
+                          </td>
+                          <td className="py-1 pr-3 text-slate-300 truncate max-w-[100px]">{v.role || 'Visitor'}</td>
+                          <td className="py-1 pr-3 text-slate-400 truncate max-w-[110px]">{v.company || 'Guest'}</td>
+                          <td className="py-1 pr-3 text-cyan-400">{v.os} • {v.browser}</td>
+                          <td className="py-1 pr-3 text-slate-400">{v.city || 'Delhi'}, {v.country || 'IN'}</td>
+                          <td className="py-1 text-right font-bold text-amber-400">{v.sessionCount || 1}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          } catch (err) {
+            outputResult = 'Error retrieving visitor intelligence data from backend node.';
+            outputType = 'error';
+          }
+        }
         break;
 
       case 'neofetch':
@@ -91,9 +178,7 @@ export const TerminalApp: React.FC = () => {
               <p><span className="text-amber-400 font-semibold">Kernel:</span> 23.4.0 Darwin Kernel</p>
               <p><span className="text-amber-400 font-semibold">Uptime:</span> 12 days, 4 hours</p>
               <p><span className="text-amber-400 font-semibold">Shell:</span> zsh 5.9 (x86_64-apple-darwin23.0)</p>
-              <p><span className="text-amber-400 font-semibold">Resolution:</span> 3456x2234 Retina Display</p>
-              <p><span className="text-amber-400 font-semibold">Terminal:</span> Apple Terminal</p>
-              <p><span className="text-amber-400 font-semibold">CPU:</span> Apple M3 Max (16 cores)</p>
+              <p><span className="text-amber-400 font-semibold">Session:</span> {isAdmin ? 'Administrator (Root)' : 'Visitor'}</p>
               <p><span className="text-amber-400 font-semibold">Memory:</span> {telemetry.activeMemoryMb}MB / 64GB</p>
             </div>
           </div>
@@ -264,10 +349,12 @@ export const TerminalApp: React.FC = () => {
           <div key={item.id} className="space-y-1">
             {item.command && (
               <div className="flex items-center space-x-2 text-slate-300">
-                <span className="text-emerald-400 font-bold">anugamya@macbook</span>
+                <span className="text-emerald-400 font-bold">
+                  anugamya{isAdmin ? '#root' : '@macbook'}
+                </span>
                 <span className="text-slate-500">:</span>
                 <span className="text-cyan-400 font-bold">~</span>
-                <span className="text-slate-400">$</span>
+                <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
                 <span className="text-white font-bold">{item.command}</span>
               </div>
             )}
@@ -288,16 +375,18 @@ export const TerminalApp: React.FC = () => {
       </div>
 
       <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0">
-        <span className="text-emerald-400 font-bold whitespace-nowrap">anugamya@macbook</span>
+        <span className="text-emerald-400 font-bold whitespace-nowrap">
+          anugamya{isAdmin ? '#root' : '@macbook'}
+        </span>
         <span className="text-cyan-400 font-bold">~</span>
-        <span className="text-slate-400">$</span>
+        <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
         <input
           ref={inputRef}
           type="text"
           value={inputCommand}
           onChange={(e) => setInputCommand(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type command ('help', 'neofetch')..."
+          placeholder={isAdmin ? "Type 'check' for visitor log..." : "Type 'help' for commands..."}
           className="flex-1 bg-transparent text-white focus:outline-none font-mono caret-cyan-400"
           autoFocus
           spellCheck={false}
