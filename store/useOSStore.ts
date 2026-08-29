@@ -169,7 +169,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
   },
 
   currentUser: null,
-  isLocked: false,
+  isLocked: true,
   isAdmin: false,
   totalLoginsCount: 48,
 

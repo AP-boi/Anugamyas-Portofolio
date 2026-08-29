@@ -76,7 +76,7 @@ export function UserCursor(props: Props) {
     classNames,
   } = mergedProps;
 
-  const { currentUser } = useOSStore();
+  const { currentUser, isLocked } = useOSStore();
   const displayName = currentUser?.name ? currentUser.name.split(' ')[0] : (label || name);
 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -130,9 +130,13 @@ export function UserCursor(props: Props) {
 
   const lastSampleRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
-  // Global mouse tracking across full viewport with rAF throttle
+  // Global mouse tracking across full viewport with rAF throttle (active only when logged in / unlocked)
   useEffect(() => {
-    if (isTouchDevice || typeof window === "undefined") return;
+    if (isTouchDevice || typeof window === "undefined" || isLocked) {
+      const existing = document.getElementById("originkit-usercursor-style");
+      if (existing) existing.remove();
+      return;
+    }
 
     const styleTag = document.createElement("style");
     styleTag.id = "originkit-usercursor-style";
@@ -226,7 +230,7 @@ export function UserCursor(props: Props) {
     );
   }, [arrow, color, size]);
 
-  if (isTouchDevice) return null;
+  if (isTouchDevice || isLocked) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
