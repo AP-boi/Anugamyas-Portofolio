@@ -92,6 +92,15 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
     defaultPosition: { x: 220, y: 80 },
     defaultSize: { width: 440, height: 580 },
   },
+  music: {
+    id: 'music',
+    title: 'Music — Lofi Coding Beats',
+    description: 'Ambient lofi and synthwave music player with real-time visualizer',
+    iconName: 'Music',
+    iconSrc: '/icons/music.png',
+    defaultPosition: { x: 280, y: 110 },
+    defaultSize: { width: 640, height: 480 },
+  },
 };
 
 interface OSStoreState {

@@ -12,6 +12,7 @@ import { AIAssistantDrawer } from '@/components/apps/AIAssistantDrawer';
 import { CameraApp } from '@/components/apps/CameraApp';
 import TetrisApp from '@/components/apps/TetrisApp';
 import { AnalyticsApp } from '@/components/apps/AnalyticsApp';
+import { MusicApp } from '@/components/apps/MusicApp';
 import { useOSStore } from '@/store/useOSStore';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
@@ -19,13 +20,17 @@ import { AnimatedWallpaper } from '@/components/ui/animated-wallpaper';
 import { AppleBootScreen } from '@/components/macOS/AppleBootScreen';
 import { MacOSLockScreen } from '@/components/macOS/MacOSLockScreen';
 import { SpotlightSearch } from '@/components/macOS/SpotlightSearch';
+import { Launchpad } from '@/components/macOS/Launchpad';
+import { ControlCenter } from '@/components/macOS/ControlCenter';
 import { DesktopContextMenu } from '@/components/macOS/DesktopContextMenu';
+import { DesktopMarquee } from '@/components/ui/DesktopMarquee';
 import { AnalogClockWidget } from '@/components/ui/analog-clock';
 import { CalendarWidget } from '@/components/ui/calendar-widget';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Activity, Sun } from 'lucide-react';
+import { sounds } from '@/lib/soundEngine';
 
 const DESKTOP_FOLDERS = [
   {
@@ -90,15 +95,16 @@ export default function Home() {
   const { openWindow, telemetry, currentUser, isLocked, lockScreen } = useOSStore();
   const [wallpaperIndex, setWallpaperIndex] = useState(0);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
+  const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
+  const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
 
-  // Desktop Context Menu State
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; isOpen: boolean }>({
     x: 0,
     y: 0,
     isOpen: false,
   });
 
-  // Track initial visit on mount in Node.js backend
+  // Track initial visit in Node.js backend
   useEffect(() => {
     fetch('/api/visitors/track', {
       method: 'POST',
@@ -107,13 +113,24 @@ export default function Home() {
     }).catch(() => {});
   }, []);
 
-  // Global Keyboard Shortcuts (Cmd+Space Spotlight, Cmd+K Terminal, Cmd+L Lock)
+  // Keyboard Shortcuts (⌘Space, ⌘K, ⌘L, F4 Launchpad)
   useKeyboardShortcuts({
     onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),
   });
 
+  // F4 Key opens Launchpad
+  useEffect(() => {
+    const handleF4 = (e: KeyboardEvent) => {
+      if (e.key === 'F4') {
+        e.preventDefault();
+        setIsLaunchpadOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleF4);
+    return () => window.removeEventListener('keydown', handleF4);
+  }, []);
+
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
-    // Only trigger desktop context menu if clicking directly on workspace surface
     const target = e.target as HTMLElement;
     if (target.closest('.liquid-glass-surface') || target.closest('button') || target.closest('input')) {
       return;
@@ -127,7 +144,15 @@ export default function Home() {
   }, []);
 
   const handleCycleWallpaper = () => {
+    sounds.playClick();
     setWallpaperIndex((prev) => (prev + 1) % WALLPAPERS.length);
+  };
+
+  const handleSelectWallpaper = (src: string) => {
+    const idx = WALLPAPERS.indexOf(src);
+    if (idx !== -1) {
+      setWallpaperIndex(idx);
+    }
   };
 
   return (
@@ -153,6 +178,20 @@ export default function Home() {
         onClose={() => setIsSpotlightOpen(false)}
       />
 
+      {/* Launchpad App Drawer Overlay (F4) */}
+      <Launchpad
+        isOpen={isLaunchpadOpen}
+        onClose={() => setIsLaunchpadOpen(false)}
+      />
+
+      {/* Control Center Panel */}
+      <ControlCenter
+        isOpen={isControlCenterOpen}
+        onClose={() => setIsControlCenterOpen(false)}
+        onSelectWallpaper={handleSelectWallpaper}
+        currentWallpaper={WALLPAPERS[wallpaperIndex]}
+      />
+
       {/* Desktop Right-Click Context Menu */}
       <DesktopContextMenu
         x={contextMenu.x}
@@ -162,25 +201,33 @@ export default function Home() {
         onChangeWallpaper={handleCycleWallpaper}
       />
 
+      {/* Desktop Tactile Selection Marquee Box */}
+      <DesktopMarquee />
+
       {/* Main Desktop Background: Animated Wallpaper */}
       <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
 
-      {/* Top System Menu Bar */}
-      <MenuBar />
+      {/* Top System Menu Bar with Dynamic Island */}
+      <MenuBar
+        onToggleSpotlight={() => setIsSpotlightOpen((prev) => !prev)}
+        onToggleControlCenter={() => setIsControlCenterOpen((prev) => !prev)}
+      />
 
       {/* Desktop Main Workspace Surface Area */}
       <div className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between">
-        {/* Desktop Layout Grid (Folders on left, Hero in middle, Widgets on right) */}
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
           
-          {/* Left Desktop Folder Items Column */}
+          {/* Left Desktop Folders Column */}
           <div className="col-span-3 flex flex-col space-y-7 pt-2 pointer-events-auto z-10">
             {DESKTOP_FOLDERS.map((folder) => (
               <ImagesBadge
                 key={folder.id}
                 text={folder.name}
                 images={folder.images}
-                onClick={() => openWindow('projects')}
+                onClick={() => {
+                  sounds.playWindowOpen();
+                  openWindow('projects');
+                }}
                 folderSize={{ width: 52, height: 38 }}
                 hoverImageSize={{ width: 84, height: 56 }}
                 className="hover:scale-105 transition-transform cursor-pointer"
@@ -212,10 +259,8 @@ export default function Home() {
 
           {/* Right Desktop Widgets Column */}
           <div className="col-span-3 flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
-            {/* 1. macOS Live Analog Clock Widget */}
             <AnalogClockWidget />
 
-            {/* 2. Weather Widget */}
             <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
               <span className="glass-orb glass-orb--one -top-10 -right-8 w-24 h-24 opacity-30" />
               <span className="glass-orb glass-orb--two -bottom-10 -left-8 w-28 h-28 opacity-30" />
@@ -229,7 +274,6 @@ export default function Home() {
               <span className="relative z-10 text-[9px] text-slate-500 font-mono mt-2">New Delhi, India</span>
             </div>
 
-            {/* 3. macOS Interactive Month Calendar Grid Widget */}
             <CalendarWidget />
           </div>
         </div>
@@ -267,7 +311,12 @@ export default function Home() {
         <AnalyticsApp />
       </Window>
 
-      {/* 7. System Telemetry Window */}
+      {/* 7. Apple Music App Window */}
+      <Window id="music">
+        <MusicApp />
+      </Window>
+
+      {/* 8. System Telemetry Window */}
       <Window id="system-info">
         <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200">
@@ -304,20 +353,20 @@ export default function Home() {
         </div>
       </Window>
 
-      {/* 8. Camera & Motion Grid App Window */}
+      {/* 9. Camera & Motion Grid App Window */}
       <Window id="camera">
         <CameraApp />
       </Window>
 
-      {/* 9. Autonomous Tetris AI Game Window */}
+      {/* 10. Autonomous Tetris AI Game Window */}
       <Window id="tetris">
         <TetrisApp />
       </Window>
 
       {/* Dock Launcher */}
-      <Dock />
+      <Dock onOpenLaunchpad={() => setIsLaunchpadOpen(true)} />
 
-      {/* Originkit Custom User Cursor Follower */}
+      {/* Custom User Cursor Follower */}
       <UserCursor name={currentUser?.name || "Anugamya"} />
     </main>
   );

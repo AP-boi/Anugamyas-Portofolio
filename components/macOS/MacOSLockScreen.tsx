@@ -19,6 +19,7 @@ import {
   Wifi,
   Battery,
 } from 'lucide-react';
+import { sounds } from '@/lib/soundEngine';
 
 interface MacOSLockScreenProps {
   onUnlock?: () => void;
@@ -121,6 +122,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
       }
 
       // Success
+      sounds.playUnlockChime();
       setCurrentUser(data.session);
       unlockScreen();
       if (onUnlock) onUnlock();
