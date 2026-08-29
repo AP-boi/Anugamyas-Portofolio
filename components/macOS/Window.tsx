@@ -12,6 +12,13 @@ interface WindowProps {
   children: React.ReactNode;
 }
 
+/**
+ * Authentic macOS window motion:
+ * - Open:    spring zoom-in from ~92% with a soft blur lift (dock-bounce feel)
+ * - Close:   quick fade + scale-down into the dock
+ * - Minimize: genie squish — window accelerates & squashes into the dock (bottom-center)
+ * - Zoom:    left/top/width/height spring between restored & maximized frames
+ */
 export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
   const {
     windows,
@@ -28,6 +35,14 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
 
   const isActive = activeAppId === id;
   const isVisible = windowState?.isOpen && !windowState?.isMinimized;
+  const isMaximized = !!windowState?.isMaximized;
+
+  // Distance from the window's bottom edge to the dock (bottom-center) —
+  // used by the genie exit so the window visibly travels *into* the dock.
+  const genieTravel =
+    typeof window !== 'undefined' && windowState
+      ? window.innerHeight - Math.min(window.innerHeight - 60, windowState.position.y + windowState.size.height)
+      : 520;
 
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
@@ -64,40 +79,64 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           ref={windowRef}
           initial={{
             opacity: 0,
-            scale: 0.88,
-            y: 20,
-            filter: 'blur(8px)',
+            scale: 0.92,
+            y: 14,
+            filter: 'blur(6px)',
           }}
           animate={{
             opacity: 1,
             scale: 1,
             y: 0,
             filter: 'blur(0px)',
+            // Spring between restored & maximized frames (authentic macOS zoom)
+            left: isMaximized ? 0 : windowState.position.x,
+            top: isMaximized ? 32 : Math.max(34, windowState.position.y),
+            width: isMaximized ? '100vw' : windowState.size.width,
+            height: isMaximized ? 'calc(100vh - 84px)' : windowState.size.height,
           }}
-          exit={{
-            opacity: 0,
-            scale: 0.88,
-            y: 20,
-            filter: 'blur(8px)',
-            transition: { duration: 0.18, ease: 'easeOut' },
-          }}
+          exit={
+            // Genie squish into the dock when minimizing; quick fade when closing.
+            // framer keeps the *last* exit variant used, so we pick per action.
+            windowState.lastAction === 'minimize'
+              ? {
+                opacity: 0,
+                scaleX: 0.35,
+                scaleY: 0.02,
+                y: genieTravel,
+                filter: 'blur(3px)',
+                transition: {
+                  duration: 0.42,
+                  ease: [0.45, 0, 0.55, 0.2],
+                },
+              }
+              : {
+                opacity: 0,
+                scale: 0.9,
+                y: 8,
+                filter: 'blur(4px)',
+                transition: { duration: 0.16, ease: 'easeOut' },
+              }
+          }
           transition={{
+            // Open entrance
             type: 'spring',
-            stiffness: 380,
-            damping: 28,
-            mass: 0.6,
+            stiffness: 420,
+            damping: 32,
+            mass: 0.7,
+            // Frame spring for the zoom (maximize) motion
+            left: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
+            top: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
+            width: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
+            height: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
+            filter: { duration: 0.2 },
           }}
           style={{
             zIndex: windowState.zIndex,
             position: 'fixed',
-            left: windowState.isMaximized ? 0 : windowState.position.x,
-            top: windowState.isMaximized ? 32 : Math.max(34, windowState.position.y),
-            width: windowState.isMaximized ? '100vw' : windowState.size.width,
-            height: windowState.isMaximized ? 'calc(100vh - 84px)' : windowState.size.height,
-            transformOrigin: '50% 50%',
+            transformOrigin: windowState.lastAction === 'minimize' ? '50% 100%' : '50% 50%',
           }}
           onMouseDown={() => focusWindow(id)}
-          drag={!windowState.isMaximized}
+          drag={!isMaximized}
           dragListener={false}
           dragControls={dragControls}
           dragMomentum={false}
@@ -108,9 +147,10 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             right: typeof window !== 'undefined' ? window.innerWidth - 200 : 800,
             bottom: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
           }}
-          className={`flex flex-col rounded-2xl overflow-hidden liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[24px] ${
-            isActive ? 'ring-1 ring-white/60' : 'opacity-95'
-          }`}
+          className={`flex flex-col rounded-2xl overflow-hidden liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${isActive
+              ? 'ring-1 ring-white/60 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)]'
+              : 'opacity-95 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),0_14px_40px_rgba(0,0,0,0.22)]'
+            }`}
         >
           {/* macOS Window Titlebar with double-click maximize */}
           <div
@@ -126,7 +166,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
               {/* Red = Close */}
               <button
                 onClick={handleClose}
-                className="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#e0443e] active:scale-90 border border-[#e0443e]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-transform cursor-pointer"
+                className="w-3 h-3 rounded-full bg-[#ff5f56] hover:bg-[#e0443e] active:scale-90 border border-[#e0443e]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-all duration-150 cursor-pointer hover:brightness-110"
                 title="Close"
               >
                 <X className="w-2 h-2 opacity-0 group-hover:opacity-100 font-bold" />
@@ -135,7 +175,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
               {/* Yellow = Minimize */}
               <button
                 onClick={handleMinimize}
-                className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:bg-[#dea123] active:scale-90 border border-[#dea123]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-transform cursor-pointer"
+                className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:bg-[#dea123] active:scale-90 border border-[#dea123]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-all duration-150 cursor-pointer hover:brightness-110"
                 title="Minimize"
               >
                 <Minus className="w-2 h-2 opacity-0 group-hover:opacity-100 font-bold" />
@@ -144,10 +184,10 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
               {/* Green = Zoom / Maximize */}
               <button
                 onClick={handleMaximize}
-                className="w-3 h-3 rounded-full bg-[#27c93f] hover:bg-[#1aab29] active:scale-90 border border-[#1aab29]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-transform cursor-pointer"
+                className="w-3 h-3 rounded-full bg-[#27c93f] hover:bg-[#1aab29] active:scale-90 border border-[#1aab29]/40 flex items-center justify-center text-slate-950 focus:outline-none transition-all duration-150 cursor-pointer hover:brightness-110"
                 title="Zoom"
               >
-                {windowState.isMaximized ? (
+                {isMaximized ? (
                   <Minimize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 font-bold" />
                 ) : (
                   <Maximize2 className="w-2 h-2 opacity-0 group-hover:opacity-100 font-bold" />

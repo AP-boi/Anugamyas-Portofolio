@@ -11,6 +11,8 @@ export interface WindowSize {
 }
 
 export interface WindowState {
+  /** What triggered the last window mutation — drives exit animations */
+  lastAction?: 'open' | 'close' | 'minimize';
   id: AppId;
   title: string;
   isOpen: boolean;

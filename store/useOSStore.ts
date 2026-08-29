@@ -216,7 +216,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
           sessionId: currentUser?.id,
           appOpened: appId,
         }),
-      }).catch(() => {});
+      }).catch(() => { });
     }
   },
 
@@ -237,6 +237,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
           isOpen: true,
           isMinimized: false,
           zIndex: nextZ,
+          lastAction: 'open',
         },
       },
       activeAppId: id,
@@ -255,6 +256,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
         ...target,
         isOpen: false,
         isMinimized: false,
+        lastAction: 'close' as const,
       },
     };
 
@@ -284,6 +286,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
       [id]: {
         ...target,
         isMinimized: true,
+        lastAction: 'minimize' as const,
       },
     };
 
