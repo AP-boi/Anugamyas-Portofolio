@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="square" stroke-linejoin="miter">
+  <!-- AP Interlocking Monogram Vector -->
+  <!-- A left stem and outer frame -->
+  <path d="M175 425 V295 H245 V425" stroke-width="26" />
+  <!-- A crossbar -->
+  <path d="M175 365 H245" stroke-width="26" />
+  <!-- A upper arch merging into P -->
+  <path d="M190 295 V235 C190 215 205 200 230 200 H260 C285 200 300 215 300 235 V425" stroke-width="26" />
+  <!-- P stem and rounded loop -->
+  <path d="M300 200 H360 C405 200 425 225 425 260 C425 295 405 320 360 320 H300" stroke-width="26" />
+</svg>

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { DynamicIsland } from './DynamicIsland';
 import {
-  Apple,
   Wifi,
   Battery,
   Sliders,
@@ -16,6 +15,7 @@ import {
   Volume2,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
+import { APLogo } from '@/components/ui/APLogo';
 
 interface MenuBarProps {
   onToggleSpotlight?: () => void;
@@ -90,8 +90,9 @@ export const MenuBar: React.FC<MenuBarProps> = ({
               setIsUserMenuOpen(false);
             }}
             className="flex items-center space-x-1 p-1 hover:bg-black/5 rounded transition-colors"
+            title="Anugamya System Menu"
           >
-            <Apple className="w-3.5 h-3.5 fill-slate-900 text-slate-900" />
+            <APLogo className="w-4 h-4 text-slate-900" />
           </button>
 
           {isAppleMenuOpen && (

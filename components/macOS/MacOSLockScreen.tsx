@@ -15,11 +15,11 @@ import {
   Mail,
   MessageSquare,
   CheckCircle2,
-  Apple,
   Wifi,
   Battery,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
+import { APLogo } from '@/components/ui/APLogo';
 
 interface MacOSLockScreenProps {
   onUnlock?: () => void;
@@ -188,7 +188,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
         {/* Lock Screen Top Menu Bar */}
         <div className="relative z-20 flex items-center justify-between px-6 py-3 text-white/90 text-xs font-medium">
           <div className="flex items-center space-x-2">
-            <Apple className="w-4 h-4 fill-white" />
+            <APLogo className="w-4 h-4 text-white" />
             <span className="font-semibold tracking-wide">Anugamya Portfolio OS</span>
           </div>
 

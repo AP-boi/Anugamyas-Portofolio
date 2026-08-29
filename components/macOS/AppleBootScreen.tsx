@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Apple } from 'lucide-react';
+import { APLogo } from '@/components/ui/APLogo';
 
 interface AppleBootScreenProps {
   onComplete?: () => void;
@@ -41,9 +41,9 @@ export const AppleBootScreen: React.FC<AppleBootScreenProps> = ({ onComplete }) 
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="mb-14"
+            className="mb-14 flex items-center justify-center"
           >
-            <Apple className="w-20 h-20 fill-white text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.35)]" />
+            <APLogo className="w-24 h-24 text-white" glow={true} />
           </motion.div>
 
           <div className="w-56 h-1.5 bg-neutral-800 rounded-full overflow-hidden relative p-[1px] border border-white/10 shadow-inner">
