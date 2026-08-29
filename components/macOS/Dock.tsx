@@ -1,11 +1,13 @@
 'use client';
 
-import React, { memo } from 'react';
+import React, { memo, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useOSStore } from '@/store/useOSStore';
 import { AppId } from '@/types/os';
 import { Dock as BaseDock, DockIcon } from '@/components/ui/dock';
 import { Grid, Activity } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
+import { MAC_SNAPPY_SPRING } from '@/lib/animations';
 
 interface DockIconConfig {
   id: AppId | 'launchpad';
@@ -82,8 +84,62 @@ const DOCK_ITEMS: DockIconConfig[] = [
   },
 ];
 
+/** macOS dock launch bounce: two hops with a squash-and-stretch landing. */
+const bounceKeyframes = {
+  y: [0, -22, 0, -12, 0],
+  scaleY: [1, 0.94, 1.06, 0.97, 1],
+  scaleX: [1, 1.06, 0.96, 1.02, 1],
+  transition: {
+    duration: 0.9,
+    times: [0, 0.32, 0.58, 0.78, 1],
+    ease: 'easeOut' as const,
+  },
+};
+
 export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
   const { windows, activeAppId, openWindow, focusWindow, minimizeWindow } = useOSStore();
+  // Apps currently playing the launch bounce (macOS bounces icons on open)
+  const [bouncingApps, setBouncingApps] = useState<Set<string>>(new Set());
+
+  const triggerBounce = useCallback((key: string) => {
+    setBouncingApps((prev) => new Set(prev).add(key));
+    setTimeout(() => {
+      setBouncingApps((prev) => {
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
+    }, 950);
+  }, []);
+
+  const handleLaunchpadClick = useCallback(() => {
+    sounds.playClick();
+    triggerBounce('dock-launchpad');
+    if (onOpenLaunchpad) onOpenLaunchpad();
+  }, [onOpenLaunchpad, triggerBounce]);
+
+  const handleAppClick = useCallback(
+    (appId: AppId) => {
+      sounds.playClick();
+      const win = windows[appId];
+      if (win?.isOpen) {
+        if (win.isMinimized) {
+          sounds.playWindowOpen();
+          openWindow(appId);
+        } else if (activeAppId === appId) {
+          sounds.playWindowClose();
+          minimizeWindow(appId);
+        } else {
+          focusWindow(appId);
+        }
+      } else {
+        sounds.playWindowOpen();
+        triggerBounce(appId);
+        openWindow(appId);
+      }
+    },
+    [windows, activeAppId, openWindow, focusWindow, minimizeWindow, triggerBounce]
+  );
 
   return (
     <div className="fixed bottom-3 left-0 right-0 z-[9999] flex justify-center pointer-events-none">
@@ -96,22 +152,23 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
           className="liquid-glass-surface mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[22px] backdrop-saturate-[150%]"
         >
           {DOCK_ITEMS.map((item, index) => {
+            const itemKey = item.id === 'launchpad' ? 'dock-launchpad' : `${appIdKey(item.id as AppId, index)}`;
+            const isBouncing = bouncingApps.has(itemKey);
+
             if (item.id === 'launchpad') {
               return (
                 <DockIcon
                   key="dock-launchpad"
                   className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square cursor-pointer"
-                  onClick={() => {
-                    sounds.playClick();
-                    if (onOpenLaunchpad) onOpenLaunchpad();
-                  }}
+                  onClick={handleLaunchpadClick}
                 >
-                  <div className="absolute -top-11 opacity-0 group-hover:opacity-100 pointer-events-none px-3.5 py-1.5 rounded-xl bg-slate-950/90 text-white text-xs font-medium border border-white/15 backdrop-blur-md whitespace-nowrap shadow-2xl z-30 transition-opacity duration-150">
-                    {item.label}
-                  </div>
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 border border-white/20 shadow-md flex items-center justify-center text-white group-hover:scale-105 transition-transform">
+                  <DockTooltip label={item.label} />
+                  <motion.div
+                    animate={isBouncing ? bounceKeyframes : { y: 0, scaleX: 1, scaleY: 1 }}
+                    className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 border border-white/20 shadow-md flex items-center justify-center text-white origin-bottom"
+                  >
                     <Grid className="w-6 h-6 text-white" />
-                  </div>
+                  </motion.div>
                 </DockIcon>
               );
             }
@@ -126,31 +183,14 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                 id={`dock-icon-${appId}`}
                 key={`${appId}-${item.label}-${index}`}
                 className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square cursor-pointer"
-                onClick={() => {
-                  sounds.playClick();
-                  if (windows[appId]?.isOpen) {
-                    if (windows[appId]?.isMinimized) {
-                      sounds.playWindowOpen();
-                      openWindow(appId);
-                    } else if (isActive) {
-                      sounds.playWindowClose();
-                      minimizeWindow(appId);
-                    } else {
-                      focusWindow(appId);
-                    }
-                  } else {
-                    sounds.playWindowOpen();
-                    openWindow(appId);
-                  }
-                }}
+                onClick={() => handleAppClick(appId)}
               >
-                <div
-                  className="absolute -top-11 opacity-0 group-hover:opacity-100 pointer-events-none px-3.5 py-1.5 rounded-xl bg-slate-950/90 text-white text-xs font-medium border border-white/15 backdrop-blur-md whitespace-nowrap shadow-2xl z-30 transition-opacity duration-150"
-                >
-                  <span>{item.label}</span>
-                </div>
+                <DockTooltip label={item.label} />
 
-                <div className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all">
+                <motion.div
+                  animate={isBouncing ? bounceKeyframes : { y: 0, scaleX: 1, scaleY: 1 }}
+                  className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all origin-bottom"
+                >
                   {item.customIcon === 'activity' ? (
                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-950 border border-emerald-500/30 shadow-lg flex items-center justify-center text-emerald-400 group-hover/icon:scale-105 transition-transform">
                       <Activity className="w-6 h-6 animate-pulse" />
@@ -168,16 +208,21 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                     </div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover/icon:opacity-100 pointer-events-none rounded-2xl transition-opacity duration-200" />
-                </div>
+                </motion.div>
 
-                {isOpen && (
-                  <div
-                    className={`absolute -bottom-1.5 rounded-full ${
-                      isActive ? 'w-2 h-1 bg-slate-900 shadow-sm' : 'w-1 h-1 bg-slate-600'
-                    }`}
-                    style={{ transition: 'all 0.2s ease-out' }}
-                  />
-                )}
+                {/* Running indicator dot — springs in/out like macOS */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{ scale: 0, opacity: 0 }}
+                      transition={MAC_SNAPPY_SPRING}
+                      className={`absolute -bottom-1.5 rounded-full origin-center ${isActive ? 'w-2 h-1 bg-slate-900 shadow-sm' : 'w-1 h-1 bg-slate-600'
+                        }`}
+                    />
+                  )}
+                </AnimatePresence>
               </DockIcon>
             );
           })}
@@ -186,6 +231,23 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
     </div>
   );
 });
+
+/** Stable key helper so bounce state survives re-renders. */
+function appIdKey(appId: AppId, index: number) {
+  return `${appId}-${index}`;
+}
+
+/** macOS-style dock tooltip: springs up with a slight scale overshoot. */
+const DockTooltip: React.FC<{ label: string }> = memo(({ label }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 6, scale: 0.9 }}
+    whileHover={undefined}
+    className="absolute -top-12 opacity-0 scale-90 translate-y-1.5 pointer-events-none px-3.5 py-1.5 rounded-xl bg-slate-950/90 text-white text-xs font-medium border border-white/15 backdrop-blur-md whitespace-nowrap shadow-2xl z-30 transition-all duration-150 ease-out group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0"
+  >
+    {label}
+  </motion.div>
+));
+DockTooltip.displayName = 'DockTooltip';
 
 Dock.displayName = 'Dock';
 export default Dock;
