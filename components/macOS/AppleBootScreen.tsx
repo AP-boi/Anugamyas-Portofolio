@@ -43,7 +43,7 @@ export const AppleBootScreen: React.FC<AppleBootScreenProps> = ({ onComplete }) 
             transition={{ duration: 0.5, ease: 'easeOut' }}
             className="mb-14 flex items-center justify-center"
           >
-            <APLogo className="w-24 h-24 text-white" glow={true} />
+            <APLogo className="w-24 h-24" variant="light" glow={true} />
           </motion.div>
 
           <div className="w-56 h-1.5 bg-neutral-800 rounded-full overflow-hidden relative p-[1px] border border-white/10 shadow-inner">

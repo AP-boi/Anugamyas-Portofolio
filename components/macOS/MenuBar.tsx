@@ -89,7 +89,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
             className="flex items-center space-x-1 p-1 hover:bg-black/5 rounded transition-colors"
             title="Anugamya System Menu"
           >
-            <APLogo className="w-4 h-4 text-slate-900" />
+            <APLogo className="w-4 h-4" variant="dark" />
           </button>
 
           {isAppleMenuOpen && (

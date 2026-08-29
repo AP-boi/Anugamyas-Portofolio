@@ -188,7 +188,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
         {/* Lock Screen Top Menu Bar */}
         <div className="relative z-20 flex items-center justify-between px-6 py-3 text-white/90 text-xs font-medium">
           <div className="flex items-center space-x-2">
-            <APLogo className="w-4 h-4 text-white" />
+            <APLogo className="w-5 h-5" variant="light" glow={true} />
             <span className="font-semibold tracking-wide">Anugamya Portfolio OS</span>
           </div>
 
