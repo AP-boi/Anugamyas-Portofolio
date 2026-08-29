@@ -20,7 +20,6 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
     closeWindow,
     minimizeWindow,
     toggleMaximizeWindow,
-    updateWindowBounds,
   } = useOSStore();
 
   const windowRef = useRef<HTMLDivElement>(null);
@@ -66,8 +65,8 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           ref={windowRef}
           initial={{
             opacity: 0,
-            scale: 0.85,
-            y: 20,
+            scale: 0.88,
+            y: 24,
             filter: 'blur(8px)',
           }}
           animate={{
@@ -78,15 +77,15 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           }}
           exit={{
             opacity: 0,
-            scale: 0.85,
-            y: 20,
+            scale: 0.88,
+            y: 24,
             filter: 'blur(8px)',
-            transition: { duration: 0.2, ease: 'easeOut' },
+            transition: { duration: 0.18, ease: 'easeOut' },
           }}
           transition={{
             type: 'spring',
             stiffness: 380,
-            damping: 30,
+            damping: 28,
             mass: 0.6,
           }}
           style={{
@@ -97,7 +96,6 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             width: windowState.isMaximized ? '100vw' : windowState.size.width,
             height: windowState.isMaximized ? 'calc(100vh - 84px)' : windowState.size.height,
             transformOrigin: '50% 50%',
-            willChange: 'transform, opacity',
           }}
           onMouseDown={() => focusWindow(id)}
           drag={!windowState.isMaximized}
@@ -111,15 +109,19 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             right: typeof window !== 'undefined' ? window.innerWidth - 200 : 800,
             bottom: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
           }}
-          className={`flex flex-col rounded-2xl overflow-hidden liquid-glass-surface border shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[24px] ${
+          className={`flex flex-col rounded-2xl overflow-hidden shadow-2xl ${
             isDarkWindow
-              ? 'border-white/15 bg-slate-950/95 text-slate-100'
-              : 'border-white/40 bg-white/80 text-slate-900'
-          } ${isActive ? 'ring-1 ring-white/50' : 'opacity-95'}`}
+              ? 'border border-white/15 bg-slate-950 text-slate-100 shadow-[0_24px_70px_rgba(0,0,0,0.7)] backdrop-blur-2xl'
+              : 'liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px]'
+          } ${isActive ? 'ring-1 ring-white/40' : 'opacity-95'}`}
         >
-          {/* Subtle liquid refraction orbs */}
-          <span className="glass-orb glass-orb--one -top-16 -right-12 w-48 h-48 opacity-20" />
-          <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-52 h-52 opacity-20" />
+          {/* Subtle liquid refraction orbs only for light glass windows */}
+          {!isDarkWindow && (
+            <>
+              <span className="glass-orb glass-orb--one -top-16 -right-12 w-48 h-48 opacity-20" />
+              <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-52 h-52 opacity-20" />
+            </>
+          )}
 
           {/* macOS Window Titlebar with double-click maximize */}
           <div
@@ -131,8 +133,8 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             className={`relative z-10 h-9 px-3 flex items-center justify-between select-none cursor-grab active:cursor-grabbing border-b flex-shrink-0 ${
               isDarkWindow
                 ? isActive
-                  ? 'bg-slate-900/90 border-white/10 text-slate-200'
-                  : 'bg-slate-950/80 border-white/5 text-slate-400'
+                  ? 'bg-slate-900/95 border-white/10 text-slate-200'
+                  : 'bg-slate-950 border-white/5 text-slate-400'
                 : isActive
                 ? 'bg-white/70 border-slate-200/80 text-slate-800'
                 : 'bg-white/40 border-slate-200/40 text-slate-600'
@@ -190,10 +192,10 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             <div className="w-24" />
           </div>
 
-          {/* Window Content Body */}
+          {/* Window Content Body - seamlessly stretches 100% */}
           <div
-            className={`flex-1 min-h-0 overflow-auto ${
-              isDarkWindow ? 'bg-slate-950 text-slate-100' : 'bg-white/80 text-slate-900'
+            className={`flex-1 min-h-0 w-full flex flex-col ${
+              isDarkWindow ? 'bg-slate-950 text-slate-100' : 'bg-white/80 text-slate-900 overflow-auto'
             } scrollbar-thin ${
               isDarkWindow ? 'scrollbar-thumb-slate-700' : 'scrollbar-thumb-slate-300'
             }`}

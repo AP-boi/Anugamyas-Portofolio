@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { AppId } from '@/types/os';
 import { Dock as BaseDock, DockIcon } from '@/components/ui/dock';
-import { ExternalLink, Grid } from 'lucide-react';
+import { Grid, Activity } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 
 interface DockIconConfig {
@@ -12,6 +12,7 @@ interface DockIconConfig {
   label: string;
   iconSrc?: string;
   isSpecial?: boolean;
+  customIcon?: 'activity';
 }
 
 interface DockProps {
@@ -52,7 +53,7 @@ const DOCK_ITEMS: DockIconConfig[] = [
   {
     id: 'analytics',
     label: 'Activity Monitor — Visitor Intelligence',
-    iconSrc: '/icons/settings.png',
+    customIcon: 'activity',
   },
   {
     id: 'camera',
@@ -153,7 +154,11 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                 </div>
 
                 <div className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all">
-                  {item.iconSrc ? (
+                  {item.customIcon === 'activity' ? (
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-950 border border-emerald-500/30 shadow-lg flex items-center justify-center text-emerald-400 group-hover/icon:scale-105 transition-transform">
+                      <Activity className="w-6 h-6 animate-pulse" />
+                    </div>
+                  ) : item.iconSrc ? (
                     <img
                       src={item.iconSrc}
                       alt={item.label}

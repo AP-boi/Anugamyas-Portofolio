@@ -24,13 +24,13 @@ export const TerminalApp: React.FC = () => {
   ]);
   const [commandHistoryIndex, setCommandHistoryIndex] = useState<number>(-1);
   const [pastInputs, setPastInputs] = useState<string[]>([]);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Only scroll to bottom when user actually enters commands (not on first load)
+  // Auto-scroll only when user enters new commands
   useEffect(() => {
-    if (history.length > 1) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (history.length > 1 && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
     }
   }, [history]);
 
@@ -51,17 +51,51 @@ export const TerminalApp: React.FC = () => {
     switch (mainCommand) {
       case 'help':
         outputResult = (
-          <div className="space-y-1 text-slate-300">
-            <p className="text-cyan-400 font-bold">Available Commands:</p>
+          <div className="space-y-1 text-slate-300 text-xs">
+            <p className="text-cyan-400 font-bold">System Commands:</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">help</span> Display available commands</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">neofetch</span> Print system summary & ASCII art</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">ls</span> List files and directories</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> Display developer profile</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">projects</span> Open Projects Finder window</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">analytics</span> Open Visitor Intelligence dashboard</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">music</span> Open Apple Music player</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> Display developer bio</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">projects</span> Open Projects Finder</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">analytics</span> Open Visitor Intelligence</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">music</span> Open Apple Music Player</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">ai &lt;query&gt;</span> Query Apple Intelligence Siri</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">cat &lt;file&gt;</span> Read file contents</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">open &lt;app&gt;</span> Launch an application or URL</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">clear</span> Clear terminal buffer</p>
+          </div>
+        );
+        break;
+
+      case 'neofetch':
+        outputResult = (
+          <div className="flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs font-mono">
+            <div className="text-cyan-400 leading-none select-none font-bold">
+              <pre>{`       .:'
+     ':::
+   ':::::
+ .::::::
+':::::::::.
+:::::::::::::  
+:::::::::::::  
+':::::::::::
+ '::::::::
+   '::::
+     '`}</pre>
+            </div>
+            <div className="space-y-1 text-slate-300">
+              <p className="text-emerald-400 font-bold">anugamya@macbook-pro</p>
+              <p className="text-slate-500">----------------------</p>
+              <p><span className="text-amber-400 font-semibold">OS:</span> macOS Sonoma 14.4 / Anugamya OS</p>
+              <p><span className="text-amber-400 font-semibold">Host:</span> MacBookPro 18,2 (Apple Silicon M3 Max)</p>
+              <p><span className="text-amber-400 font-semibold">Kernel:</span> 23.4.0 Darwin Kernel</p>
+              <p><span className="text-amber-400 font-semibold">Uptime:</span> 12 days, 4 hours</p>
+              <p><span className="text-amber-400 font-semibold">Shell:</span> zsh 5.9 (x86_64-apple-darwin23.0)</p>
+              <p><span className="text-amber-400 font-semibold">Resolution:</span> 3456x2234 Retina Display</p>
+              <p><span className="text-amber-400 font-semibold">Terminal:</span> Apple Terminal</p>
+              <p><span className="text-amber-400 font-semibold">CPU:</span> Apple M3 Max (16 cores)</p>
+              <p><span className="text-amber-400 font-semibold">Memory:</span> {telemetry.activeMemoryMb}MB / 64GB</p>
+            </div>
           </div>
         );
         break;
@@ -84,7 +118,7 @@ export const TerminalApp: React.FC = () => {
           <div className="space-y-1 text-slate-200">
             <p className="font-bold text-white">Anugamya (@AP-boi) — Creative Full-Stack & 3D WebGL Developer</p>
             <p className="text-slate-400 text-xs">
-              Specializing in Next.js, Three.js 3D WebGL graphics, Gemini AI apps, and interactive canvas engines.
+              Crafting immersive web experiences with Next.js, Three.js 3D WebGL, AI integration, and HTML5 Canvas engines.
             </p>
             <p className="text-emerald-400 font-mono text-[11px]">
               GitHub: https://github.com/AP-boi
@@ -93,9 +127,14 @@ export const TerminalApp: React.FC = () => {
         );
         break;
 
+      case 'ai':
+        openWindow('ai-assistant');
+        outputResult = args ? `Passing query to Siri: "${args}"...` : 'Launching Apple Intelligence Siri...';
+        break;
+
       case 'projects':
         openWindow('projects');
-        outputResult = 'Launching Projects Finder...';
+        outputResult = 'Opening Projects Finder...';
         break;
 
       case 'analytics':
@@ -215,9 +254,12 @@ export const TerminalApp: React.FC = () => {
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
+      className="w-full h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
     >
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-700"
+      >
         {history.map((item) => (
           <div key={item.id} className="space-y-1">
             {item.command && (
@@ -243,7 +285,6 @@ export const TerminalApp: React.FC = () => {
             </div>
           </div>
         ))}
-        <div ref={bottomRef} />
       </div>
 
       <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0">
@@ -256,7 +297,7 @@ export const TerminalApp: React.FC = () => {
           value={inputCommand}
           onChange={(e) => setInputCommand(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type command ('help')..."
+          placeholder="Type command ('help', 'neofetch')..."
           className="flex-1 bg-transparent text-white focus:outline-none font-mono caret-cyan-400"
           autoFocus
           spellCheck={false}
