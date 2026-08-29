@@ -28,7 +28,6 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
 
   const isActive = activeAppId === id;
   const isVisible = windowState?.isOpen && !windowState?.isMinimized;
-  const isDarkWindow = id === 'terminal';
 
   const handleClose = useCallback(
     (e: React.MouseEvent) => {
@@ -66,7 +65,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           initial={{
             opacity: 0,
             scale: 0.88,
-            y: 24,
+            y: 20,
             filter: 'blur(8px)',
           }}
           animate={{
@@ -78,7 +77,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           exit={{
             opacity: 0,
             scale: 0.88,
-            y: 24,
+            y: 20,
             filter: 'blur(8px)',
             transition: { duration: 0.18, ease: 'easeOut' },
           }}
@@ -109,19 +108,13 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             right: typeof window !== 'undefined' ? window.innerWidth - 200 : 800,
             bottom: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
           }}
-          className={`flex flex-col rounded-2xl overflow-hidden shadow-2xl ${
-            isDarkWindow
-              ? 'border border-white/15 bg-slate-950 text-slate-100 shadow-[0_24px_70px_rgba(0,0,0,0.7)] backdrop-blur-2xl'
-              : 'liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px]'
-          } ${isActive ? 'ring-1 ring-white/40' : 'opacity-95'}`}
+          className={`flex flex-col rounded-2xl overflow-hidden liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[24px] ${
+            isActive ? 'ring-1 ring-white/60' : 'opacity-95'
+          }`}
         >
-          {/* Subtle liquid refraction orbs only for light glass windows */}
-          {!isDarkWindow && (
-            <>
-              <span className="glass-orb glass-orb--one -top-16 -right-12 w-48 h-48 opacity-20" />
-              <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-52 h-52 opacity-20" />
-            </>
-          )}
+          {/* Subtle liquid refraction orbs */}
+          <span className="glass-orb glass-orb--one -top-16 -right-12 w-48 h-48 opacity-20" />
+          <span className="glass-orb glass-orb--two -bottom-16 -left-12 w-52 h-52 opacity-20" />
 
           {/* macOS Window Titlebar with double-click maximize */}
           <div
@@ -130,15 +123,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
               dragControls.start(e);
             }}
             onDoubleClick={handleMaximize}
-            className={`relative z-10 h-9 px-3 flex items-center justify-between select-none cursor-grab active:cursor-grabbing border-b flex-shrink-0 ${
-              isDarkWindow
-                ? isActive
-                  ? 'bg-slate-900/95 border-white/10 text-slate-200'
-                  : 'bg-slate-950 border-white/5 text-slate-400'
-                : isActive
-                ? 'bg-white/70 border-slate-200/80 text-slate-800'
-                : 'bg-white/40 border-slate-200/40 text-slate-600'
-            }`}
+            className="relative z-10 h-9 px-3 flex items-center justify-between select-none cursor-grab active:cursor-grabbing border-b border-slate-200/80 bg-white/70 text-slate-800 flex-shrink-0"
           >
             {/* macOS Traffic Light Controls */}
             <div className="flex items-center space-x-2 group w-24">
@@ -175,7 +160,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             </div>
 
             {/* Window Title Header with authentic macOS app icon */}
-            <div className="flex items-center space-x-2 text-xs font-medium tracking-wide pointer-events-none truncate">
+            <div className="flex items-center space-x-2 text-xs font-semibold tracking-wide pointer-events-none truncate text-slate-800">
               {windowState.iconSrc && (
                 <img
                   src={windowState.iconSrc}
@@ -183,23 +168,15 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
                   className="w-4 h-4 rounded object-contain drop-shadow-xs flex-shrink-0"
                 />
               )}
-              <span className={`truncate ${isDarkWindow ? 'font-mono text-[11px] text-slate-300' : 'text-slate-800 font-semibold'}`}>
-                {windowState.title}
-              </span>
+              <span className="truncate">{windowState.title}</span>
             </div>
 
             {/* Right Spacer */}
             <div className="w-24" />
           </div>
 
-          {/* Window Content Body - seamlessly stretches 100% */}
-          <div
-            className={`flex-1 min-h-0 w-full flex flex-col ${
-              isDarkWindow ? 'bg-slate-950 text-slate-100' : 'bg-white/80 text-slate-900 overflow-auto'
-            } scrollbar-thin ${
-              isDarkWindow ? 'scrollbar-thumb-slate-700' : 'scrollbar-thumb-slate-300'
-            }`}
-          >
+          {/* Window Content Body */}
+          <div className="flex-1 min-h-0 w-full overflow-hidden bg-white/95 text-slate-900 flex flex-col">
             {children}
           </div>
         </motion.div>

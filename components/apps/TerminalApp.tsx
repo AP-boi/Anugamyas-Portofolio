@@ -3,7 +3,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { TerminalHistory, VisitorRecord } from '@/types/os';
-import { CornerDownLeft, ShieldCheck, Lock, Terminal as TerminalIcon, Sparkles } from 'lucide-react';
+import {
+  CornerDownLeft,
+  ShieldCheck,
+  Lock,
+  Terminal as TerminalIcon,
+  Sparkles,
+  Trash2,
+  HelpCircle,
+  Cpu,
+  FolderGit2,
+} from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 
 export const TerminalApp: React.FC = () => {
@@ -37,9 +47,8 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
     }
   }, [history]);
 
-  const handleCommandExecute = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const rawInput = inputCommand.trim();
+  const executeCommand = async (rawCommand: string) => {
+    const rawInput = rawCommand.trim();
     if (!rawInput) return;
 
     sounds.playClick();
@@ -345,64 +354,132 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
   };
 
   return (
-    <div
-      onClick={() => inputRef.current?.focus()}
-      className="w-full h-full flex-1 flex flex-col font-mono text-xs bg-[#0d1117] text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
-    >
-      <div
-        ref={scrollContainerRef}
-        className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-slate-700"
-      >
-        {history.map((item) => (
-          <div key={item.id} className="space-y-1">
-            {item.command && (
-              <div className="flex items-center space-x-2 text-slate-300">
-                <span className="text-emerald-400 font-bold">
-                  anugamya{isAdmin ? '#root' : '@macbook'}
-                </span>
-                <span className="text-slate-500">:</span>
-                <span className="text-cyan-400 font-bold">~</span>
-                <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
-                <span className="text-white font-bold">{item.command}</span>
-              </div>
-            )}
-
-            <div
-              className={`${
-                item.type === 'error'
-                  ? 'text-rose-400 font-semibold'
-                  : item.type === 'system'
-                  ? 'text-slate-300 whitespace-pre-line leading-relaxed'
-                  : 'text-slate-200'
-              }`}
-            >
-              {item.output}
-            </div>
+    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95 select-none overflow-hidden">
+      {/* Top macOS App Subheader Bar (Matching Finder, Notes, Analytics) */}
+      <div className="flex items-center justify-between pb-2 border-b border-slate-200 flex-shrink-0">
+        <div className="flex items-center space-x-2.5">
+          <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-slate-900 to-slate-700 flex items-center justify-center text-white shadow-xs">
+            <TerminalIcon className="w-3 h-3 text-emerald-400" />
           </div>
-        ))}
+          <span className="text-xs font-bold text-slate-900">Terminal — zsh</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-600">
+            {isAdmin ? '👑 Administrator' : 'Guest / Visitor'}
+          </span>
+        </div>
+
+        {/* Quick Command Action Toolbar Chips */}
+        <div className="flex items-center space-x-1.5">
+          {isAdmin && (
+            <button
+              onClick={() => executeCommand('check')}
+              className="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors"
+            >
+              <ShieldCheck className="w-3 h-3 text-amber-700" />
+              <span>Check Visitors</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => executeCommand('neofetch')}
+            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+          >
+            <Cpu className="w-3 h-3 text-cyan-600" />
+            <span>Neofetch</span>
+          </button>
+
+          <button
+            onClick={() => executeCommand('projects')}
+            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+          >
+            <FolderGit2 className="w-3 h-3 text-blue-600" />
+            <span>Projects</span>
+          </button>
+
+          <button
+            onClick={() => executeCommand('help')}
+            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+          >
+            <HelpCircle className="w-3 h-3 text-slate-600" />
+            <span>Help</span>
+          </button>
+
+          <button
+            onClick={() => setHistory([])}
+            className="p-1 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+            title="Clear Buffer"
+          >
+            <Trash2 className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
-      <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0 bg-[#0d1117]">
-        <span className="text-emerald-400 font-bold whitespace-nowrap">
-          anugamya{isAdmin ? '#root' : '@macbook'}
-        </span>
-        <span className="text-cyan-400 font-bold">~</span>
-        <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputCommand}
-          onChange={(e) => setInputCommand(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder={isAdmin ? "Type 'check' for visitor log..." : "Type 'help' for commands..."}
-          className="flex-1 bg-transparent text-white focus:outline-none font-mono caret-cyan-400"
-          autoFocus
-          spellCheck={false}
-        />
-        <button type="submit" className="text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer">
-          <CornerDownLeft className="w-3.5 h-3.5" />
-        </button>
-      </form>
+      {/* Inner Sleek Dark Terminal Console Pane */}
+      <div
+        onClick={() => inputRef.current?.focus()}
+        className="flex-1 min-h-0 w-full rounded-2xl bg-slate-950 text-slate-100 p-4 border border-slate-800 shadow-inner flex flex-col font-mono text-xs overflow-hidden cursor-text"
+      >
+        <div
+          ref={scrollContainerRef}
+          className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-slate-700"
+        >
+          {history.map((item) => (
+            <div key={item.id} className="space-y-1">
+              {item.command && (
+                <div className="flex items-center space-x-2 text-slate-300">
+                  <span className="text-emerald-400 font-bold">
+                    anugamya{isAdmin ? '#root' : '@macbook'}
+                  </span>
+                  <span className="text-slate-500">:</span>
+                  <span className="text-cyan-400 font-bold">~</span>
+                  <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
+                  <span className="text-white font-bold">{item.command}</span>
+                </div>
+              )}
+
+              <div
+                className={`${
+                  item.type === 'error'
+                    ? 'text-rose-400 font-semibold'
+                    : item.type === 'system'
+                    ? 'text-slate-300 whitespace-pre-line leading-relaxed'
+                    : 'text-slate-200'
+                }`}
+              >
+                {item.output}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Command Line Input */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            executeCommand(inputCommand);
+          }}
+          className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0 bg-slate-950"
+        >
+          <span className="text-emerald-400 font-bold whitespace-nowrap">
+            anugamya{isAdmin ? '#root' : '@macbook'}
+          </span>
+          <span className="text-cyan-400 font-bold">~</span>
+          <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
+          <input
+            ref={inputRef}
+            type="text"
+            value={inputCommand}
+            onChange={(e) => setInputCommand(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder={isAdmin ? "Type 'check' for visitor log..." : "Type 'help' for commands..."}
+            className="flex-1 bg-transparent text-white focus:outline-none font-mono caret-cyan-400"
+            autoFocus
+            spellCheck={false}
+          />
+          <button type="submit" className="text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer">
+            <CornerDownLeft className="w-3.5 h-3.5" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
