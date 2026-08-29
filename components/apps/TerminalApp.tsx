@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { TerminalHistory } from '@/types/os';
 import { CornerDownLeft } from 'lucide-react';
+import { sounds } from '@/lib/soundEngine';
 
 const INITIAL_WELCOME = `Last login: ${new Date().toLocaleDateString()} on ttys002
 Anugamya OS zsh (x86_64-apple-darwin23.0)
@@ -26,8 +27,11 @@ export const TerminalApp: React.FC = () => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Only scroll to bottom when user actually enters commands (not on first load)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (history.length > 1) {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [history]);
 
   const handleCommandExecute = (e: React.FormEvent) => {
@@ -35,6 +39,7 @@ export const TerminalApp: React.FC = () => {
     const rawInput = inputCommand.trim();
     if (!rawInput) return;
 
+    sounds.playClick();
     const sanitizedCmd = rawInput.replace(/[<>'"`;]/g, '');
     const parts = sanitizedCmd.split(' ');
     const mainCommand = parts[0].toLowerCase();
@@ -53,6 +58,7 @@ export const TerminalApp: React.FC = () => {
             <p><span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> Display developer profile</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">projects</span> Open Projects Finder window</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">analytics</span> Open Visitor Intelligence dashboard</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">music</span> Open Apple Music player</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">cat &lt;file&gt;</span> Read file contents</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">open &lt;app&gt;</span> Launch an application or URL</p>
             <p><span className="text-emerald-400 font-bold w-28 inline-block">clear</span> Clear terminal buffer</p>
@@ -97,6 +103,11 @@ export const TerminalApp: React.FC = () => {
         outputResult = 'Opening Visitor Intelligence & Analytics...';
         break;
 
+      case 'music':
+        openWindow('music');
+        outputResult = 'Opening Apple Music player...';
+        break;
+
       case 'camera':
       case 'cam':
         openWindow('camera');
@@ -132,6 +143,9 @@ export const TerminalApp: React.FC = () => {
         } else if (args === 'analytics') {
           openWindow('analytics');
           outputResult = 'Opening Analytics...';
+        } else if (args === 'music') {
+          openWindow('music');
+          outputResult = 'Opening Music...';
         } else {
           outputResult = `open: unknown target "${args}". Try "open github" or "open projects"`;
           outputType = 'error';
@@ -201,7 +215,7 @@ export const TerminalApp: React.FC = () => {
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-3.5 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
+      className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
     >
       <div className="flex-1 overflow-y-auto space-y-3 pr-1">
         {history.map((item) => (
@@ -221,7 +235,7 @@ export const TerminalApp: React.FC = () => {
                 item.type === 'error'
                   ? 'text-rose-400 font-semibold'
                   : item.type === 'system'
-                  ? 'text-slate-400'
+                  ? 'text-slate-300 whitespace-pre-line leading-relaxed'
                   : 'text-slate-200'
               }`}
             >
@@ -232,7 +246,7 @@ export const TerminalApp: React.FC = () => {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2 border-t border-white/10">
+      <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0">
         <span className="text-emerald-400 font-bold whitespace-nowrap">anugamya@macbook</span>
         <span className="text-cyan-400 font-bold">~</span>
         <span className="text-slate-400">$</span>
