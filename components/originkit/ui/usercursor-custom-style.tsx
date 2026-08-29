@@ -130,9 +130,9 @@ export function UserCursor(props: Props) {
 
   const lastSampleRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
-  // Global mouse tracking across full viewport with rAF throttle (active only when logged in / unlocked)
+  // Global mouse tracking across full viewport with rAF throttle
   useEffect(() => {
-    if (isTouchDevice || typeof window === "undefined" || isLocked) {
+    if (isTouchDevice || typeof window === "undefined") {
       const existing = document.getElementById("originkit-usercursor-style");
       if (existing) existing.remove();
       return;
@@ -230,10 +230,10 @@ export function UserCursor(props: Props) {
     );
   }, [arrow, color, size]);
 
-  if (isTouchDevice || isLocked) return null;
+  if (isTouchDevice) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[99999] overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-[999999] overflow-hidden">
       {/* Label trailing pill with dynamic visitor name */}
       {showLabel && (
         <motion.div
