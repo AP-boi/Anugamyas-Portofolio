@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { TerminalHistory, VisitorRecord } from '@/types/os';
-import { CornerDownLeft, ShieldCheck, Lock } from 'lucide-react';
+import { CornerDownLeft, ShieldCheck, Lock, Terminal as TerminalIcon, Sparkles } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 
 export const TerminalApp: React.FC = () => {
@@ -14,7 +14,7 @@ export const TerminalApp: React.FC = () => {
 Anugamya OS zsh (x86_64-apple-darwin23.0)${
     isAdmin ? ' — 👑 [ADMINISTRATOR SESSION ACTIVE]' : ''
   }
-Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view available commands.`;
+Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view available system commands.`;
 
   const [history, setHistory] = useState<TerminalHistory[]>([
     {
@@ -54,25 +54,30 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
     switch (mainCommand) {
       case 'help':
         outputResult = (
-          <div className="space-y-1 text-slate-300 text-xs">
-            <p className="text-cyan-400 font-bold">Available System Commands:</p>
+          <div className="space-y-1.5 text-slate-300 text-xs py-1">
+            <p className="text-cyan-400 font-bold tracking-wide">Available System Commands:</p>
             {isAdmin && (
-              <p className="bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20 font-semibold flex items-center gap-1.5">
-                <ShieldCheck className="w-3 h-3 text-amber-400" />
-                <span className="font-bold w-24 inline-block text-amber-400">check</span>
-                <span>[ADMIN] View live visitor database & logins</span>
-              </p>
+              <div className="bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-md border border-amber-500/30 font-semibold flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                  <strong className="text-amber-400 font-mono">check</strong>
+                  <span>— View real-time visitor database & logins</span>
+                </span>
+                <span className="text-[10px] bg-amber-400 text-black px-1 rounded font-bold uppercase">Admin</span>
+              </div>
             )}
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">help</span> Display available commands</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">neofetch</span> Print system summary & ASCII art</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">ls</span> List files and directories</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> Display developer bio</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">projects</span> Open Projects Finder</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">analytics</span> Open Visitor Intelligence</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">music</span> Open Apple Music Player</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">ai &lt;query&gt;</span> Query Apple Intelligence Siri</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">cat &lt;file&gt;</span> Read file contents</p>
-            <p><span className="text-emerald-400 font-bold w-28 inline-block">clear</span> Clear terminal buffer</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-1 font-mono text-[11px]">
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">help</span> Display available commands</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">neofetch</span> System info summary & ASCII</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">ls</span> List files and directories</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">whoami</span> Developer biography</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">projects</span> Open Projects Finder</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">analytics</span> Open Activity Monitor</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">music</span> Open Apple Music Player</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query Apple Intelligence Siri</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">cat &lt;file&gt;</span> Print file contents</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">clear</span> Clear terminal screen</p>
+            </div>
           </div>
         );
         break;
@@ -82,7 +87,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
       case 'audit':
         if (!isAdmin) {
           outputResult = (
-            <div className="space-y-1 text-rose-400 text-xs">
+            <div className="space-y-1 text-rose-400 text-xs py-1">
               <p className="font-bold flex items-center gap-1.5">
                 <Lock className="w-3.5 h-3.5" />
                 <span>zsh: permission denied: 'check' is an Administrator-only command.</span>
@@ -101,45 +106,48 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
             const summary = data.analytics;
 
             outputResult = (
-              <div className="space-y-2 text-xs font-mono text-slate-200">
-                <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300">
+              <div className="space-y-2 text-xs font-mono text-slate-200 py-1">
+                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-1">
                   <div className="font-bold flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                      <span>VISITOR DATABASE AUDIT — REAL-TIME TELEMETRY</span>
+                      <ShieldCheck className="w-4 h-4 text-amber-400" />
+                      <span>VISITOR INTELLIGENCE AUDIT — LIVE NODE TELEMETRY</span>
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-bold">● NODE SYNCED</span>
+                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>ONLINE</span>
+                    </span>
                   </div>
-                  <div className="flex space-x-4 mt-1 text-[11px] text-slate-300">
+                  <div className="flex space-x-4 text-[11px] text-slate-300 pt-0.5">
                     <span>Total Visits: <strong className="text-white">{summary?.totalVisits || 0}</strong></span>
                     <span>Total Logins: <strong className="text-white">{summary?.totalLogins || 0}</strong></span>
-                    <span>Active Now: <strong className="text-emerald-400">{summary?.activeSessions || 1}</strong></span>
+                    <span>Active Sessions: <strong className="text-emerald-400">{summary?.activeSessions || 1}</strong></span>
                   </div>
                 </div>
 
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto rounded-lg border border-white/10 bg-black/40">
                   <table className="w-full text-left text-[11px] border-collapse">
                     <thead>
-                      <tr className="border-b border-white/20 text-slate-400 uppercase text-[10px]">
-                        <th className="py-1 pr-3">Visitor Name</th>
-                        <th className="py-1 pr-3">Role</th>
-                        <th className="py-1 pr-3">Company</th>
-                        <th className="py-1 pr-3">Device / OS</th>
-                        <th className="py-1 pr-3">Location</th>
-                        <th className="py-1 text-right">Logins</th>
+                      <tr className="border-b border-white/15 bg-white/5 text-slate-400 uppercase text-[9px] tracking-wider">
+                        <th className="py-1.5 px-3">Visitor Name</th>
+                        <th className="py-1.5 px-3">Role</th>
+                        <th className="py-1.5 px-3">Company</th>
+                        <th className="py-1.5 px-3">Device / OS</th>
+                        <th className="py-1.5 px-3">Location</th>
+                        <th className="py-1.5 px-3 text-right">Logins</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5">
                       {visitors.map((v) => (
                         <tr key={v.id} className="hover:bg-white/5 transition-colors">
-                          <td className="py-1 pr-3 font-semibold text-white truncate max-w-[120px]">
+                          <td className="py-1.5 px-3 font-semibold text-white truncate max-w-[120px]">
                             {v.name} {v.isAdmin ? '👑' : ''}
                           </td>
-                          <td className="py-1 pr-3 text-slate-300 truncate max-w-[100px]">{v.role || 'Visitor'}</td>
-                          <td className="py-1 pr-3 text-slate-400 truncate max-w-[110px]">{v.company || 'Guest'}</td>
-                          <td className="py-1 pr-3 text-cyan-400">{v.os} • {v.browser}</td>
-                          <td className="py-1 pr-3 text-slate-400">{v.city || 'Delhi'}, {v.country || 'IN'}</td>
-                          <td className="py-1 text-right font-bold text-amber-400">{v.sessionCount || 1}</td>
+                          <td className="py-1.5 px-3 text-slate-300 truncate max-w-[100px]">{v.role || 'Visitor'}</td>
+                          <td className="py-1.5 px-3 text-slate-400 truncate max-w-[110px]">{v.company || 'Guest'}</td>
+                          <td className="py-1.5 px-3 text-cyan-400">{v.os} • {v.browser}</td>
+                          <td className="py-1.5 px-3 text-slate-400">{v.city || 'Delhi'}, {v.country || 'IN'}</td>
+                          <td className="py-1.5 px-3 text-right font-bold text-amber-400">{v.sessionCount || 1}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -156,7 +164,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
 
       case 'neofetch':
         outputResult = (
-          <div className="flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs font-mono">
+          <div className="flex flex-col sm:flex-row items-start space-y-2 sm:space-y-0 sm:space-x-4 text-xs font-mono py-1">
             <div className="text-cyan-400 leading-none select-none font-bold">
               <pre>{`       .:'
      ':::
@@ -187,7 +195,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
 
       case 'ls':
         outputResult = (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono py-1">
             <span className="text-blue-400 font-bold">drwxr-xr-x Projects/</span>
             <span className="text-amber-400 font-bold">drwxr-xr-x Achievements/</span>
             <span className="text-emerald-400 font-bold">-rw-r--r-- about.txt</span>
@@ -200,7 +208,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
 
       case 'whoami':
         outputResult = (
-          <div className="space-y-1 text-slate-200">
+          <div className="space-y-1 text-slate-200 py-1">
             <p className="font-bold text-white">Anugamya (@AP-boi) — Creative Full-Stack & 3D WebGL Developer</p>
             <p className="text-slate-400 text-xs">
               Crafting immersive web experiences with Next.js, Three.js 3D WebGL, AI integration, and HTML5 Canvas engines.
@@ -242,7 +250,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
         if (args === 'about.txt' || args === 'achievements.txt') {
           openWindow('achievements');
           outputResult = (
-            <div className="space-y-1 text-amber-300 font-mono text-xs">
+            <div className="space-y-1 text-amber-300 font-mono text-xs py-1">
               <p className="font-bold">[ Featured Projects ]</p>
               <p>• Bharat Dekho: AI-powered Indian Tourism & 3D Heritage Portal (Next.js 15 + Gemini AI + Three.js)</p>
               <p>• Cyber Ascension: 2D Cyberpunk Action Game Engine (HTML5 Canvas)</p>
@@ -278,7 +286,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
 
       case 'telemetry':
         outputResult = (
-          <div className="space-y-1 font-mono text-xs text-cyan-300">
+          <div className="space-y-1 font-mono text-xs text-cyan-300 py-1">
             <p className="font-bold text-white">[ Node Telemetry ]</p>
             <p>Latency: {telemetry.latencyMs} ms</p>
             <p>Region: {telemetry.region}</p>
@@ -339,11 +347,11 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
   return (
     <div
       onClick={() => inputRef.current?.focus()}
-      className="w-full h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
+      className="w-full h-full flex-1 flex flex-col font-mono text-xs bg-[#0d1117] text-slate-100 p-4 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
     >
       <div
         ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-700"
+        className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-slate-700"
       >
         {history.map((item) => (
           <div key={item.id} className="space-y-1">
@@ -374,7 +382,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
         ))}
       </div>
 
-      <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0">
+      <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2.5 border-t border-white/10 flex-shrink-0 bg-[#0d1117]">
         <span className="text-emerald-400 font-bold whitespace-nowrap">
           anugamya{isAdmin ? '#root' : '@macbook'}
         </span>
@@ -391,7 +399,7 @@ Type ${isAdmin ? '"check" to inspect visitor logs or ' : ''}"help" to view avail
           autoFocus
           spellCheck={false}
         />
-        <button type="submit" className="text-slate-500 hover:text-cyan-400 transition-colors">
+        <button type="submit" className="text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer">
           <CornerDownLeft className="w-3.5 h-3.5" />
         </button>
       </form>
