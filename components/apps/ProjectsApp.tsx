@@ -9,13 +9,6 @@ import {
   ExternalLink,
   Github,
   Search,
-  Grid,
-  List,
-  Sparkles,
-  Layers,
-  Activity,
-  CheckCircle2,
-  Play,
 } from 'lucide-react';
 
 const PROJECTS_DATA: ProjectItem[] = [
@@ -68,55 +61,55 @@ const PROJECTS_DATA: ProjectItem[] = [
     metrics: {
       latency: 'Sub-16ms Framerate',
       throughput: '100% Client-Side',
-      uptime: '99.99%',
+      uptime: 'Always On',
     },
-    technologies: ['Next.js 14', 'TypeScript', 'React Three Fiber', 'Three.js', 'Framer Motion', 'Zustand', 'Tailwind CSS'],
+    technologies: ['Next.js 14', 'React Three Fiber', 'Three.js', 'Zustand', 'Framer Motion', 'Tailwind CSS'],
     githubUrl: 'https://github.com/AP-boi/Anugamyas-Portofolio',
-    liveDemoUrl: 'https://github.com/AP-boi/Anugamyas-Portofolio',
-    apiEndpoint: '/api/v1/telemetry/ping',
+    liveDemoUrl: 'https://anugamya.dev',
+    apiEndpoint: 'https://anugamya.dev',
     featured: true,
   },
   {
     id: 'proj-4',
     title: 'AirPure Delhi',
-    tagline: 'iOS-Inspired Air Quality Telemetry & Smart Purifier Platform',
+    tagline: 'Real-Time Air Quality Index & PM2.5 Telemetry Dashboard',
     category: 'UI/UX & Web',
     description:
-      'Designed and coded an Apple iOS-style web platform tracking real-time Delhi NCR Air Quality Index (AQI), PM2.5 concentrations, and interactive air purification hardware controllers.',
-    architectureNotes: 'Implemented responsive glassmorphism with CSS backdrop-filter blur, CSS custom properties, and real-time metric gauges.',
+      'Built a live air pollution and environmental telemetry web portal for Delhi NCR featuring real-time AQI tracking, health advisory systems, and responsive hardware controllers.',
+    architectureNotes: 'Crafted with Apple iOS weather aesthetics, real-time sensor API integration, and glassmorphic micro-interactions.',
     metrics: {
-      latency: 'Instant Render',
-      throughput: '100% Mobile Ready',
-      uptime: 'Live on GitHub',
+      latency: 'Instant Sync',
+      throughput: 'Real-Time AQI',
+      uptime: 'Live on Web',
     },
-    technologies: ['HTML5', 'CSS3 Glassmorphism', 'JavaScript', 'Responsive UI'],
-    githubUrl: 'https://github.com/AP-boi/airpure-delhi',
-    liveDemoUrl: 'https://ap-boi.github.io/airpure-delhi/',
-    apiEndpoint: 'https://ap-boi.github.io/airpure-delhi/',
-    featured: false,
+    technologies: ['Next.js', 'React', 'Tailwind CSS', 'Lucide Icons', 'API Integration'],
+    githubUrl: 'https://github.com/AP-boi/AirPure-Delhi',
+    liveDemoUrl: 'https://ap-boi.github.io/AirPure-Delhi/',
+    apiEndpoint: 'https://ap-boi.github.io/AirPure-Delhi/',
+    featured: true,
   },
   {
     id: 'proj-5',
     title: 'Gravity Client',
-    tagline: 'High-Performance Java Game Client & Runtime Architecture Engine',
+    tagline: 'Custom Minecraft Java Client Engine & Low-Latency Event Bus',
     category: 'Systems & Java',
     description:
-      'Engineered a custom Java client engine with custom event dispatching, runtime bytecode manipulation, optimized OpenGL rendering pipelines, and modular HUD components.',
-    architectureNotes: 'Designed modular event-bus architecture with minimal JVM garbage collection overhead and custom graphical overlay hooks.',
+      'Engineered a performance-focused Java client architecture featuring modular draggable HUD overlays, runtime bytecode manipulation, low-latency event bus dispatching, and optimized OpenGL rendering.',
+    architectureNotes: 'Engineered with clean object-oriented architecture, custom OpenGL rendering hooks, and packet handling pipelines.',
     metrics: {
-      latency: 'Zero GC Stutters',
-      throughput: 'Multi-threaded',
-      uptime: '100%',
+      latency: 'Zero Overhead',
+      throughput: '240+ FPS OpenGL',
+      uptime: 'Open Source',
     },
-    technologies: ['Java', 'JVM Bytecode', 'Event System', 'OpenGL', 'Game Architecture'],
-    githubUrl: 'https://github.com/AP-boi/gravity-client',
-    apiEndpoint: 'https://github.com/AP-boi/gravity-client',
+    technologies: ['Java', 'OpenGL / LWJGL', 'Bytecode Instrumentation', 'Event-Driven Architecture'],
+    githubUrl: 'https://github.com/AP-boi/Gravity-Client',
+    apiEndpoint: 'https://github.com/AP-boi/Gravity-Client',
     featured: false,
   },
   {
     id: 'proj-6',
-    title: 'Diesel LDR',
-    tagline: 'Lightweight Dynamic Resource Loader & Stream Parser in TypeScript',
+    title: 'diesel-ldr',
+    tagline: 'Lightweight Asynchronous Module Loader & Cache Manager',
     category: 'Tools & Utilities',
     description:
       'Created an asynchronous resource loading pipeline in TypeScript designed for rapid module resolution, intelligent in-memory caching, and streaming buffer parsing.',
@@ -150,7 +143,6 @@ export const ProjectsApp: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95">
-      {/* macOS Finder Navigation Toolbar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1">
@@ -168,7 +160,6 @@ export const ProjectsApp: React.FC = () => {
           <span className="text-[11px] font-mono text-slate-500">({filteredProjects.length} items)</span>
         </div>
 
-        {/* Search */}
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-1.5 bg-slate-100 border border-slate-300 rounded-md px-2 py-0.5 text-xs text-slate-800">
             <Search className="w-3 h-3 text-slate-500" />
@@ -183,9 +174,7 @@ export const ProjectsApp: React.FC = () => {
         </div>
       </div>
 
-      {/* Dual Pane Finder Viewport */}
       <div className="flex-1 flex flex-col md:flex-row gap-3 overflow-hidden">
-        {/* Finder Left Sidebar */}
         <div className="w-full md:w-48 bg-slate-100/80 border border-slate-200 rounded-xl p-2 space-y-1.5">
           <span className="px-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">Categories</span>
           <div className="space-y-0.5">
@@ -207,7 +196,6 @@ export const ProjectsApp: React.FC = () => {
           </div>
         </div>
 
-        {/* Finder Main Grid View */}
         <div className="flex-1 overflow-y-auto space-y-3 pr-1">
           <div className="grid grid-cols-1 gap-3">
             {filteredProjects.map((proj) => (
@@ -258,7 +246,6 @@ export const ProjectsApp: React.FC = () => {
 
                 <p className="text-xs text-slate-700 leading-relaxed">{proj.description}</p>
 
-                {/* Key Metrics Row */}
                 <div className="grid grid-cols-3 gap-2 pt-1">
                   <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
                     <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Performance</span>
@@ -274,7 +261,6 @@ export const ProjectsApp: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Tech Pills */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {proj.technologies.map((tech) => (
                     <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-medium">

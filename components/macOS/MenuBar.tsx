@@ -349,14 +349,13 @@ export const MenuBar: React.FC = () => {
           <span className="glass-orb glass-orb--one -top-12 -right-8 w-28 h-28 opacity-30" />
           <span className="glass-orb glass-orb--two -bottom-12 -left-8 w-32 h-32 opacity-30" />
           <div className="relative z-10 flex items-center justify-between pb-2 border-b border-slate-200/60">
-            <span className="font-bold text-slate-900 text-xs">System Controls</span>
-            <span className="text-[10px] text-slate-500 font-mono">WebGL Liquid Shader</span>
+            <span className="font-bold text-slate-900 text-xs">Display & Effects</span>
+            <span className="text-[10px] text-slate-500 font-mono">Control Center</span>
           </div>
 
-          {/* Shader Light Intensity Slider */}
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-slate-600">
-              <span>Ambient Glow Intensity</span>
+              <span>Ambient Glow</span>
               <span className="font-mono text-cyan-600 font-bold">{Math.round(ambientLight.intensity * 100)}%</span>
             </div>
             <input
@@ -370,10 +369,9 @@ export const MenuBar: React.FC = () => {
             />
           </div>
 
-          {/* Noise Level Slider */}
           <div className="space-y-1">
             <div className="flex justify-between text-[10px] text-slate-600">
-              <span>Liquid Noise Grain</span>
+              <span>Backdrop Grain</span>
               <span className="font-mono text-purple-600 font-bold">{Math.round(ambientLight.noiseLevel * 100)}%</span>
             </div>
             <input

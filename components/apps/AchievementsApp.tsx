@@ -2,24 +2,7 @@
 
 import React, { useState } from 'react';
 import { AchievementItem } from '@/types/os';
-import {
-  Trophy,
-  Award,
-  CheckCircle2,
-  ExternalLink,
-  Zap,
-  ShieldCheck,
-  TrendingUp,
-  ChevronRight,
-  Folder,
-  FileText,
-  Search,
-  Share2,
-  Trash2,
-  Edit3,
-  Calendar,
-  Sparkles,
-} from 'lucide-react';
+import { CheckCircle2, ExternalLink, Search, Share2 } from 'lucide-react';
 
 const ACHIEVEMENTS_DATA: AchievementItem[] = [
   {
@@ -105,7 +88,6 @@ export const AchievementsApp: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full space-y-2 text-slate-900 p-3 bg-white/95">
-      {/* Authentic macOS Notes App Toolbar */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1.5">
@@ -116,7 +98,6 @@ export const AchievementsApp: React.FC = () => {
           <span className="text-[11px] text-slate-500">{filteredItems.length} Notes</span>
         </div>
 
-        {/* Notes Action Items */}
         <div className="flex items-center space-x-2">
           <div className="flex items-center space-x-1.5 bg-slate-100 border border-slate-300 rounded-md px-2 py-0.5 text-xs text-slate-800">
             <Search className="w-3 h-3 text-slate-500" />
@@ -134,9 +115,7 @@ export const AchievementsApp: React.FC = () => {
         </div>
       </div>
 
-      {/* Dual Pane macOS Notes Layout */}
       <div className="flex-1 flex flex-col md:flex-row gap-3 overflow-hidden pt-1">
-        {/* Left Notes List Sidebar */}
         <div className="w-full md:w-5/12 bg-slate-100/70 border border-slate-200 rounded-xl overflow-y-auto divide-y divide-slate-200">
           {filteredItems.map((item) => {
             const isSelected = selectedItem.id === item.id;
@@ -159,8 +138,7 @@ export const AchievementsApp: React.FC = () => {
           })}
         </div>
 
-        {/* Right Note Detail Viewport */}
-        <div className="flex-1 bg-white border border-slate-200 shadow-sm rounded-xl p-4 overflow-y-auto space-y-4">
+        <div className="flex-1 bg-white border border-slate-200 shadow-xs rounded-xl p-4 overflow-y-auto space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-3">
             <div>
               <div className="flex items-center space-x-2">
@@ -170,7 +148,7 @@ export const AchievementsApp: React.FC = () => {
                 {selectedItem.verified && (
                   <span className="flex items-center space-x-1 text-[10px] text-emerald-700 font-mono font-semibold">
                     <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                    <span>VERIFIED RECORD</span>
+                    <span>VERIFIED</span>
                   </span>
                 )}
               </div>
@@ -186,22 +164,20 @@ export const AchievementsApp: React.FC = () => {
               rel="noopener noreferrer"
               className="p-2 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 transition-all text-xs font-bold flex items-center space-x-1.5 whitespace-nowrap shadow-xs"
             >
-              <span>View Credential</span>
+              <span>View Source</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
           </div>
 
-          {/* Note Body Text */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">Executive Summary</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">Overview</h4>
             <p className="text-xs text-slate-800 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-200 font-medium">
               {selectedItem.description}
             </p>
           </div>
 
-          {/* Metrics Grid */}
           <div className="space-y-2">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">Impact Metrics</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">Key Highlights</h4>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {selectedItem.metrics.map((metric) => (
                 <div key={metric.label} className="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
@@ -213,7 +189,6 @@ export const AchievementsApp: React.FC = () => {
             </div>
           </div>
 
-          {/* Tags */}
           <div className="pt-2">
             <div className="flex flex-wrap gap-1.5">
               {selectedItem.tags.map((tag) => (
