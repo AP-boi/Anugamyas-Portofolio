@@ -17,7 +17,7 @@ import { useOSStore } from '@/store/useOSStore';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
 import { AnimatedWallpaper } from '@/components/ui/animated-wallpaper';
-import { AppleBootScreen } from '@/components/macOS/AppleBootScreen';
+import { BootScreen } from '@/components/macOS/BootScreen';
 import { MacOSLockScreen } from '@/components/macOS/MacOSLockScreen';
 import { SpotlightSearch } from '@/components/macOS/SpotlightSearch';
 import { Launchpad } from '@/components/macOS/Launchpad';
@@ -160,8 +160,8 @@ export default function Home() {
       onContextMenu={handleContextMenu}
       className="relative w-screen h-screen overflow-hidden select-none bg-slate-100"
     >
-      {/* Authentic macOS Startup Boot Screen */}
-      <AppleBootScreen
+      {/* Authentic Anugamya OS Startup Boot Screen */}
+      <BootScreen
         onComplete={() => {
           if (!currentUser) {
             lockScreen();
@@ -309,7 +309,7 @@ export default function Home() {
         <AnalyticsApp />
       </Window>
 
-      {/* 7. Apple Music App Window */}
+      {/* 7. AP Music App Window */}
       <Window id="music">
         <MusicApp />
       </Window>

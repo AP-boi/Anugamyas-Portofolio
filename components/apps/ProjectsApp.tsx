@@ -56,7 +56,7 @@ const PROJECTS_DATA: ProjectItem[] = [
     tagline: 'Interactive macOS Sonoma Desktop OS Simulator with Liquid Glass Physics',
     category: 'Full-Stack & WebGL',
     description:
-      'Developed a fully interactive Apple macOS desktop environment simulator featuring draggable multi-window management, liquid glassmorphism, Siri AI assistant, autonomous Tetris AI, and 3D camera motion grid.',
+      'Developed a fully interactive Anugamya OS desktop environment simulator featuring draggable multi-window management, liquid glassmorphism, AP Intelligence assistant, autonomous Tetris AI, and 3D camera motion grid.',
     architectureNotes: 'Built with Next.js 14 App Router, Zustand reactive window manager, Framer Motion spring physics, and React Three Fiber liquid canvas shaders.',
     metrics: {
       latency: 'Sub-16ms Framerate',
@@ -76,7 +76,7 @@ const PROJECTS_DATA: ProjectItem[] = [
     category: 'UI/UX & Web',
     description:
       'Built a live air pollution and environmental telemetry web portal for Delhi NCR featuring real-time AQI tracking, health advisory systems, and responsive hardware controllers.',
-    architectureNotes: 'Crafted with Apple iOS weather aesthetics, real-time sensor API integration, and glassmorphic micro-interactions.',
+    architectureNotes: 'Crafted with modern fluid weather aesthetics, real-time sensor API integration, and glassmorphic micro-interactions.',
     metrics: {
       latency: 'Instant Sync',
       throughput: 'Real-Time AQI',

@@ -80,7 +80,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
     },
     {
       id: 'app-siri',
-      title: 'Siri — Apple Intelligence AI Assistant',
+      title: 'Siri — AP Intelligence AI Assistant',
       category: 'Applications',
       subtitle: 'Ask AI questions about Anugamya’s architecture & stack',
       iconSrc: '/icons/siri.png',

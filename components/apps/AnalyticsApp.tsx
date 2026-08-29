@@ -369,7 +369,7 @@ export const AnalyticsApp: React.FC = () => {
                   <span className="text-[10px] uppercase font-bold text-slate-400 font-mono">Operating Systems</span>
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between text-slate-700">
-                      <span>macOS / Apple</span>
+                      <span>macOS / Darwin</span>
                       <span className="font-mono font-bold text-slate-900">{summary?.osBreakdown?.macos ?? 0}</span>
                     </div>
                     <div className="flex justify-between text-slate-700">

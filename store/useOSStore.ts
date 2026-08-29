@@ -49,8 +49,8 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   'ai-assistant': {
     id: 'ai-assistant',
-    title: 'Apple Intelligence Siri',
-    description: 'Interactive Siri assistant to explore projects and architecture',
+    title: 'AP Intelligence Assistant',
+    description: 'Interactive AI assistant to explore projects and architecture',
     iconName: 'Bot',
     iconSrc: '/icons/siri.png',
     defaultPosition: { x: 320, y: 80 },

@@ -67,7 +67,7 @@ const DOCK_ITEMS: DockIconConfig[] = [
   },
   {
     id: 'ai-assistant',
-    label: 'Apple Intelligence Siri',
+    label: 'AP Intelligence Assistant',
     iconSrc: '/icons/siri.png',
   },
   {

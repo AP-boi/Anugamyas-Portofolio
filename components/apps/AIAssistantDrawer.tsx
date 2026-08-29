@@ -42,7 +42,7 @@ export const AIAssistantDrawer: React.FC = () => {
     {
       id: 'init-msg',
       sender: 'assistant',
-      text: "Hello! I am Apple Intelligence Siri, trained on Anugamya's projects, WebGL architectures, and engineering experience. How can I assist you today?",
+      text: "Hello! I am AP Intelligence Assistant, trained on Anugamya's projects, WebGL architectures, and engineering experience. How can I assist you today?",
       timestamp: 'Just now',
     },
   ]);
@@ -79,7 +79,7 @@ export const AIAssistantDrawer: React.FC = () => {
     }
 
     if (q.includes('portfolio') || q.includes('macos') || q.includes('desktop') || q.includes('liquid') || q.includes('glass')) {
-      return `🍎 Portfolio OS is an authentic simulation of macOS Sonoma & Sequoia inside a modern web browser.\n\n• Tech Stack: Next.js 14 App Router, TypeScript, Zustand (Window state management), Framer Motion, and Web Audio API synthesizer.\n• Features: Fullstack Node.js persistent visitor tracker, Apple Dynamic Island HUD, Activity Monitor with CSV/JSON exports, Launchpad (F4), Spotlight Search (⌘Space), and realistic frosted liquid glass surfaces.`;
+      return `✨ Portfolio OS is an authentic simulation of macOS Sonoma & Sequoia inside a modern web browser.\n\n• Tech Stack: Next.js 14 App Router, TypeScript, Zustand (Window state management), Framer Motion, and Web Audio API synthesizer.\n• Features: Fullstack Node.js persistent visitor tracker, AP Dynamic Island HUD, Activity Monitor with CSV/JSON exports, Launchpad (F4), Spotlight Search (⌘Space), and realistic frosted liquid glass surfaces.`;
     }
 
     if (q.includes('airpure') || q.includes('aqi') || q.includes('delhi')) {
@@ -167,9 +167,9 @@ export const AIAssistantDrawer: React.FC = () => {
 
           <div>
             <div className="flex items-center space-x-1.5">
-              <h3 className="text-xs font-bold text-white tracking-wide">Apple Intelligence</h3>
+              <h3 className="text-xs font-bold text-white tracking-wide">AP Intelligence</h3>
               <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30">
-                Siri AI
+                AP-AI
               </span>
             </div>
             <p className="text-[10px] text-slate-400">Trained on Anugamya's Portfolio & Engineering Work</p>

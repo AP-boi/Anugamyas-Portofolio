@@ -4,20 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { APLogo } from '@/components/ui/APLogo';
 
-interface AppleBootScreenProps {
+interface BootScreenProps {
   onComplete?: () => void;
 }
 
-export const AppleBootScreen: React.FC<AppleBootScreenProps> = ({ onComplete }) => {
+export const BootScreen: React.FC<BootScreenProps> = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setProgress(15), 180),
-      setTimeout(() => setProgress(42), 600),
-      setTimeout(() => setProgress(70), 1100),
-      setTimeout(() => setProgress(92), 1600),
+      setTimeout(() => setProgress(18), 180),
+      setTimeout(() => setProgress(45), 600),
+      setTimeout(() => setProgress(72), 1100),
+      setTimeout(() => setProgress(94), 1600),
       setTimeout(() => setProgress(100), 2000),
       setTimeout(() => {
         setIsDone(true);
@@ -43,7 +43,7 @@ export const AppleBootScreen: React.FC<AppleBootScreenProps> = ({ onComplete }) 
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className="mb-14 flex items-center justify-center"
           >
-            <APLogo className="w-28 h-28" variant="light" glow={true} />
+            <APLogo className="w-36 h-24" variant="light" glow={true} />
           </motion.div>
 
           <div className="w-56 h-1.5 bg-neutral-800 rounded-full overflow-hidden relative p-[1px] border border-white/10 shadow-inner">
@@ -64,4 +64,4 @@ export const AppleBootScreen: React.FC<AppleBootScreenProps> = ({ onComplete }) 
   );
 };
 
-export default AppleBootScreen;
+export default BootScreen;

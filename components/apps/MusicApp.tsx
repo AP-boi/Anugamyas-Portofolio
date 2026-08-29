@@ -118,7 +118,7 @@ export const MusicApp: React.FC = () => {
               <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-rose-500 to-amber-500 flex items-center justify-center shadow-md">
                 <Music className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="text-xs font-bold text-white tracking-wide">Apple Music</span>
+              <span className="text-xs font-bold text-white tracking-wide">AP Music</span>
             </div>
 
             <div className="space-y-1">

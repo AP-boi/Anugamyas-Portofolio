@@ -38,7 +38,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   const [timeString, setTimeString] = useState<string>('');
   const [dateString, setDateString] = useState<string>('');
   const [batteryLevel, setBatteryLevel] = useState<number>(98);
-  const [isAppleMenuOpen, setIsAppleMenuOpen] = useState<boolean>(false);
+  const [isSystemMenuOpen, setIsSystemMenuOpen] = useState<boolean>(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
@@ -83,16 +83,16 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           <button
             onClick={() => {
               sounds.playClick();
-              setIsAppleMenuOpen(!isAppleMenuOpen);
+              setIsSystemMenuOpen(!isSystemMenuOpen);
               setIsUserMenuOpen(false);
             }}
             className="flex items-center space-x-1 p-1 hover:bg-black/5 rounded transition-colors"
             title="Anugamya System Menu"
           >
-            <APLogo className="w-4 h-4" variant="dark" />
+            <APLogo className="w-5 h-3.5" variant="dark" />
           </button>
 
-          {isAppleMenuOpen && (
+          {isSystemMenuOpen && (
             <div
               className="liquid-glass-card absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1 text-slate-800 z-[10000] border border-white/30 backdrop-blur-[24px] bg-white/85 text-xs"
               onClick={(e) => e.stopPropagation()}
@@ -106,7 +106,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   openWindow('projects');
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
               >
@@ -118,7 +118,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   openWindow('analytics');
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
               >
@@ -130,7 +130,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   openWindow('terminal');
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
               >
@@ -142,11 +142,11 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   openWindow('music');
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
               >
-                <span>Apple Music</span>
+                <span>AP Music</span>
               </button>
 
               <div className="my-1 border-t border-slate-200" />
@@ -155,7 +155,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   lockScreen();
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs flex items-center justify-between transition-colors"
               >
@@ -167,7 +167,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 onClick={() => {
                   sounds.playClick();
                   logout();
-                  setIsAppleMenuOpen(false);
+                  setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-rose-600 hover:text-white rounded text-xs text-rose-600 flex items-center justify-between transition-colors"
               >
@@ -240,7 +240,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
               onClick={() => {
                 sounds.playClick();
                 setIsUserMenuOpen(!isUserMenuOpen);
-                setIsAppleMenuOpen(false);
+                setIsSystemMenuOpen(false);
               }}
               className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-white/70 hover:bg-white border border-slate-300 text-slate-800 transition-all font-semibold shadow-2xs cursor-pointer"
             >

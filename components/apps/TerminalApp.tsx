@@ -82,8 +82,8 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
               <p><span className="text-emerald-400 font-bold w-24 inline-block">whoami</span> Developer biography</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">projects</span> Open Projects Finder</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">analytics</span> Open Activity Monitor</p>
-              <p><span className="text-emerald-400 font-bold w-24 inline-block">music</span> Open Apple Music Player</p>
-              <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query Apple Intelligence Siri</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">music</span> Open AP Music Player</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query AP Intelligence</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">cat &lt;file&gt;</span> Print file contents</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">clear</span> Clear terminal screen</p>
             </div>
@@ -191,10 +191,10 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
               <p className="text-emerald-400 font-bold">anugamya@macbook-pro</p>
               <p className="text-slate-500">----------------------</p>
               <p><span className="text-amber-400 font-semibold">OS:</span> macOS Sonoma 14.4 / Anugamya OS</p>
-              <p><span className="text-amber-400 font-semibold">Host:</span> MacBookPro 18,2 (Apple Silicon M3 Max)</p>
+              <p><span className="text-amber-400 font-semibold">Host:</span> Anugamya M3 Max Studio</p>
               <p><span className="text-amber-400 font-semibold">Kernel:</span> 23.4.0 Darwin Kernel</p>
               <p><span className="text-amber-400 font-semibold">Uptime:</span> 12 days, 4 hours</p>
-              <p><span className="text-amber-400 font-semibold">Shell:</span> zsh 5.9 (x86_64-apple-darwin23.0)</p>
+              <p><span className="text-amber-400 font-semibold">Shell:</span> zsh 5.9 (x86_64-anugamya-darwin23.0)</p>
               <p><span className="text-amber-400 font-semibold">Session:</span> {isAdmin ? 'Administrator (Root)' : 'Visitor'}</p>
               <p><span className="text-amber-400 font-semibold">Memory:</span> {telemetry.activeMemoryMb}MB / 64GB</p>
             </div>
@@ -231,7 +231,7 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
 
       case 'ai':
         openWindow('ai-assistant');
-        outputResult = args ? `Passing query to Siri: "${args}"...` : 'Launching Apple Intelligence Siri...';
+        outputResult = args ? `Passing query to AP Intelligence: "${args}"...` : 'Launching AP Intelligence Assistant...';
         break;
 
       case 'projects':
@@ -246,7 +246,7 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
 
       case 'music':
         openWindow('music');
-        outputResult = 'Opening Apple Music player...';
+        outputResult = 'Opening AP Music player...';
         break;
 
       case 'camera':

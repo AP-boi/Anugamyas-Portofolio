@@ -65,7 +65,7 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = memo(({ image
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden select-none bg-sky-50" style={{ perspective: '1200px' }}>
-      {/* Apple Live Motion Spatial Scaling & Parallax Container */}
+      {/* Live Motion Spatial Scaling & Parallax Container */}
       <motion.div
         style={{
           x: translateX,
@@ -87,7 +87,7 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = memo(({ image
         }}
         className="absolute -inset-10 bg-cover bg-center bg-no-repeat"
       >
-        {/* Apple Dynamic Spatial Light Sweep Sheen */}
+        {/* Dynamic Spatial Light Sweep Sheen */}
         <motion.div
           className="absolute inset-0 pointer-events-none opacity-30 mix-blend-overlay"
           style={{
@@ -98,30 +98,24 @@ export const AnimatedWallpaper: React.FC<AnimatedWallpaperProps> = memo(({ image
 
         {/* Ambient Subtle Breathing Color Pulse */}
         <motion.div
-          animate={{
-            opacity: [0.1, 0.25, 0.1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute inset-0 bg-gradient-to-tr from-sky-200/30 via-transparent to-indigo-200/30 pointer-events-none mix-blend-color-dodge"
+          animate={{ opacity: [0.12, 0.22, 0.12] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          className="absolute inset-0 bg-gradient-to-tr from-cyan-400/10 via-transparent to-purple-400/10 pointer-events-none mix-blend-soft-light"
         />
+
+        {/* High-Resolution Ambient Vignette */}
+        <div className="absolute inset-0 bg-radial-vignette pointer-events-none opacity-40" />
       </motion.div>
 
-      {/* Floating Spatial Depth Dust & Web Sparkles Canvas Layer */}
+      {/* Floating Spatial Dust Particles */}
       <DepthParticleOverlay />
-
-      {/* Readability Vignette Overlay — switched to simple gradient, no backdrop-blur */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-white/10 via-transparent to-white/30 pointer-events-none" />
     </div>
   );
 });
 
 AnimatedWallpaper.displayName = 'AnimatedWallpaper';
 
-// Floating Depth Particles for Apple Motion Wallpaper effect
+// Floating Depth Particles for Motion Wallpaper effect
 const DepthParticleOverlay: React.FC = memo(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

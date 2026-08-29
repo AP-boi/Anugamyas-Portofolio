@@ -217,11 +217,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
             <div className="relative z-10 flex flex-col items-center text-center mb-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 p-0.5 shadow-xl flex items-center justify-center mb-2">
                 <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                  {loginMode === 'admin' ? (
-                    <Shield className="w-7 h-7 text-indigo-600" />
-                  ) : (
-                    <User className="w-7 h-7 text-blue-600" />
-                  )}
+                  <APLogo className="w-10 h-7" variant="dark" />
                 </div>
               </div>
 

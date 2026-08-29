@@ -46,7 +46,7 @@ const ACHIEVEMENTS_DATA: AchievementItem[] = [
     category: 'Engineering Milestone',
     date: '2026',
     description:
-      'Constructed a production-ready WebGL desktop environment featuring liquid glassmorphism, draggable multi-window architecture with Zustand, Apple Intelligence Siri assistant, and autonomous AI Tetris engine.',
+      'Constructed a production-ready WebGL desktop environment featuring liquid glassmorphism, draggable multi-window architecture with Zustand, AP Intelligence assistant, and autonomous AI Tetris engine.',
     metrics: [
       { label: 'Liquid Physics Framerate', value: '60 FPS', improvement: 'R3F / Three.js' },
       { label: 'Window State Latency', value: '0ms', improvement: 'Zustand Store' },
