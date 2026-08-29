@@ -23,7 +23,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   projects: {
     id: 'projects',
     title: 'Finder — Projects',
-    description: 'Bento-grid showcase with live API tester, code inspector & system topologies',
+    description: 'Showcase of full-stack projects, live demos, and source code',
     iconName: 'FolderGit2',
     iconSrc: '/icons/finder.png',
     defaultPosition: { x: 140, y: 90 },
@@ -32,7 +32,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   github: {
     id: 'github',
     title: 'Safari — GitHub (@AP-boi)',
-    description: 'In-OS GitHub profile metrics, repositories & live commit streak',
+    description: 'GitHub repositories, commit activity, and statistics',
     iconName: 'Github',
     iconSrc: '/icons/safari.png',
     defaultPosition: { x: 200, y: 120 },
@@ -41,7 +41,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   terminal: {
     id: 'terminal',
     title: 'anugamya — zsh — 80×24',
-    description: 'Interactive CLI shell with command parser & system utilities',
+    description: 'Interactive Unix terminal shell with command parser',
     iconName: 'Terminal',
     iconSrc: '/icons/terminal.png',
     defaultPosition: { x: 260, y: 100 },
@@ -50,7 +50,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   'ai-assistant': {
     id: 'ai-assistant',
     title: 'Apple Intelligence Siri',
-    description: 'RAG conversational agent trained on codebase & system architecture',
+    description: 'Interactive Siri assistant to explore projects and architecture',
     iconName: 'Bot',
     iconSrc: '/icons/siri.png',
     defaultPosition: { x: 320, y: 80 },

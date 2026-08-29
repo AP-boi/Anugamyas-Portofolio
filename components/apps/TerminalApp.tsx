@@ -3,12 +3,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import { TerminalHistory } from '@/types/os';
-import DOMPurify from 'dompurify';
-import { Terminal as TerminalIcon, ShieldCheck, CornerDownLeft } from 'lucide-react';
+import { CornerDownLeft } from 'lucide-react';
 
-const INITIAL_WELCOME = `Anugamya Shell v1.0 (x86_64-apple-darwin23.0)
-Type "help" for a list of available commands.
-Security Protocol: XSS Sanitization & Prompt Injection Shield Enabled.`;
+const INITIAL_WELCOME = `Last login: ${new Date().toLocaleDateString()} on ttys002
+Anugamya OS zsh (x86_64-apple-darwin23.0)
+Type "help" to view available system commands.`;
 
 export const TerminalApp: React.FC = () => {
   const { openWindow, telemetry } = useOSStore();
@@ -19,7 +18,7 @@ export const TerminalApp: React.FC = () => {
       command: '',
       output: INITIAL_WELCOME,
       type: 'system',
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [commandHistoryIndex, setCommandHistoryIndex] = useState<number>(-1);
@@ -31,23 +30,12 @@ export const TerminalApp: React.FC = () => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
-  // Input Sanitization Protocol (Section 2.A Security Requirement)
-  const sanitizeInput = (input: string): string => {
-    // Strip dangerous HTML/script characters
-    const cleanStr = input.replace(/[<>'"`;]/g, '');
-    if (typeof window !== 'undefined' && DOMPurify.sanitize) {
-      return DOMPurify.sanitize(cleanStr);
-    }
-    return cleanStr;
-  };
-
   const handleCommandExecute = (e: React.FormEvent) => {
     e.preventDefault();
     const rawInput = inputCommand.trim();
     if (!rawInput) return;
 
-    // Sanitize input command to block injection attacks
-    const sanitizedCmd = sanitizeInput(rawInput);
+    const sanitizedCmd = rawInput.replace(/[<>'"`;]/g, '');
     const parts = sanitizedCmd.split(' ');
     const mainCommand = parts[0].toLowerCase();
     const args = parts.slice(1).join(' ');
@@ -59,43 +47,15 @@ export const TerminalApp: React.FC = () => {
       case 'help':
         outputResult = (
           <div className="space-y-1 text-slate-300">
-            <p className="text-cyan-400 font-bold">Available System Commands:</p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">help</span> - Display
-              command manual
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">ls</span> - List directory
-              contents
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> - Display
-              engineer profile summary
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">projects</span> - Open
-              Finder Projects bento window
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">cat achievements.txt</span> -
-              Print key credentials & hackathon wins
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">open github</span> - Direct
-              redirect to GitHub repository
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">telemetry</span> - View real-time
-              node telemetry
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">rag &lt;query&gt;</span> - Query
-              RAG AI engine directly
-            </p>
-            <p>
-              <span className="text-emerald-400 font-bold w-28 inline-block">clear</span> - Clear terminal
-              screen
-            </p>
+            <p className="text-cyan-400 font-bold">Available Commands:</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">help</span> Display available commands</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">ls</span> List files and directories</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">whoami</span> Display developer profile</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">projects</span> Open Projects Finder window</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">analytics</span> Open Visitor Intelligence dashboard</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">cat &lt;file&gt;</span> Read file contents</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">open &lt;app&gt;</span> Launch an application or URL</p>
+            <p><span className="text-emerald-400 font-bold w-28 inline-block">clear</span> Clear terminal buffer</p>
           </div>
         );
         break;
@@ -105,10 +65,10 @@ export const TerminalApp: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
             <span className="text-blue-400 font-bold">drwxr-xr-x Projects/</span>
             <span className="text-amber-400 font-bold">drwxr-xr-x Achievements/</span>
-            <span className="text-emerald-400 font-bold">-rw-r--r-- achievements.txt</span>
-            <span className="text-purple-400 font-bold">-rw-r--r-- system_telemetry.log</span>
-            <span className="text-cyan-400 font-bold">-rwxr-xr-x security_audit.sh</span>
-            <span className="text-pink-400 font-bold">drwxr-xr-x AI_Assistant_RAG/</span>
+            <span className="text-emerald-400 font-bold">-rw-r--r-- about.txt</span>
+            <span className="text-purple-400 font-bold">-rw-r--r-- telemetry.log</span>
+            <span className="text-cyan-400 font-bold">drwxr-xr-x AI_Assistant/</span>
+            <span className="text-pink-400 font-bold">drwxr-xr-x Analytics/</span>
           </div>
         );
         break;
@@ -116,12 +76,12 @@ export const TerminalApp: React.FC = () => {
       case 'whoami':
         outputResult = (
           <div className="space-y-1 text-slate-200">
-            <p className="font-bold text-white">Anugamya (@AP-boi) - Creative Full-Stack & 3D WebGL Developer</p>
+            <p className="font-bold text-white">Anugamya (@AP-boi) — Creative Full-Stack & 3D WebGL Developer</p>
             <p className="text-slate-400 text-xs">
-              Building AI-powered web experiences (Bharat Dekho), 2D cyberpunk game engines (Cyber Ascension), and desktop OS simulators in Next.js, Three.js & Canvas.
+              Specializing in Next.js, Three.js 3D WebGL graphics, Gemini AI apps, and interactive canvas engines.
             </p>
             <p className="text-emerald-400 font-mono text-[11px]">
-              GitHub: https://github.com/AP-boi • Open Source Contributor
+              GitHub: https://github.com/AP-boi
             </p>
           </div>
         );
@@ -129,40 +89,51 @@ export const TerminalApp: React.FC = () => {
 
       case 'projects':
         openWindow('projects');
-        outputResult = 'Launching Projects.app Finder window...';
+        outputResult = 'Launching Projects Finder...';
+        break;
+
+      case 'analytics':
+        openWindow('analytics');
+        outputResult = 'Opening Visitor Intelligence & Analytics...';
         break;
 
       case 'camera':
       case 'cam':
         openWindow('camera');
-        outputResult = 'Launching Camera & Motion Grid app...';
+        outputResult = 'Launching Camera & Motion Grid...';
         break;
 
       case 'cat':
-        if (args === 'achievements.txt') {
+        if (args === 'about.txt' || args === 'achievements.txt') {
           openWindow('achievements');
           outputResult = (
             <div className="space-y-1 text-amber-300 font-mono text-xs">
-              <p className="font-bold">[=== REAL PROJECTS & MILESTONES ===]</p>
+              <p className="font-bold">[ Featured Projects ]</p>
               <p>• Bharat Dekho: AI-powered Indian Tourism & 3D Heritage Portal (Next.js 15 + Gemini AI + Three.js)</p>
-              <p>• Cyber Ascension: 2D Cyberpunk Action Game Engine with Branching Narrative (HTML5 Canvas)</p>
-              <p>• macOS Portfolio OS: Interactive Desktop OS Simulator with Liquid Glassmorphism</p>
-              <p>• AirPure Delhi: iOS-styled Real-time AQI tracking and air purifier web application</p>
+              <p>• Cyber Ascension: 2D Cyberpunk Action Game Engine (HTML5 Canvas)</p>
+              <p>• Portfolio OS: Interactive Apple macOS Desktop Simulation</p>
+              <p>• AirPure Delhi: Real-time AQI tracking platform</p>
             </div>
           );
         } else {
-          outputResult = `cat: ${args || 'file'}: No such file or directory. Try "cat achievements.txt"`;
+          outputResult = `cat: ${args || 'file'}: No such file. Try "cat about.txt"`;
           outputType = 'error';
         }
         break;
 
       case 'open':
-        if (args === 'github') {
+        if (args === 'github' || args === 'gh') {
           window.open('https://github.com/AP-boi', '_blank', 'noopener,noreferrer');
           openWindow('github');
-          outputResult = 'Executing direct action: Opening GitHub profile...';
+          outputResult = 'Opening GitHub in Safari...';
+        } else if (args === 'projects') {
+          openWindow('projects');
+          outputResult = 'Opening Projects...';
+        } else if (args === 'analytics') {
+          openWindow('analytics');
+          outputResult = 'Opening Analytics...';
         } else {
-          outputResult = `open: command target "${args}" not recognized. Try "open github"`;
+          outputResult = `open: unknown target "${args}". Try "open github" or "open projects"`;
           outputType = 'error';
         }
         break;
@@ -170,24 +141,14 @@ export const TerminalApp: React.FC = () => {
       case 'telemetry':
         outputResult = (
           <div className="space-y-1 font-mono text-xs text-cyan-300">
-            <p className="font-bold text-white">[=== REAL-TIME TELEMETRY MONITOR ===]</p>
-            <p>Node Latency: {telemetry.latencyMs} ms</p>
-            <p>Edge Region: {telemetry.region}</p>
-            <p>FPS Benchmark: {telemetry.fps} FPS</p>
+            <p className="font-bold text-white">[ Node Telemetry ]</p>
+            <p>Latency: {telemetry.latencyMs} ms</p>
+            <p>Region: {telemetry.region}</p>
+            <p>Framerate: {telemetry.fps} FPS</p>
             <p>Active Memory: {telemetry.activeMemoryMb} MB</p>
-            <p>Edge Status: {telemetry.edgeStatus}</p>
+            <p>Status: {telemetry.edgeStatus}</p>
           </div>
         );
-        break;
-
-      case 'rag':
-        if (!args) {
-          outputResult = 'Usage: rag <your architecture question>';
-          outputType = 'error';
-        } else {
-          openWindow('ai-assistant');
-          outputResult = `Invoking AI Assistant Drawer with query: "${args}"...`;
-        }
         break;
 
       case 'clear':
@@ -196,17 +157,17 @@ export const TerminalApp: React.FC = () => {
         return;
 
       default:
-        outputResult = `zsh: command not found: ${mainCommand}. Type "help" for available commands.`;
+        outputResult = `zsh: command not found: ${mainCommand}. Type "help" for a list of commands.`;
         outputType = 'error';
         break;
     }
 
     const newHistoryItem: TerminalHistory = {
-      id: Math.random().toString(),
+      id: Math.random().toString(36).substring(2, 9),
       command: rawInput,
       output: outputResult,
       type: outputType,
-      timestamp: new Date().toLocaleTimeString(),
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
     setHistory((prev) => [...prev, newHistoryItem]);
@@ -242,13 +203,12 @@ export const TerminalApp: React.FC = () => {
       onClick={() => inputRef.current?.focus()}
       className="h-full flex flex-col font-mono text-xs bg-slate-950 text-slate-100 p-3.5 selection:bg-cyan-500 selection:text-slate-950 overflow-hidden"
     >
-      {/* History Log Container */}
       <div className="flex-1 overflow-y-auto space-y-3 pr-1">
         {history.map((item) => (
           <div key={item.id} className="space-y-1">
             {item.command && (
               <div className="flex items-center space-x-2 text-slate-300">
-                <span className="text-emerald-400 font-bold">anugamya@portfolio</span>
+                <span className="text-emerald-400 font-bold">anugamya@macbook</span>
                 <span className="text-slate-500">:</span>
                 <span className="text-cyan-400 font-bold">~</span>
                 <span className="text-slate-400">$</span>
@@ -272,9 +232,8 @@ export const TerminalApp: React.FC = () => {
         <div ref={bottomRef} />
       </div>
 
-      {/* Terminal Command Input Bar */}
       <form onSubmit={handleCommandExecute} className="mt-3 flex items-center space-x-2 pt-2 border-t border-white/10">
-        <span className="text-emerald-400 font-bold whitespace-nowrap">anugamya@portfolio</span>
+        <span className="text-emerald-400 font-bold whitespace-nowrap">anugamya@macbook</span>
         <span className="text-cyan-400 font-bold">~</span>
         <span className="text-slate-400">$</span>
         <input
@@ -295,3 +254,5 @@ export const TerminalApp: React.FC = () => {
     </div>
   );
 };
+
+export default TerminalApp;
