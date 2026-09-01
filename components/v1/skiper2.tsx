@@ -1,46 +1,121 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useOSStore } from '@/store/useOSStore';
 import {
   Play,
   Pause,
   SkipForward,
   SkipBack,
   Volume2,
-  Radio,
-  ExternalLink,
-  Timer as TimerIcon,
+  VolumeX,
   Phone,
   PhoneOff,
   Mic,
+  Timer as TimerIcon,
+  Music,
   Share2,
+  Radio,
   BatteryCharging,
   ScanFace,
   Check,
   RotateCcw,
   Sparkles,
+  ExternalLink,
   CircleDot,
-  Music as MusicIcon,
+  Bell,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
-import {
-  IslandView,
-  Track,
-  PLAYLIST,
-  DynamicIsland as Skiper2Island,
-  Options as Skiper2Options,
-} from '@/components/v1/skiper2';
 
-export { PLAYLIST };
-export type { Track, IslandView };
+export type IslandView =
+  | 'idle'
+  | 'ring'
+  | 'call'
+  | 'timer'
+  | 'record'
+  | 'music'
+  | 'airdrop'
+  | 'battery'
+  | 'faceid';
 
-export const DynamicIsland: React.FC = () => {
-  const { openWindow, telemetry } = useOSStore();
-  const [activeView, setActiveView] = useState<IslandView>('music');
+export interface Track {
+  id: string;
+  title: string;
+  artist: string;
+  album: string;
+  duration: number; // in seconds
+  coverColor: string;
+}
+
+export const PLAYLIST: Track[] = [
+  {
+    id: 't-1',
+    title: 'Sonoma Sunset',
+    artist: 'Anugamya Audio Lab',
+    album: 'macOS Ambient Vol. 1',
+    duration: 184,
+    coverColor: 'from-amber-500 via-rose-500 to-indigo-600',
+  },
+  {
+    id: 't-2',
+    title: 'Cyber Ascension (Theme)',
+    artist: 'AP-boi',
+    album: 'Cyber Ascension OST',
+    duration: 215,
+    coverColor: 'from-cyan-500 via-blue-600 to-purple-700',
+  },
+  {
+    id: 't-3',
+    title: 'Bharat Heritage Melody',
+    artist: 'Indian Classical Synth',
+    album: 'Bharat Dekho OST',
+    duration: 198,
+    coverColor: 'from-orange-500 via-amber-600 to-emerald-600',
+  },
+  {
+    id: 't-4',
+    title: 'Midnight Coding in Tokyo',
+    artist: 'Lofi Chilled Vibes',
+    album: 'Deep Focus Beats',
+    duration: 160,
+    coverColor: 'from-purple-600 via-pink-600 to-rose-500',
+  },
+];
+
+const springTransition = {
+  type: 'spring' as const,
+  stiffness: 420,
+  damping: 32,
+  mass: 0.75,
+};
+
+export interface DynamicIslandProps {
+  view?: IslandView;
+  variantKey?: string;
+  className?: string;
+  onViewChange?: (view: IslandView) => void;
+  onOpenApp?: (appId: string) => void;
+  interactive?: boolean;
+}
+
+export const DynamicIsland: React.FC<DynamicIslandProps> = ({
+  view: controlledView,
+  variantKey,
+  className = '',
+  onViewChange,
+  onOpenApp,
+  interactive = true,
+}) => {
+  const [internalView, setInternalView] = useState<IslandView>('music');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [showViewPicker, setShowViewPicker] = useState<boolean>(false);
+
+  const activeView: IslandView = controlledView || internalView;
+
+  const setView = (newView: IslandView) => {
+    setInternalView(newView);
+    if (onViewChange) onViewChange(newView);
+  };
 
   // Music State
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
@@ -50,15 +125,15 @@ export const DynamicIsland: React.FC = () => {
   const currentTrack = PLAYLIST[currentTrackIndex];
 
   // Timer State
-  const [timerSeconds, setTimerSeconds] = useState<number>(300);
+  const [timerSeconds, setTimerSeconds] = useState<number>(300); // 5 mins
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
 
   // Record State
   const [recordSeconds, setRecordSeconds] = useState<number>(18);
   const [isRecording, setIsRecording] = useState<boolean>(true);
 
-  // AirDrop State
-  const [airdropProgress, setAirdropProgress] = useState<number>(68);
+  // Airdrop State
+  const [airdropProgress, setAirdropProgress] = useState<number>(64);
   const [airdropAccepted, setAirdropAccepted] = useState<boolean>(false);
 
   // FaceID State
@@ -66,46 +141,46 @@ export const DynamicIsland: React.FC = () => {
 
   // Music timer loop
   useEffect(() => {
-    if (!isPlaying) return;
-    const timer = setInterval(() => {
+    if (!isPlaying || activeView !== 'music') return;
+    const interval = setInterval(() => {
       setCurrentTime((prev) => (prev >= currentTrack.duration ? 0 : prev + 1));
     }, 1000);
-    return () => clearInterval(timer);
-  }, [isPlaying, currentTrack.duration]);
+    return () => clearInterval(interval);
+  }, [isPlaying, activeView, currentTrack.duration]);
 
   // Timer countdown loop
   useEffect(() => {
     if (!isTimerRunning || activeView !== 'timer') return;
-    const timer = setInterval(() => {
+    const interval = setInterval(() => {
       setTimerSeconds((prev) => (prev <= 0 ? 0 : prev - 1));
     }, 1000);
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, [isTimerRunning, activeView]);
 
   // Record timer loop
   useEffect(() => {
     if (!isRecording || activeView !== 'record') return;
-    const timer = setInterval(() => {
+    const interval = setInterval(() => {
       setRecordSeconds((prev) => prev + 1);
     }, 1000);
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, [isRecording, activeView]);
 
   // FaceID verification trigger
   useEffect(() => {
     if (activeView === 'faceid') {
       setFaceIdVerified(false);
-      const timeout = setTimeout(() => {
+      const timer = setTimeout(() => {
         setFaceIdVerified(true);
       }, 1200);
-      return () => clearTimeout(timeout);
+      return () => clearTimeout(timer);
     }
   }, [activeView]);
 
-  const handleTogglePlay = (e?: React.MouseEvent) => {
-    e?.stopPropagation();
-    sounds.playClick();
-    setIsPlaying((prev) => !prev);
+  const formatSeconds = (sec: number) => {
+    const mins = Math.floor(sec / 60);
+    const remainder = sec % 60;
+    return `${mins < 10 ? '0' : ''}${mins}:${remainder < 10 ? '0' : ''}${remainder}`;
   };
 
   const handleNextTrack = (e?: React.MouseEvent) => {
@@ -122,18 +197,12 @@ export const DynamicIsland: React.FC = () => {
     setCurrentTime(0);
   };
 
-  const formatSeconds = (sec: number) => {
-    const mins = Math.floor(sec / 60);
-    const remainder = sec % 60;
-    return `${mins}:${remainder < 10 ? '0' : ''}${remainder}`;
-  };
-
-  // Dimensions calculation based on Skiper2 spring specs
+  // Dimensions mapper depending on view and expansion
   const getDimensions = () => {
     if (isExpanded) {
       switch (activeView) {
         case 'music':
-          return { width: 360, height: 172, borderRadius: 28 };
+          return { width: 360, height: 168, borderRadius: 28 };
         case 'timer':
           return { width: 340, height: 140, borderRadius: 26 };
         case 'ring':
@@ -156,49 +225,46 @@ export const DynamicIsland: React.FC = () => {
     // Compact pill dimensions
     switch (activeView) {
       case 'idle':
-        return { width: 140, height: 26, borderRadius: 13 };
+        return { width: 140, height: 28, borderRadius: 14 };
       case 'ring':
       case 'call':
-        return { width: 220, height: 26, borderRadius: 13 };
+        return { width: 220, height: 28, borderRadius: 14 };
       case 'timer':
-        return { width: 195, height: 26, borderRadius: 13 };
+        return { width: 195, height: 28, borderRadius: 14 };
       case 'record':
-        return { width: 190, height: 26, borderRadius: 13 };
+        return { width: 190, height: 28, borderRadius: 14 };
       case 'airdrop':
-        return { width: 220, height: 26, borderRadius: 13 };
+        return { width: 220, height: 28, borderRadius: 14 };
       case 'battery':
-        return { width: 175, height: 26, borderRadius: 13 };
+        return { width: 175, height: 28, borderRadius: 14 };
       case 'faceid':
-        return { width: 155, height: 26, borderRadius: 13 };
+        return { width: 155, height: 28, borderRadius: 14 };
       case 'music':
       default:
-        return { width: isPlaying ? 245 : 185, height: 26, borderRadius: 13 };
+        return { width: isPlaying ? 245 : 185, height: 28, borderRadius: 14 };
     }
   };
 
-  const dims = getDimensions();
+  const dimensions = getDimensions();
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none">
+    <div className={`relative flex items-center justify-center select-none ${className}`}>
       <motion.div
         layout
         onClick={() => {
-          sounds.playClick();
-          setIsExpanded(!isExpanded);
+          if (interactive) {
+            sounds.playClick();
+            setIsExpanded(!isExpanded);
+          }
         }}
         initial={false}
         animate={{
-          width: dims.width,
-          height: dims.height,
-          borderRadius: dims.borderRadius,
+          width: dimensions.width,
+          height: dimensions.height,
+          borderRadius: dimensions.borderRadius,
         }}
-        transition={{
-          type: 'spring',
-          stiffness: 420,
-          damping: 32,
-          mass: 0.75,
-        }}
-        className="bg-black/95 text-white backdrop-blur-[28px] border border-white/18 shadow-[0_12px_32px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)] cursor-pointer overflow-hidden flex flex-col justify-between p-2.5 z-[1000] relative"
+        transition={springTransition}
+        className="bg-black/95 text-white backdrop-blur-[30px] border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08)] cursor-pointer overflow-hidden flex flex-col justify-between p-2.5 z-[1000] relative"
       >
         <AnimatePresence mode="wait">
           {/* COMPACT PILL MODE */}
@@ -215,26 +281,25 @@ export const DynamicIsland: React.FC = () => {
               {activeView === 'idle' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
-                    <span className="w-2 h-2 rounded-full bg-slate-700 ring-1 ring-white/30" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-slate-700 ring-1 ring-white/20 shadow-inner" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500/80 animate-pulse" />
                   </div>
                   <span className="text-[10px] font-mono text-white/50">AP OS</span>
                 </div>
               )}
 
-              {/* MUSIC */}
+              {/* MUSIC COMPACT */}
               {activeView === 'music' && (
                 <>
                   <div className="flex items-center space-x-2 min-w-0">
                     <div
-                      className={`w-3.5 h-3.5 rounded-full bg-gradient-to-br ${currentTrack.coverColor} flex-shrink-0 animate-pulse`}
+                      className={`w-4 h-4 rounded-full bg-gradient-to-br ${currentTrack.coverColor} flex-shrink-0 animate-pulse`}
                     />
                     <span className="text-[11px] font-semibold text-white/95 truncate max-w-[125px]">
                       {currentTrack.title}
                     </span>
                   </div>
-
-                  <div className="flex items-center space-x-1.5 flex-shrink-0">
+                  <div className="flex items-center space-x-1 flex-shrink-0">
                     {isPlaying ? (
                       <div className="flex items-center space-x-0.5 h-3">
                         <span className="w-0.5 h-2.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.6s' }} />
@@ -249,7 +314,7 @@ export const DynamicIsland: React.FC = () => {
                 </>
               )}
 
-              {/* TIMER */}
+              {/* TIMER COMPACT */}
               {activeView === 'timer' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -262,7 +327,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* CALL / RING */}
+              {/* CALL / RING COMPACT */}
               {(activeView === 'ring' || activeView === 'call') && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -277,7 +342,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* RECORD */}
+              {/* RECORD COMPACT */}
               {activeView === 'record' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -290,7 +355,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* AIRDROP */}
+              {/* AIRDROP COMPACT */}
               {activeView === 'airdrop' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -303,7 +368,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* BATTERY */}
+              {/* BATTERY COMPACT */}
               {activeView === 'battery' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -314,7 +379,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* FACEID */}
+              {/* FACEID COMPACT */}
               {activeView === 'faceid' && (
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-1.5">
@@ -363,9 +428,9 @@ export const DynamicIsland: React.FC = () => {
                     <div className="text-right">
                       <div className="flex items-center space-x-1 justify-end text-[10px] text-emerald-400 font-mono font-semibold">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                        <span>{telemetry.fps} FPS</span>
+                        <span>Playing</span>
                       </div>
-                      <span className="text-[9px] text-white/40 font-mono">{telemetry.latencyMs}ms latency</span>
+                      <span className="text-[9px] text-white/40 font-mono">Spatial Audio</span>
                     </div>
                   </div>
 
@@ -386,7 +451,7 @@ export const DynamicIsland: React.FC = () => {
                   {/* Bottom Controls Row */}
                   <div className="flex items-center justify-between pt-0.5">
                     <button
-                      onClick={() => openWindow('music')}
+                      onClick={() => onOpenApp ? onOpenApp('music') : sounds.playClick()}
                       className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-white font-medium transition-colors flex items-center gap-1"
                     >
                       <span>Open Music</span>
@@ -402,7 +467,11 @@ export const DynamicIsland: React.FC = () => {
                       </button>
 
                       <button
-                        onClick={handleTogglePlay}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          sounds.playClick();
+                          setIsPlaying(!isPlaying);
+                        }}
                         className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md"
                       >
                         {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
@@ -449,6 +518,7 @@ export const DynamicIsland: React.FC = () => {
                     </span>
                   </div>
 
+                  {/* Progress bar */}
                   <div className="w-full h-1.5 bg-white/15 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-300"
@@ -456,6 +526,7 @@ export const DynamicIsland: React.FC = () => {
                     />
                   </div>
 
+                  {/* Controls */}
                   <div className="flex items-center justify-between pt-1">
                     <button
                       onClick={() => {
@@ -507,7 +578,7 @@ export const DynamicIsland: React.FC = () => {
                     <button
                       onClick={() => {
                         sounds.playClick();
-                        setActiveView('idle');
+                        setView('idle');
                         setIsExpanded(false);
                       }}
                       className="w-9 h-9 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-rose-900/40"
@@ -517,7 +588,7 @@ export const DynamicIsland: React.FC = () => {
                     <button
                       onClick={() => {
                         sounds.playClick();
-                        setActiveView('call');
+                        setView('call');
                       }}
                       className="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/40"
                     >
@@ -540,6 +611,7 @@ export const DynamicIsland: React.FC = () => {
                     </span>
                   </div>
 
+                  {/* Equalizer Visualizer Bars */}
                   <div className="flex items-center justify-center space-x-1 h-8 bg-black/40 rounded-xl px-3 border border-white/10">
                     {[12, 24, 18, 28, 14, 22, 30, 16, 26, 10, 20, 32, 14, 22, 18].map((h, i) => (
                       <motion.span
@@ -601,7 +673,7 @@ export const DynamicIsland: React.FC = () => {
                       <button
                         onClick={() => {
                           sounds.playClick();
-                          setActiveView('idle');
+                          setView('idle');
                           setIsExpanded(false);
                         }}
                         className="px-2.5 py-0.5 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-white font-medium"
@@ -661,7 +733,7 @@ export const DynamicIsland: React.FC = () => {
                 </div>
               )}
 
-              {/* IDLE VIEW */}
+              {/* IDLE EXPANDED VIEW */}
               {activeView === 'idle' && (
                 <div className="flex items-center justify-between h-full px-2">
                   <div className="flex items-center space-x-2">
@@ -680,24 +752,68 @@ export const DynamicIsland: React.FC = () => {
           )}
         </AnimatePresence>
       </motion.div>
-
-      {/* Quick View Switcher floating bar underneath when island is expanded */}
-      {isExpanded && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 6 }}
-          exit={{ opacity: 0, y: -8 }}
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 z-[1001]"
-        >
-          <Skiper2Options
-            currentView={activeView}
-            onSelectView={(v) => setActiveView(v)}
-            className="scale-90 shadow-2xl"
-          />
-        </motion.div>
-      )}
     </div>
   );
 };
 
-export default DynamicIsland;
+export interface OptionsProps {
+  currentView?: IslandView;
+  onSelectView: (view: IslandView) => void;
+  className?: string;
+}
+
+export const Options: React.FC<OptionsProps> = ({
+  currentView = 'music',
+  onSelectView,
+  className = '',
+}) => {
+  const optionsList: { id: IslandView; label: string; icon: React.ReactNode; color: string }[] = [
+    { id: 'music', label: 'Music', icon: <Music className="w-3.5 h-3.5" />, color: 'hover:text-emerald-400' },
+    { id: 'timer', label: 'Timer', icon: <TimerIcon className="w-3.5 h-3.5" />, color: 'hover:text-amber-400' },
+    { id: 'ring', label: 'Call', icon: <Phone className="w-3.5 h-3.5" />, color: 'hover:text-emerald-400' },
+    { id: 'record', label: 'Record', icon: <Mic className="w-3.5 h-3.5" />, color: 'hover:text-rose-400' },
+    { id: 'airdrop', label: 'AirDrop', icon: <Share2 className="w-3.5 h-3.5" />, color: 'hover:text-blue-400' },
+    { id: 'battery', label: 'Battery', icon: <BatteryCharging className="w-3.5 h-3.5" />, color: 'hover:text-emerald-400' },
+    { id: 'faceid', label: 'Face ID', icon: <ScanFace className="w-3.5 h-3.5" />, color: 'hover:text-cyan-400' },
+    { id: 'idle', label: 'Idle', icon: <CircleDot className="w-3.5 h-3.5" />, color: 'hover:text-slate-300' },
+  ];
+
+  return (
+    <div
+      className={`inline-flex items-center gap-1 p-1 bg-black/80 backdrop-blur-xl border border-white/15 rounded-full shadow-2xl text-xs text-white/70 ${className}`}
+    >
+      {optionsList.map((opt) => {
+        const isActive = currentView === opt.id;
+        return (
+          <button
+            key={opt.id}
+            onClick={() => {
+              sounds.playClick();
+              onSelectView(opt.id);
+            }}
+            title={opt.label}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all duration-200 cursor-pointer ${
+              isActive
+                ? 'bg-white/25 text-white shadow-sm ring-1 ring-white/30 font-semibold'
+                : `text-white/60 hover:bg-white/10 ${opt.color}`
+            }`}
+          >
+            {opt.icon}
+            <span>{opt.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
+export default function Skiper2Demo() {
+  const [view, setView] = useState<IslandView>('music');
+
+  return (
+    <div className="flex flex-col items-center justify-center p-8 space-y-6">
+      <DynamicIsland view={view} onViewChange={setView} />
+      <Options currentView={view} onSelectView={setView} />
+    </div>
+  );
+}

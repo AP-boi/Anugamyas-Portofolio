@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { APLogo } from '@/components/ui/APLogo';
+import { VanishForm } from '@/components/v1/skiper56';
 
 interface MacOSLockScreenProps {
   onUnlock?: () => void;
@@ -33,7 +34,6 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
   const [company, setCompany] = useState('');
-  const [contact, setContact] = useState('');
   const [message, setMessage] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
   
@@ -53,7 +53,6 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
       const mins = now.getMinutes();
       const formattedHours = hours % 12 || 12;
       const formattedMins = mins < 10 ? `0${mins}` : mins;
-      const ampm = hours >= 12 ? 'PM' : 'AM';
 
       const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
       const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -69,8 +68,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
     return () => clearInterval(interval);
   }, []);
 
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLoginSubmit = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     setIsLoading(true);
     setError(null);
 
@@ -86,9 +85,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
           return;
         }
         payload.name = name.trim();
-        payload.role = role.trim();
-        payload.company = company.trim();
-        payload.contact = contact.trim();
+        payload.role = role.trim() || 'Software Engineer / Visitor';
+        payload.company = company.trim() || 'Tech Explorer';
         payload.message = message.trim();
       } else if (loginMode === 'guest') {
         payload.name = 'Guest Visitor';
@@ -179,23 +177,22 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="fixed inset-0 z-[99998] flex flex-col justify-between overflow-hidden select-none bg-cover bg-center"
         style={{
-          backgroundImage: `url('/custom-wallpaper.jpg')`,
+          backgroundImage: `radial-gradient(circle at center, rgba(15,23,42,0.45), rgba(2,6,23,0.85)), url('/custom-wallpaper.jpg')`,
         }}
       >
-        {/* Subtle Blur & Vignette Backdrop */}
-        <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[16px] backdrop-saturate-150" />
-
-        {/* Lock Screen Top Menu Bar */}
-        <div className="relative z-20 flex items-center justify-between px-6 py-3 text-white/90 text-xs font-medium">
+        {/* Top macOS Status Header */}
+        <div className="flex items-center justify-between px-6 py-4 text-white/90 text-xs font-semibold relative z-20">
           <div className="flex items-center space-x-2">
-            <APLogo className="w-5 h-5" variant="light" glow={true} />
-            <span className="font-semibold tracking-wide">Anugamya Portfolio OS</span>
+            <APLogo className="w-5 h-3.5" variant="light" />
+            <span className="font-mono text-[11px] text-white/70">macOS Sonoma • AP OS</span>
           </div>
 
-          <div className="flex items-center space-x-3 text-white/80">
-            <Wifi className="w-3.5 h-3.5" />
-            <Battery className="w-4 h-4" />
-            <span className="font-mono text-[11px]">{currentTime.timeStr}</span>
+          <div className="flex items-center space-x-3">
+            <Wifi className="w-4 h-4 text-white/90" />
+            <div className="flex items-center space-x-1 font-mono text-[11px]">
+              <span>98%</span>
+              <Battery className="w-4 h-4 text-emerald-400" />
+            </div>
           </div>
         </div>
 
@@ -212,7 +209,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
           </div>
 
           {/* Login Card Surface */}
-          <div className="liquid-glass-card w-full max-w-[440px] p-6 text-slate-900 border border-white/40 shadow-2xl backdrop-blur-2xl bg-white/75 rounded-3xl">
+          <div className="liquid-glass-card w-full max-w-[460px] p-6 text-slate-900 border border-white/40 shadow-2xl backdrop-blur-2xl bg-white/80 rounded-3xl">
             {/* Profile Avatar & Header */}
             <div className="relative z-10 flex flex-col items-center text-center mb-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 p-0.5 shadow-xl flex items-center justify-center mb-2">
@@ -290,26 +287,27 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
 
             {/* Forms */}
             {loginMode === 'visitor' && (
-              <form onSubmit={handleLoginSubmit} className="relative z-10 space-y-2.5">
+              <form onSubmit={handleLoginSubmit} className="relative z-10 space-y-3">
                 <div>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Your Name *</label>
-                  <div className="flex items-center px-3 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all shadow-inner">
-                    <User className="w-3.5 h-3.5 text-slate-400 mr-2 flex-shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="e.g. Sundar Pichai, Jane Doe"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
-                      autoFocus
-                    />
-                  </div>
+                  <VanishForm
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onSubmit={(val) => {
+                      setName(val);
+                      if (val.trim()) handleLoginSubmit();
+                    }}
+                    icon={<User className="w-3.5 h-3.5" />}
+                    placeholders={['Sundar Pichai', 'Sam Altman', 'Jane Doe', 'Recruiter @ Tech']}
+                    autoFocus
+                    buttonText="Next"
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Role / Title</label>
-                    <div className="flex items-center px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
+                    <div className="flex items-center px-2.5 py-1.5 bg-white/90 border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                       <Briefcase className="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" />
                       <input
                         type="text"
@@ -322,11 +320,11 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Company / Org</label>
-                    <div className="flex items-center px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
+                    <div className="flex items-center px-2.5 py-1.5 bg-white/90 border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                       <Building className="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" />
                       <input
                         type="text"
-                        placeholder="Google / Self"
+                        placeholder="Google / Startup"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
@@ -337,11 +335,11 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
 
                 <div>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Quick Note to Anugamya (Optional)</label>
-                  <div className="flex items-center px-3 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
+                  <div className="flex items-center px-3 py-1.5 bg-white/90 border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                     <MessageSquare className="w-3.5 h-3.5 text-slate-400 mr-2 flex-shrink-0" />
                     <input
                       type="text"
-                      placeholder="e.g. Loved Bharat Dekho! Let's connect."
+                      placeholder="e.g. Loved the 3D portfolio! Let's connect."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
@@ -351,10 +349,10 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
 
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full mt-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white text-xs font-bold transition-all shadow-lg hover:shadow-blue-500/25 flex items-center justify-center space-x-2"
+                  disabled={isLoading || !name.trim()}
+                  className="w-full mt-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-50 text-white text-xs font-bold transition-all shadow-lg hover:shadow-blue-500/25 flex items-center justify-center space-x-2 cursor-pointer"
                 >
-                  <span>{isLoading ? 'Signing In...' : 'Sign In & Enter Portfolio'}</span>
+                  <span>{isLoading ? 'Entering Portfolio...' : 'Sign In & Enter Portfolio'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </form>
@@ -369,7 +367,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   type="button"
                   onClick={handleQuickGuestLogin}
                   disabled={isLoading}
-                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center space-x-2"
+                  className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>{isLoading ? 'Entering...' : 'Instant One-Click Guest Access'}</span>
@@ -381,35 +379,37 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
               <form onSubmit={handleLoginSubmit} className="relative z-10 space-y-3">
                 <div>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Admin Passcode</label>
-                  <div className="flex items-center px-3 py-2 bg-white border border-slate-300 rounded-xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 transition-all shadow-inner">
-                    <KeyRound className="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" />
-                    <input
-                      type="password"
-                      placeholder="Enter owner passcode ('2026')"
-                      value={adminPassword}
-                      onChange={(e) => setAdminPassword(e.target.value)}
-                      className="w-full bg-transparent text-xs text-slate-900 outline-none"
-                      autoFocus
-                    />
-                  </div>
+                  <VanishForm
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    onSubmit={(val) => {
+                      setAdminPassword(val);
+                      handleLoginSubmit();
+                    }}
+                    icon={<KeyRound className="w-3.5 h-3.5" />}
+                    placeholder="Enter owner passcode ('2026')"
+                    autoFocus
+                    buttonText="Unlock"
+                  />
                 </div>
 
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center space-x-2"
+                  disabled={isLoading || !adminPassword.trim()}
+                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer"
                 >
-                  <span>{isLoading ? 'Verifying...' : 'Unlock Administrator Console'}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>{isLoading ? 'Verifying Passcode...' : 'Unlock Admin Dashboard'}</span>
                 </button>
               </form>
             )}
           </div>
         </div>
 
-        {/* Lock Screen Bottom Footer */}
-        <div className="relative z-20 text-center pb-5 text-[11px] text-white/75 font-mono">
-          <span>Press Enter to submit • Anugamya Portfolio OS v1.0 • Node.js Engine</span>
+        {/* Bottom Lock screen Footer info */}
+        <div className="text-center pb-6 text-white/60 text-xs font-mono relative z-20">
+          <span>Anugamya Portfolio • Interactive Simulation</span>
         </div>
       </motion.div>
     </AnimatePresence>
