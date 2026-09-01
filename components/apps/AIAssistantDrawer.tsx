@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { useOSStore } from '@/store/useOSStore';
-import { AppleBorderGradient, AppleIntelligenceGlow } from '@/components/v1/skiper86';
 
 interface ChatMessage {
   id: string;
@@ -154,25 +153,23 @@ export const AIAssistantDrawer: React.FC = () => {
   };
 
   return (
-    <AppleBorderGradient
-      preview={isTyping}
-      intensity="md"
-      speed={3}
-      borderRadius="0"
-      containerClassName="h-full w-full"
-      className="flex flex-col h-full w-full bg-slate-900/95 text-slate-100 select-none overflow-hidden font-sans"
-    >
+    <div className="flex flex-col h-full w-full bg-slate-900/95 text-slate-100 select-none overflow-hidden font-sans">
       {/* Siri Apple Intelligence Iridescent Glowing Header */}
       <div className="relative p-3.5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 flex-shrink-0">
         <div className="flex items-center space-x-3">
-          {/* Glowing Animated Siri Apple Intelligence Orb */}
-          <AppleIntelligenceGlow size={32} spinning={isTyping || true} />
+          {/* Glowing Animated Siri Orb */}
+          <div className="relative w-8 h-8 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-400 via-fuchsia-500 to-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
+            <div className="absolute inset-0.5 rounded-full bg-slate-950 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-cyan-300 animate-pulse" />
+            </div>
+          </div>
 
           <div>
             <div className="flex items-center space-x-1.5">
               <h3 className="text-xs font-bold text-white tracking-wide">AP Intelligence</h3>
               <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30">
-                Apple Intelligence
+                AP-AI
               </span>
             </div>
             <p className="text-[10px] text-slate-400">Trained on Anugamya's Portfolio & Engineering Work</p>
@@ -311,7 +308,7 @@ export const AIAssistantDrawer: React.FC = () => {
           <Send className="w-3.5 h-3.5" />
         </button>
       </form>
-    </AppleBorderGradient>
+    </div>
   );
 };
 

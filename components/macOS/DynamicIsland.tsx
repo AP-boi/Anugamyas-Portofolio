@@ -9,62 +9,69 @@ import {
   SkipForward,
   SkipBack,
   Volume2,
+  Activity,
+  Sparkles,
+  Wifi,
   Radio,
   ExternalLink,
-  Timer as TimerIcon,
-  Phone,
-  PhoneOff,
-  Mic,
-  Share2,
-  BatteryCharging,
-  ScanFace,
-  Check,
-  RotateCcw,
-  Sparkles,
-  CircleDot,
-  Music as MusicIcon,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
-import {
-  IslandView,
-  Track,
-  PLAYLIST,
-  DynamicIsland as Skiper2Island,
-  Options as Skiper2Options,
-} from '@/components/v1/skiper2';
 
-export { PLAYLIST };
-export type { Track, IslandView };
+export interface Track {
+  id: string;
+  title: string;
+  artist: string;
+  album: string;
+  duration: number; // in seconds
+  coverColor: string;
+}
+
+export const PLAYLIST: Track[] = [
+  {
+    id: 't-1',
+    title: 'Sonoma Sunset',
+    artist: 'Anugamya Audio Lab',
+    album: 'macOS Ambient Vol. 1',
+    duration: 184,
+    coverColor: 'from-amber-500 via-rose-500 to-indigo-600',
+  },
+  {
+    id: 't-2',
+    title: 'Cyber Ascension (Theme)',
+    artist: 'AP-boi',
+    album: 'Cyber Ascension OST',
+    duration: 215,
+    coverColor: 'from-cyan-500 via-blue-600 to-purple-700',
+  },
+  {
+    id: 't-3',
+    title: 'Bharat Heritage Melody',
+    artist: 'Indian Classical Synth',
+    album: 'Bharat Dekho OST',
+    duration: 198,
+    coverColor: 'from-orange-500 via-amber-600 to-emerald-600',
+  },
+  {
+    id: 't-4',
+    title: 'Midnight Coding in Tokyo',
+    artist: 'Lofi Chilled Vibes',
+    album: 'Deep Focus Beats',
+    duration: 160,
+    coverColor: 'from-purple-600 via-pink-600 to-rose-500',
+  },
+];
 
 export const DynamicIsland: React.FC = () => {
   const { openWindow, telemetry } = useOSStore();
-  const [activeView, setActiveView] = useState<IslandView>('music');
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [showViewPicker, setShowViewPicker] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
+  const [currentTime, setCurrentTime] = useState(42);
+  const [volume, setVolume] = useState(75);
 
-  // Music State
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(0);
-  const [currentTime, setCurrentTime] = useState<number>(42);
-  const [volume, setVolume] = useState<number>(75);
   const currentTrack = PLAYLIST[currentTrackIndex];
 
-  // Timer State
-  const [timerSeconds, setTimerSeconds] = useState<number>(300);
-  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(true);
-
-  // Record State
-  const [recordSeconds, setRecordSeconds] = useState<number>(18);
-  const [isRecording, setIsRecording] = useState<boolean>(true);
-
-  // AirDrop State
-  const [airdropProgress, setAirdropProgress] = useState<number>(68);
-  const [airdropAccepted, setAirdropAccepted] = useState<boolean>(false);
-
-  // FaceID State
-  const [faceIdVerified, setFaceIdVerified] = useState<boolean>(false);
-
-  // Music timer loop
+  // Track playback time ticker
   useEffect(() => {
     if (!isPlaying) return;
     const timer = setInterval(() => {
@@ -72,35 +79,6 @@ export const DynamicIsland: React.FC = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, [isPlaying, currentTrack.duration]);
-
-  // Timer countdown loop
-  useEffect(() => {
-    if (!isTimerRunning || activeView !== 'timer') return;
-    const timer = setInterval(() => {
-      setTimerSeconds((prev) => (prev <= 0 ? 0 : prev - 1));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isTimerRunning, activeView]);
-
-  // Record timer loop
-  useEffect(() => {
-    if (!isRecording || activeView !== 'record') return;
-    const timer = setInterval(() => {
-      setRecordSeconds((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [isRecording, activeView]);
-
-  // FaceID verification trigger
-  useEffect(() => {
-    if (activeView === 'faceid') {
-      setFaceIdVerified(false);
-      const timeout = setTimeout(() => {
-        setFaceIdVerified(true);
-      }, 1200);
-      return () => clearTimeout(timeout);
-    }
-  }, [activeView]);
 
   const handleTogglePlay = (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -128,58 +106,8 @@ export const DynamicIsland: React.FC = () => {
     return `${mins}:${remainder < 10 ? '0' : ''}${remainder}`;
   };
 
-  // Dimensions calculation based on Skiper2 spring specs
-  const getDimensions = () => {
-    if (isExpanded) {
-      switch (activeView) {
-        case 'music':
-          return { width: 360, height: 172, borderRadius: 28 };
-        case 'timer':
-          return { width: 340, height: 140, borderRadius: 26 };
-        case 'ring':
-        case 'call':
-          return { width: 340, height: 110, borderRadius: 24 };
-        case 'record':
-          return { width: 340, height: 135, borderRadius: 26 };
-        case 'airdrop':
-          return { width: 340, height: 140, borderRadius: 26 };
-        case 'battery':
-          return { width: 320, height: 115, borderRadius: 24 };
-        case 'faceid':
-          return { width: 260, height: 125, borderRadius: 24 };
-        case 'idle':
-        default:
-          return { width: 320, height: 100, borderRadius: 24 };
-      }
-    }
-
-    // Compact pill dimensions
-    switch (activeView) {
-      case 'idle':
-        return { width: 140, height: 26, borderRadius: 13 };
-      case 'ring':
-      case 'call':
-        return { width: 220, height: 26, borderRadius: 13 };
-      case 'timer':
-        return { width: 195, height: 26, borderRadius: 13 };
-      case 'record':
-        return { width: 190, height: 26, borderRadius: 13 };
-      case 'airdrop':
-        return { width: 220, height: 26, borderRadius: 13 };
-      case 'battery':
-        return { width: 175, height: 26, borderRadius: 13 };
-      case 'faceid':
-        return { width: 155, height: 26, borderRadius: 13 };
-      case 'music':
-      default:
-        return { width: isPlaying ? 245 : 185, height: 26, borderRadius: 13 };
-    }
-  };
-
-  const dims = getDimensions();
-
   return (
-    <div className="relative flex flex-col items-center justify-center select-none">
+    <div className="relative flex items-center justify-center select-none">
       <motion.div
         layout
         onClick={() => {
@@ -188,514 +116,149 @@ export const DynamicIsland: React.FC = () => {
         }}
         initial={false}
         animate={{
-          width: dims.width,
-          height: dims.height,
-          borderRadius: dims.borderRadius,
+          width: isExpanded ? 340 : isPlaying ? 240 : 180,
+          height: isExpanded ? 160 : 26,
+          borderRadius: isExpanded ? 24 : 13,
         }}
         transition={{
           type: 'spring',
           stiffness: 420,
           damping: 32,
-          mass: 0.75,
+          mass: 0.7,
         }}
-        className="bg-black/95 text-white backdrop-blur-[28px] border border-white/18 shadow-[0_12px_32px_rgba(0,0,0,0.55),0_0_0_1px_rgba(255,255,255,0.06)] cursor-pointer overflow-hidden flex flex-col justify-between p-2.5 z-[1000] relative"
+        className="bg-black/90 text-white backdrop-blur-[24px] border border-white/15 shadow-[0_10px_30px_rgba(0,0,0,0.5)] cursor-pointer overflow-hidden flex flex-col justify-between p-2.5 z-[1000]"
       >
-        <AnimatePresence mode="wait">
-          {/* COMPACT PILL MODE */}
-          {!isExpanded && (
-            <motion.div
-              key={`compact-${activeView}`}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.15 }}
-              className="flex items-center justify-between w-full h-full px-1 text-xs"
-            >
-              {/* IDLE */}
-              {activeView === 'idle' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <span className="w-2 h-2 rounded-full bg-slate-700 ring-1 ring-white/30" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-                  </div>
-                  <span className="text-[10px] font-mono text-white/50">AP OS</span>
+        {/* COMPACT PILL MODE */}
+        {!isExpanded && (
+          <motion.div
+            layout="position"
+            className="flex items-center justify-between w-full h-full px-1 text-xs"
+          >
+            {/* Left: Album cover or Activity indicator */}
+            <div className="flex items-center space-x-2">
+              <div
+                className={`w-3.5 h-3.5 rounded-full bg-gradient-to-br ${currentTrack.coverColor} flex-shrink-0 animate-pulse`}
+              />
+              <span className="text-[11px] font-semibold text-white/90 truncate max-w-[110px]">
+                {currentTrack.title}
+              </span>
+            </div>
+
+            {/* Right: Real-time sound wave bars */}
+            <div className="flex items-center space-x-1.5">
+              {isPlaying ? (
+                <div className="flex items-center space-x-0.5 h-3">
+                  <span className="w-0.5 h-2.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.6s' }} />
+                  <span className="w-0.5 h-3.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.8s', animationDelay: '0.1s' }} />
+                  <span className="w-0.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.5s', animationDelay: '0.2s' }} />
+                  <span className="w-0.5 h-3 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.7s', animationDelay: '0.15s' }} />
                 </div>
+              ) : (
+                <span className="text-[10px] text-white/50 font-mono">PAUSED</span>
               )}
+            </div>
+          </motion.div>
+        )}
 
-              {/* MUSIC */}
-              {activeView === 'music' && (
-                <>
-                  <div className="flex items-center space-x-2 min-w-0">
-                    <div
-                      className={`w-3.5 h-3.5 rounded-full bg-gradient-to-br ${currentTrack.coverColor} flex-shrink-0 animate-pulse`}
-                    />
-                    <span className="text-[11px] font-semibold text-white/95 truncate max-w-[125px]">
-                      {currentTrack.title}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center space-x-1.5 flex-shrink-0">
-                    {isPlaying ? (
-                      <div className="flex items-center space-x-0.5 h-3">
-                        <span className="w-0.5 h-2.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.6s' }} />
-                        <span className="w-0.5 h-3.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.8s', animationDelay: '0.1s' }} />
-                        <span className="w-0.5 h-1.5 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.5s', animationDelay: '0.2s' }} />
-                        <span className="w-0.5 h-3 bg-emerald-400 rounded-full animate-bounce" style={{ animationDuration: '0.7s', animationDelay: '0.15s' }} />
-                      </div>
-                    ) : (
-                      <span className="text-[9px] text-white/50 font-mono">PAUSED</span>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {/* TIMER */}
-              {activeView === 'timer' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <TimerIcon className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-                    <span className="text-[10px] font-medium text-amber-300">Timer</span>
-                  </div>
-                  <span className="text-[11px] font-mono font-bold text-white tracking-wider">
-                    {formatSeconds(timerSeconds)}
-                  </span>
+        {/* EXPANDED ISLAND HUD MODE */}
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col justify-between h-full w-full space-y-2 text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Track Info Row */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div
+                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${currentTrack.coverColor} flex items-center justify-center shadow-lg border border-white/20`}
+                >
+                  <Radio className="w-5 h-5 text-white/90" />
                 </div>
-              )}
-
-              {/* CALL / RING */}
-              {(activeView === 'ring' || activeView === 'call') && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <div className="w-3.5 h-3.5 rounded-full bg-emerald-500 flex items-center justify-center animate-pulse">
-                      <Phone className="w-2 h-2 text-white" />
-                    </div>
-                    <span className="text-[10px] font-medium text-white/90 truncate max-w-[110px]">
-                      Tim Cook
-                    </span>
-                  </div>
-                  <span className="text-[9px] text-emerald-400 font-mono">00:48</span>
+                <div>
+                  <h4 className="text-xs font-bold text-white leading-tight">{currentTrack.title}</h4>
+                  <p className="text-[11px] text-white/70">{currentTrack.artist}</p>
+                  <span className="text-[9px] text-white/40 font-mono">{currentTrack.album}</span>
                 </div>
-              )}
+              </div>
 
-              {/* RECORD */}
-              {activeView === 'record' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
-                    <span className="text-[10px] font-medium text-rose-300">Recording</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-semibold text-white">
-                    {formatSeconds(recordSeconds)}
-                  </span>
+              {/* Edge Node Telemetry Mini Badge */}
+              <div className="text-right">
+                <div className="flex items-center space-x-1 justify-end text-[10px] text-emerald-400 font-mono font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span>{telemetry.fps} FPS</span>
                 </div>
-              )}
+                <span className="text-[9px] text-white/40 font-mono">{telemetry.latencyMs}ms latency</span>
+              </div>
+            </div>
 
-              {/* AIRDROP */}
-              {activeView === 'airdrop' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <Share2 className="w-3.5 h-3.5 text-blue-400 animate-bounce" />
-                    <span className="text-[10px] font-medium text-blue-300 truncate max-w-[110px]">
-                      AirDrop
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-mono text-white/80">{airdropProgress}%</span>
-                </div>
-              )}
+            {/* Middle Scrubber Bar */}
+            <div className="space-y-1">
+              <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-white rounded-full transition-all duration-300"
+                  style={{ width: `${(currentTime / currentTrack.duration) * 100}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-[9px] font-mono text-white/60">
+                <span>{formatSeconds(currentTime)}</span>
+                <span>{formatSeconds(currentTrack.duration)}</span>
+              </div>
+            </div>
 
-              {/* BATTERY */}
-              {activeView === 'battery' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <BatteryCharging className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-[10px] font-medium text-emerald-300">MagSafe</span>
-                  </div>
-                  <span className="text-[10px] font-mono font-bold text-white">98%</span>
-                </div>
-              )}
+            {/* Bottom Controls Row */}
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center space-x-1">
+                <button
+                  onClick={() => openWindow('music')}
+                  className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-white font-medium transition-colors flex items-center gap-1"
+                >
+                  <span>Open Music</span>
+                  <ExternalLink className="w-2.5 h-2.5" />
+                </button>
+              </div>
 
-              {/* FACEID */}
-              {activeView === 'faceid' && (
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-1.5">
-                    <ScanFace className="w-3.5 h-3.5 text-cyan-400" />
-                    <span className="text-[10px] font-medium text-cyan-300">Face ID</span>
-                  </div>
-                  {faceIdVerified ? (
-                    <Check className="w-3 h-3 text-emerald-400" />
-                  ) : (
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                  )}
-                </div>
-              )}
-            </motion.div>
-          )}
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={handlePrevTrack}
+                  className="text-white/70 hover:text-white transition-colors p-1"
+                >
+                  <SkipBack className="w-4 h-4 fill-current" />
+                </button>
 
-          {/* EXPANDED ISLAND HUD MODE */}
-          {isExpanded && (
-            <motion.div
-              key={`expanded-${activeView}`}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col justify-between h-full w-full space-y-2 text-white"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* MUSIC VIEW */}
-              {activeView === 'music' && (
-                <>
-                  {/* Top Track Info Row */}
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div
-                        className={`w-11 h-11 rounded-xl bg-gradient-to-br ${currentTrack.coverColor} flex items-center justify-center shadow-lg border border-white/20`}
-                      >
-                        <Radio className="w-5 h-5 text-white/90" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white leading-tight">{currentTrack.title}</h4>
-                        <p className="text-[11px] text-white/70">{currentTrack.artist}</p>
-                        <span className="text-[9px] text-white/40 font-mono">{currentTrack.album}</span>
-                      </div>
-                    </div>
+                <button
+                  onClick={handleTogglePlay}
+                  className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md"
+                >
+                  {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
+                </button>
 
-                    <div className="text-right">
-                      <div className="flex items-center space-x-1 justify-end text-[10px] text-emerald-400 font-mono font-semibold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                        <span>{telemetry.fps} FPS</span>
-                      </div>
-                      <span className="text-[9px] text-white/40 font-mono">{telemetry.latencyMs}ms latency</span>
-                    </div>
-                  </div>
+                <button
+                  onClick={handleNextTrack}
+                  className="text-white/70 hover:text-white transition-colors p-1"
+                >
+                  <SkipForward className="w-4 h-4 fill-current" />
+                </button>
+              </div>
 
-                  {/* Scrubber Bar */}
-                  <div className="space-y-1">
-                    <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-white rounded-full transition-all duration-300"
-                        style={{ width: `${(currentTime / currentTrack.duration) * 100}%` }}
-                      />
-                    </div>
-                    <div className="flex justify-between text-[9px] font-mono text-white/60">
-                      <span>{formatSeconds(currentTime)}</span>
-                      <span>{formatSeconds(currentTrack.duration)}</span>
-                    </div>
-                  </div>
-
-                  {/* Bottom Controls Row */}
-                  <div className="flex items-center justify-between pt-0.5">
-                    <button
-                      onClick={() => openWindow('music')}
-                      className="px-2 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-white font-medium transition-colors flex items-center gap-1"
-                    >
-                      <span>Open Music</span>
-                      <ExternalLink className="w-2.5 h-2.5" />
-                    </button>
-
-                    <div className="flex items-center space-x-3">
-                      <button
-                        onClick={handlePrevTrack}
-                        className="text-white/70 hover:text-white transition-colors p-1"
-                      >
-                        <SkipBack className="w-4 h-4 fill-current" />
-                      </button>
-
-                      <button
-                        onClick={handleTogglePlay}
-                        className="w-8 h-8 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-md"
-                      >
-                        {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current ml-0.5" />}
-                      </button>
-
-                      <button
-                        onClick={handleNextTrack}
-                        className="text-white/70 hover:text-white transition-colors p-1"
-                      >
-                        <SkipForward className="w-4 h-4 fill-current" />
-                      </button>
-                    </div>
-
-                    <div className="flex items-center space-x-1.5 text-white/70">
-                      <Volume2 className="w-3.5 h-3.5" />
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={volume}
-                        onChange={(e) => setVolume(parseInt(e.target.value))}
-                        className="w-14 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* TIMER VIEW */}
-              {activeView === 'timer' && (
-                <div className="flex flex-col justify-between h-full space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                        <TimerIcon className="w-4 h-4" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white">Focus Timer</h4>
-                        <p className="text-[10px] text-white/60">Anugamya Deep Work Session</p>
-                      </div>
-                    </div>
-                    <span className="text-xl font-mono font-bold text-amber-400 tracking-wider">
-                      {formatSeconds(timerSeconds)}
-                    </span>
-                  </div>
-
-                  <div className="w-full h-1.5 bg-white/15 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-amber-400 to-orange-500 rounded-full transition-all duration-300"
-                      style={{ width: `${(timerSeconds / 300) * 100}%` }}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between pt-1">
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setTimerSeconds(300);
-                      }}
-                      className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] font-medium transition-colors flex items-center gap-1 text-white/80"
-                    >
-                      <RotateCcw className="w-3 h-3" />
-                      <span>Reset</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setIsTimerRunning(!isTimerRunning);
-                      }}
-                      className={`px-4 py-1 rounded-full text-[10px] font-bold transition-all shadow-md ${
-                        isTimerRunning
-                          ? 'bg-amber-500 text-black hover:bg-amber-400'
-                          : 'bg-emerald-500 text-white hover:bg-emerald-400'
-                      }`}
-                    >
-                      {isTimerRunning ? 'Pause' : 'Resume'}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* CALL / RING VIEW */}
-              {(activeView === 'ring' || activeView === 'call') && (
-                <div className="flex items-center justify-between h-full px-1">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-slate-700 to-slate-900 border border-white/20 flex items-center justify-center font-bold text-sm text-white shadow-md">
-                      TC
-                    </div>
-                    <div>
-                      <div className="flex items-center space-x-1.5">
-                        <h4 className="text-xs font-bold text-white">Tim Cook</h4>
-                        <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                          Apple Inc.
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-white/60">Incoming FaceTime Audio...</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2.5">
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setActiveView('idle');
-                        setIsExpanded(false);
-                      }}
-                      className="w-9 h-9 rounded-full bg-rose-600 hover:bg-rose-500 text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-rose-900/40"
-                    >
-                      <PhoneOff className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setActiveView('call');
-                      }}
-                      className="w-9 h-9 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-emerald-900/40"
-                    >
-                      <Phone className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* RECORD VIEW */}
-              {activeView === 'record' && (
-                <div className="flex flex-col justify-between h-full space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-rose-500 animate-ping" />
-                      <span className="text-xs font-bold text-rose-400">Voice Memo</span>
-                    </div>
-                    <span className="text-sm font-mono font-bold text-white">
-                      {formatSeconds(recordSeconds)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-center space-x-1 h-8 bg-black/40 rounded-xl px-3 border border-white/10">
-                    {[12, 24, 18, 28, 14, 22, 30, 16, 26, 10, 20, 32, 14, 22, 18].map((h, i) => (
-                      <motion.span
-                        key={i}
-                        animate={{
-                          height: isRecording ? [h * 0.4, h, h * 0.5] : h * 0.3,
-                        }}
-                        transition={{
-                          repeat: Infinity,
-                          duration: 0.6 + (i % 5) * 0.1,
-                          ease: 'easeInOut',
-                        }}
-                        className="w-1 bg-rose-500 rounded-full"
-                      />
-                    ))}
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] text-white/50">48kHz • 24-bit Lossless</span>
-                    <button
-                      onClick={() => {
-                        sounds.playClick();
-                        setIsRecording(!isRecording);
-                      }}
-                      className="px-3 py-0.5 rounded-full bg-rose-600/80 hover:bg-rose-500 text-[10px] font-bold text-white transition-all"
-                    >
-                      {isRecording ? 'Stop' : 'Resume'}
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* AIRDROP VIEW */}
-              {activeView === 'airdrop' && (
-                <div className="flex flex-col justify-between h-full space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2.5">
-                      <div className="w-8 h-8 rounded-full bg-blue-500/20 border border-blue-400/40 flex items-center justify-center text-blue-400">
-                        <Share2 className="w-4 h-4 animate-pulse" />
-                      </div>
-                      <div>
-                        <h4 className="text-xs font-bold text-white">Anugamya Resume 2026</h4>
-                        <p className="text-[10px] text-white/60">From "MacBook Pro M3 Max"</p>
-                      </div>
-                    </div>
-                    <span className="text-xs font-mono font-bold text-blue-400">{airdropProgress}%</span>
-                  </div>
-
-                  <div className="w-full h-1.5 bg-white/15 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full transition-all duration-300"
-                      style={{ width: `${airdropProgress}%` }}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between pt-0.5">
-                    <span className="text-[10px] text-white/50">4.8 MB • PDF Document</span>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => {
-                          sounds.playClick();
-                          setActiveView('idle');
-                          setIsExpanded(false);
-                        }}
-                        className="px-2.5 py-0.5 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] text-white font-medium"
-                      >
-                        Decline
-                      </button>
-                      <button
-                        onClick={() => {
-                          sounds.playClick();
-                          setAirdropProgress(100);
-                          setAirdropAccepted(true);
-                        }}
-                        className="px-3 py-0.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-[10px] font-bold text-white shadow-md"
-                      >
-                        {airdropAccepted ? 'Accepted' : 'Accept'}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* BATTERY VIEW */}
-              {activeView === 'battery' && (
-                <div className="flex items-center justify-between h-full px-2">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400">
-                      <BatteryCharging className="w-6 h-6 animate-pulse" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">MagSafe Power</h4>
-                      <p className="text-[11px] text-emerald-400 font-semibold">Fast Charging 98%</p>
-                      <span className="text-[9px] text-white/50">45W • 12 mins to full</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-mono font-bold text-white">98%</span>
-                  </div>
-                </div>
-              )}
-
-              {/* FACEID VIEW */}
-              {activeView === 'faceid' && (
-                <div className="flex items-center justify-center flex-col h-full space-y-1.5 py-1">
-                  <div className="relative w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center">
-                    {faceIdVerified ? (
-                      <Check className="w-6 h-6 text-emerald-400" />
-                    ) : (
-                      <ScanFace className="w-6 h-6 text-cyan-400 animate-pulse" />
-                    )}
-                  </div>
-                  <div className="text-center">
-                    <h4 className="text-xs font-bold text-white">
-                      {faceIdVerified ? 'Face ID Verified' : 'Scanning Face...'}
-                    </h4>
-                    <p className="text-[9px] text-white/60">Anugamya Protected Portfolio</p>
-                  </div>
-                </div>
-              )}
-
-              {/* IDLE VIEW */}
-              {activeView === 'idle' && (
-                <div className="flex items-center justify-between h-full px-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-600/30 border border-blue-400/30 flex items-center justify-center text-blue-400">
-                      <Sparkles className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white">Anugamya OS Island</h4>
-                      <p className="text-[10px] text-white/60">All system services active</p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-emerald-400">Connected</span>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <div className="flex items-center space-x-1.5 text-white/70">
+                <Volume2 className="w-3.5 h-3.5" />
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(parseInt(e.target.value))}
+                  className="w-14 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
       </motion.div>
-
-      {/* Quick View Switcher floating bar underneath when island is expanded */}
-      {isExpanded && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 6 }}
-          exit={{ opacity: 0, y: -8 }}
-          className="absolute -bottom-8 left-1/2 -translate-x-1/2 z-[1001]"
-        >
-          <Skiper2Options
-            currentView={activeView}
-            onSelectView={(v) => setActiveView(v)}
-            className="scale-90 shadow-2xl"
-          />
-        </motion.div>
-      )}
     </div>
   );
 };

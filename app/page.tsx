@@ -28,7 +28,6 @@ import { AnalogClockWidget } from '@/components/ui/analog-clock';
 import { CalendarWidget } from '@/components/ui/calendar-widget';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
-import { MinimalCardExpand } from '@/components/v1/skiper23';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Activity, Sun } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
@@ -258,10 +257,22 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Desktop Widgets Column with skiper23 animated expandable deck */}
-          <div className="col-span-3 flex flex-col items-end space-y-3 pt-1 pointer-events-auto z-10 max-h-[calc(100vh-100px)] overflow-y-auto no-scrollbar pr-1">
+          {/* Right Desktop Widgets Column */}
+          <div className="col-span-3 flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
             <AnalogClockWidget />
-            <MinimalCardExpand defaultExpandedId="system-ai" />
+
+            <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
+              <div className="relative z-10 flex items-center justify-between">
+                <div>
+                  <span className="text-2xl font-light text-slate-900">30°</span>
+                  <p className="text-[10px] text-slate-600 font-medium">Partly Cloudy</p>
+                </div>
+                <Sun className="w-7 h-7 text-amber-500 drop-shadow" />
+              </div>
+              <span className="relative z-10 text-[9px] text-slate-500 font-mono mt-2">New Delhi, India</span>
+            </div>
+
+            <CalendarWidget />
           </div>
         </div>
       </div>

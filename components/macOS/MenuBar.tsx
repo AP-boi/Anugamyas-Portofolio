@@ -3,20 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
 import {
+  Wifi,
+  Battery,
   Sliders,
+  Search,
   Lock,
   LogOut,
   Sparkles,
   Shield,
   Volume2,
 } from 'lucide-react';
-import {
-  AnimatedSearchIcon,
-  AnimatedWifiIcon,
-  AnimatedBatteryIcon,
-  AnimatedSettingsIcon,
-  AnimatedLockIcon,
-} from '@/components/v1/skiper42';
 import { sounds } from '@/lib/soundEngine';
 import { APLogo } from '@/components/ui/APLogo';
 
@@ -162,10 +158,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs flex items-center justify-between transition-colors"
               >
-                <div className="flex items-center gap-1.5">
-                  <AnimatedLockIcon size={13} className="text-slate-600" />
-                  <span>Lock Screen</span>
-                </div>
+                <span>Lock Screen</span>
                 <span className="text-[10px] text-slate-400 font-mono">⌘L</span>
               </button>
 
@@ -284,36 +277,36 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           </div>
         )}
 
-        {/* Spotlight Search Icon with micro-animation */}
+        {/* Spotlight Search Icon */}
         <button
           onClick={() => {
             sounds.playClick();
             if (onToggleSpotlight) onToggleSpotlight();
           }}
-          className="p-1 hover:bg-black/5 rounded transition-colors text-slate-700 hover:text-slate-950 flex items-center justify-center"
+          className="p-1 hover:bg-black/5 rounded transition-colors text-slate-700 hover:text-slate-950"
           title="Spotlight Search (⌘Space)"
         >
-          <AnimatedSearchIcon size={14} />
+          <Search className="w-3.5 h-3.5" />
         </button>
 
-        {/* Control Center Toggle with animated settings gear */}
+        {/* Control Center Toggle */}
         <button
           onClick={() => {
             sounds.playClick();
             if (onToggleControlCenter) onToggleControlCenter();
           }}
-          className="p-1 hover:bg-black/5 rounded transition-colors text-slate-700 hover:text-slate-950 flex items-center justify-center"
+          className="p-1 hover:bg-black/5 rounded transition-colors text-slate-700 hover:text-slate-950"
           title="Control Center"
         >
-          <AnimatedSettingsIcon size={14} />
+          <Sliders className="w-3.5 h-3.5" />
         </button>
 
-        {/* Status Indicators with animated wifi & battery */}
+        {/* Status Indicators */}
         <div className="flex items-center space-x-1.5 text-slate-700">
-          <AnimatedWifiIcon size={14} className="text-slate-800" />
+          <Wifi className="w-3.5 h-3.5 text-slate-800" />
           <div className="flex items-center space-x-0.5">
             <span className="text-[10px] font-mono font-medium">{batteryLevel}%</span>
-            <AnimatedBatteryIcon size={16} className="text-slate-800" />
+            <Battery className="w-4 h-4 text-slate-800" />
           </div>
         </div>
 
