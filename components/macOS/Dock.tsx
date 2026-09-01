@@ -48,11 +48,6 @@ const DOCK_ITEMS: DockIconConfig[] = [
     iconSrc: '/icons/terminal.png',
   },
   {
-    id: 'music',
-    label: 'Music — Lofi Beats',
-    iconSrc: '/icons/music.png',
-  },
-  {
     id: 'analytics',
     label: 'Activity Monitor — Visitor Intelligence',
     customIcon: 'activity',

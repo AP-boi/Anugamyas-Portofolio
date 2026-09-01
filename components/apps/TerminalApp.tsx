@@ -82,7 +82,6 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
               <p><span className="text-emerald-400 font-bold w-24 inline-block">whoami</span> Developer biography</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">projects</span> Open Projects Finder</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">analytics</span> Open Activity Monitor</p>
-              <p><span className="text-emerald-400 font-bold w-24 inline-block">music</span> Open AP Music Player</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query AP Intelligence</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">cat &lt;file&gt;</span> Print file contents</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">clear</span> Clear terminal screen</p>
@@ -244,11 +243,6 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
         outputResult = 'Opening Visitor Intelligence & Analytics...';
         break;
 
-      case 'music':
-        openWindow('music');
-        outputResult = 'Opening AP Music player...';
-        break;
-
       case 'camera':
       case 'cam':
         openWindow('camera');
@@ -284,9 +278,6 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
         } else if (args === 'analytics') {
           openWindow('analytics');
           outputResult = 'Opening Analytics...';
-        } else if (args === 'music') {
-          openWindow('music');
-          outputResult = 'Opening Music...';
         } else {
           outputResult = `open: unknown target "${args}". Try "open github" or "open projects"`;
           outputType = 'error';

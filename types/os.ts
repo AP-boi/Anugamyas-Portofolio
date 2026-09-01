@@ -1,4 +1,4 @@
-export type AppId = 'achievements' | 'projects' | 'github' | 'terminal' | 'ai-assistant' | 'system-info' | 'camera' | 'tetris' | 'analytics' | 'music';
+export type AppId = 'achievements' | 'projects' | 'github' | 'terminal' | 'ai-assistant' | 'system-info' | 'camera' | 'tetris' | 'analytics';
 
 export interface WindowPosition {
   x: number;

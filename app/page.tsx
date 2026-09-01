@@ -12,7 +12,6 @@ import { AIAssistantDrawer } from '@/components/apps/AIAssistantDrawer';
 import { CameraApp } from '@/components/apps/CameraApp';
 import TetrisApp from '@/components/apps/TetrisApp';
 import { AnalyticsApp } from '@/components/apps/AnalyticsApp';
-import { MusicApp } from '@/components/apps/MusicApp';
 import { useOSStore } from '@/store/useOSStore';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
@@ -309,12 +308,7 @@ export default function Home() {
         <AnalyticsApp />
       </Window>
 
-      {/* 7. AP Music App Window */}
-      <Window id="music">
-        <MusicApp />
-      </Window>
-
-      {/* 8. System Telemetry Window */}
+      {/* 7. System Telemetry Window */}
       <Window id="system-info">
         <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200">

@@ -137,17 +137,6 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 <span className="text-[10px] text-slate-400 group-hover:text-white">⌘K</span>
               </button>
 
-              <button
-                onClick={() => {
-                  sounds.playClick();
-                  openWindow('music');
-                  setIsSystemMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
-              >
-                <span>AP Music</span>
-              </button>
-
               <div className="my-1 border-t border-slate-200" />
 
               <button
@@ -204,15 +193,6 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           >
             <span>Analytics</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          </button>
-          <button
-            onClick={() => {
-              sounds.playClick();
-              openWindow('music');
-            }}
-            className="text-slate-700 hover:text-blue-600 transition-colors font-medium"
-          >
-            Music
           </button>
           <button
             onClick={() => {
