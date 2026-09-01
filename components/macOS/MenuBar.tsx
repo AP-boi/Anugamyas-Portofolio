@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
-import { DynamicIsland } from './DynamicIsland';
 import {
   Sliders,
   Lock,
@@ -232,11 +231,6 @@ export const MenuBar: React.FC<MenuBarProps> = ({
             Milestones
           </button>
         </div>
-      </div>
-
-      {/* Center Dynamic Island */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-1 z-20">
-        <DynamicIsland />
       </div>
 
       {/* Right Control & User Profile Bar */}

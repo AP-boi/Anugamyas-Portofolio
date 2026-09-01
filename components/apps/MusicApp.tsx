@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { PLAYLIST, Track } from '@/components/macOS/DynamicIsland';
+import { PLAYLIST, Track } from '@/lib/playlist';
 import {
   Play,
   Pause,
