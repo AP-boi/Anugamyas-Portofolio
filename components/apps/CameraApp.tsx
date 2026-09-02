@@ -24,7 +24,7 @@ export const CameraApp: React.FC = () => {
     <div className="relative flex flex-col h-full w-full bg-slate-100 text-slate-900 overflow-hidden select-none">
       <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100/90 border-b border-slate-200 backdrop-blur-md z-20">
         <div className="flex items-center space-x-3">
-          <img src="/icons/camera.png" alt="Camera" className="w-8 h-8 rounded-lg object-cover shadow-xs" />
+          <img src="/icons/camera.png" alt="Camera" className="w-8 h-8 rounded-lg object-contain shadow-xs" />
           <div>
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               Camera & Motion Grid
