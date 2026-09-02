@@ -31,12 +31,12 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   github: {
     id: 'github',
-    title: 'Safari — GitHub (@AP-boi)',
-    description: 'GitHub repositories, commit activity, and statistics',
-    iconName: 'Github',
+    title: 'Safari — Web Browser',
+    description: 'Web browser with open-source search engine, GitHub explorer, and real-time search',
+    iconName: 'Compass',
     iconSrc: '/icons/safari.png',
-    defaultPosition: { x: 200, y: 120 },
-    defaultSize: { width: 840, height: 560 },
+    defaultPosition: { x: 180, y: 80 },
+    defaultSize: { width: 940, height: 620 },
   },
   terminal: {
     id: 'terminal',
@@ -58,12 +58,12 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
   },
   'system-info': {
     id: 'system-info',
-    title: 'System Settings — Telemetry',
-    description: 'Real-time connection performance, memory & edge telemetry monitor',
-    iconName: 'Activity',
+    title: 'System Settings',
+    description: 'Appearance, wallpaper, displays, brightness, Wi-Fi, sound, and macOS system preferences',
+    iconName: 'Settings',
     iconSrc: '/icons/settings.png',
-    defaultPosition: { x: 100, y: 140 },
-    defaultSize: { width: 680, height: 480 },
+    defaultPosition: { x: 140, y: 90 },
+    defaultSize: { width: 780, height: 540 },
   },
   camera: {
     id: 'camera',
@@ -118,6 +118,19 @@ interface OSStoreState {
   toggleTheme: () => void;
   brightness: number;
   setBrightness: (b: number) => void;
+  wallpaper: string;
+  setWallpaper: (wp: string) => void;
+  wifiEnabled: boolean;
+  setWifiEnabled: (enabled: boolean) => void;
+  wifiNetwork: string;
+  volume: number;
+  setVolume: (v: number) => void;
+  soundEffects: boolean;
+  setSoundEffects: (enabled: boolean) => void;
+  accentColor: string;
+  setAccentColor: (color: string) => void;
+  nightShift: boolean;
+  setNightShift: (enabled: boolean) => void;
   updateTelemetry: (data: Partial<TelemetryData>) => void;
   updateAmbientLight: (data: Partial<AmbientLightState>) => void;
 }
@@ -360,6 +373,37 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
   brightness: 100,
   setBrightness: (brightness: number) => {
     set({ brightness: Math.max(20, Math.min(100, brightness)) });
+  },
+
+  wallpaper: '/custom-wallpaper.jpg',
+  setWallpaper: (wallpaper: string) => {
+    set({ wallpaper });
+  },
+
+  wifiEnabled: true,
+  setWifiEnabled: (wifiEnabled: boolean) => {
+    set({ wifiEnabled });
+  },
+  wifiNetwork: 'Anugamya_Fiber_5G',
+
+  volume: 80,
+  setVolume: (volume: number) => {
+    set({ volume: Math.max(0, Math.min(100, volume)) });
+  },
+
+  soundEffects: true,
+  setSoundEffects: (soundEffects: boolean) => {
+    set({ soundEffects });
+  },
+
+  accentColor: 'blue',
+  setAccentColor: (accentColor: string) => {
+    set({ accentColor });
+  },
+
+  nightShift: false,
+  setNightShift: (nightShift: boolean) => {
+    set({ nightShift });
   },
 
   updateTelemetry: (data: Partial<TelemetryData>) => {

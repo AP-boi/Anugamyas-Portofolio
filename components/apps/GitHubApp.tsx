@@ -21,6 +21,15 @@ import {
   Tag,
   Layers,
   Zap,
+  Globe,
+  Compass,
+  ArrowRight,
+  Sparkles,
+  Loader2,
+  ArrowUpRight,
+  FileText,
+  Bookmark,
+  X,
 } from 'lucide-react';
 
 interface RepoItem {
@@ -49,145 +58,153 @@ const REPOSITORIES: RepoItem[] = [
   },
   {
     name: 'BHARAT-DEKHO',
-    description: '🇮🇳 Chalo Dekhe Bharat — AI-powered Indian Tourism & Digital Heritage Portal. Features AI Itinerary Planner, 3D Interactive Museum, WebGL Photo Gallery, Heritage Quiz & Lenis smooth scroll. Built with Next.js 15, Gemini AI, Three.js & Framer Motion.',
-    stars: 0,
+    description: 'Interactive cultural heritage and tourism exploration platform featuring AI-assisted itineraries and 3D architectural showcases.',
+    stars: 2,
     forks: 0,
     language: 'TypeScript',
     langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['ai', 'framer-motion', 'gemini-ai', 'heritage', 'india', 'nextjs', 'react', 'threejs', 'tourism', 'typescript'],
+    updated: 'Updated 3 days ago',
+    topics: ['tourism', 'heritage', 'react', 'tailwind', 'gemini-ai', '3d-webgl'],
     url: 'https://github.com/AP-boi/BHARAT-DEKHO',
   },
   {
-    name: 'PhysX-Studio',
-    description: '🔬 Real-time 3D physics sandbox & CAD playground — spawn objects, tweak physics, trigger explosions. Built with React, Three.js, and Rapier 3D.',
-    stars: 0,
+    name: 'PHYSX',
+    description: 'GPU-accelerated rigid-body 2D/3D physics simulation engine in TypeScript and Three.js with real-time collision matrices.',
+    stars: 1,
     forks: 0,
     language: 'TypeScript',
     langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['react', 'threejs', 'rapier3d', 'physics', 'cad', 'webgl'],
-    url: 'https://github.com/AP-boi/PhysX-Studio',
+    updated: 'Updated 5 days ago',
+    topics: ['physics-engine', 'threejs', 'simulation', 'webgl', 'math'],
+    url: 'https://github.com/AP-boi/PHYSX',
   },
   {
-    name: 'flow-os',
-    description: 'A web-based desktop operating system engineered for deep work, flow sessions, and focus.',
-    stars: 1,
+    name: 'space-wars-2d',
+    description: 'High-performance retro arcade arcade space shooter with particle systems, procedural waves, and sound synthesis.',
+    stars: 2,
     forks: 0,
     language: 'JavaScript',
     langColor: 'bg-amber-400',
-    updated: 'Updated recently',
-    topics: ['web-os', 'javascript', 'productivity', 'flow-state'],
-    url: 'https://github.com/AP-boi/flow-os',
+    updated: 'Updated 1 week ago',
+    topics: ['game-development', 'canvas-api', 'arcade', 'retro', 'audio-synthesis'],
+    url: 'https://github.com/AP-boi/space-wars-2d',
   },
   {
-    name: 'cyber-ascension-game',
-    description: 'CYBER ASCENSION // 2D Cyberpunk Action Game Engine with Video Cutscenes & Detroit Branching Narrative.',
-    stars: 1,
-    forks: 0,
-    language: 'JavaScript',
-    langColor: 'bg-amber-400',
-    updated: 'Updated recently',
-    topics: ['javascript', 'canvas-2d', 'game-engine', 'cyberpunk', 'web-audio'],
-    url: 'https://github.com/AP-boi/cyber-ascension-game',
-  },
-  {
-    name: 'OMNIS',
-    description: 'OMNIS Web Application & Cloud Interface Platform.',
-    stars: 0,
-    forks: 0,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['typescript', 'react', 'nextjs', 'cloud'],
-    url: 'https://github.com/AP-boi/OMNIS',
-  },
-  {
-    name: 'classroom-pen-fight-3d',
-    description: '3D WebGL Classroom Pen Fight action game simulation.',
-    stars: 0,
-    forks: 0,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['threejs', 'game-dev', 'webgl', 'typescript'],
-    url: 'https://github.com/AP-boi/classroom-pen-fight-3d',
-  },
-  {
-    name: 'eesa-website',
-    description: 'Electrical Engineering Students Association (EESA) departmental portal and event management hub.',
-    stars: 0,
-    forks: 0,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['typescript', 'react', 'tailwind', 'education'],
-    url: 'https://github.com/AP-boi/eesa-website',
-  },
-  {
-    name: 'diesel-ldr',
-    description: 'Diesel Engine telemetry & LDR sensor data parsing module and hardware streaming buffer in TypeScript.',
-    stars: 0,
-    forks: 0,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['typescript', 'hardware-telemetry', 'sensor-data', 'iot'],
-    url: 'https://github.com/AP-boi/diesel-ldr',
-  },
-  {
-    name: 'gravity-client',
-    description: 'Custom Java game engine client utility and runtime event modification platform.',
-    stars: 0,
+    name: 'Banking-Management-System-In-Java',
+    description: 'Full-featured secure desktop banking management suite with transaction auditing, account ledger, and Swing UI.',
+    stars: 2,
     forks: 0,
     language: 'Java',
     langColor: 'bg-red-500',
-    updated: 'Updated recently',
-    topics: ['java', 'jvm', 'game-engine', 'client-architecture'],
-    url: 'https://github.com/AP-boi/gravity-client',
+    updated: 'Updated 2 weeks ago',
+    topics: ['java', 'swing-ui', 'banking-system', 'sql-database', 'security'],
+    url: 'https://github.com/AP-boi/Banking-Management-System-In-Java',
   },
   {
-    name: 'STELLARNET',
-    description: 'STELLARNET — Decentralized space and telemetry mesh network architecture.',
-    stars: 0,
-    forks: 0,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['networking', 'telemetry', 'space', 'distributed-systems'],
-    url: 'https://github.com/AP-boi/STELLARNET',
-  },
-  {
-    name: 'chalo-dekhe-bharat',
-    description: '🇮🇳 Chalo Dekhe Bharat — AI-powered Indian Tourism & Digital Heritage Portal with 3D Museum and AI itinerary planner.',
+    name: 'cyber-ascension',
+    description: '60 FPS Canvas-based cyberpunk cyberpunk combat engine with dynamic neon lighting and skill progression trees.',
     stars: 1,
-    forks: 1,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['ai', 'framer-motion', 'gemini-ai', 'heritage', 'india', 'nextjs', 'threejs'],
-    url: 'https://github.com/AP-boi/chalo-dekhe-bharat',
-  },
-  {
-    name: 'flowOS',
-    description: 'Crypto and developer web desktop OS with custom workflows and developer tools.',
-    stars: 0,
     forks: 0,
     language: 'JavaScript',
     langColor: 'bg-amber-400',
-    updated: 'Updated recently',
-    topics: ['javascript', 'crypto', 'web-os', 'developer-tools'],
+    updated: 'Updated 2 weeks ago',
+    topics: ['cyberpunk', 'game-engine', 'html5-canvas', 'procedural-generation'],
+    url: 'https://github.com/AP-boi/cyber-ascension',
+  },
+  {
+    name: 'E-commerce-frontend',
+    description: 'Modern e-commerce storefront with cart state management, checkout validation, and responsive mobile-first design.',
+    stars: 1,
+    forks: 0,
+    language: 'HTML',
+    langColor: 'bg-orange-500',
+    updated: 'Updated last month',
+    topics: ['ecommerce', 'responsive-design', 'shopping-cart', 'css-grid'],
+    url: 'https://github.com/AP-boi/E-commerce-frontend',
+  },
+  {
+    name: 'flowOS',
+    description: 'Experimental browser operating system prototype exploring window hierarchies and multi-tasking workflows.',
+    stars: 3,
+    forks: 1,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated 1 month ago',
+    topics: ['web-os', 'window-manager', 'react', 'virtual-desktop'],
     url: 'https://github.com/AP-boi/flowOS',
   },
 ];
 
-type TabType = 'profile' | 'repos' | 'streak';
+type TabType = 'search' | 'profile' | 'repos' | 'streak' | 'webview';
 
 const TAB_URL_MAP: Record<TabType, string> = {
+  search: 'https://duckduckgo.com',
   profile: 'https://github.com/AP-boi',
   repos: 'https://github.com/AP-boi?tab=repositories',
   streak: 'https://github.com/AP-boi?tab=contributions',
+  webview: 'https://en.wikipedia.org',
 };
+
+const QUICK_BOOKMARKS = [
+  {
+    name: 'DuckDuckGo',
+    desc: 'Privacy & Open Web Search',
+    url: 'https://duckduckgo.com',
+    icon: '🦆',
+    isSearch: true,
+  },
+  {
+    name: 'Wikipedia',
+    desc: 'The Free Encyclopedia',
+    url: 'https://en.wikipedia.org',
+    icon: '📖',
+  },
+  {
+    name: 'GitHub',
+    desc: 'Anugamya (@AP-boi)',
+    action: 'profile',
+    icon: '🐙',
+  },
+  {
+    name: 'Hacker News',
+    desc: 'Tech & Open Source News',
+    url: 'https://news.ycombinator.com',
+    icon: '⚡',
+  },
+  {
+    name: 'Bharat Dekho',
+    desc: '3D Cultural Heritage Portal',
+    url: 'https://github.com/AP-boi/BHARAT-DEKHO',
+    icon: '🏛️',
+  },
+  {
+    name: 'PhysX Studio',
+    desc: '3D Physics Sandbox',
+    url: 'https://github.com/AP-boi/PHYSX',
+    icon: '⚛️',
+  },
+  {
+    name: 'MDN Web Docs',
+    desc: 'Open Web Standards',
+    url: 'https://developer.mozilla.org',
+    icon: '🌐',
+  },
+  {
+    name: 'Dev.to',
+    desc: 'Developer Community',
+    url: 'https://dev.to',
+    icon: '👩‍💻',
+  },
+];
+
+const SUGGESTED_SEARCHES = [
+  'Three.js WebGL 3D graphics',
+  'Next.js 14 App Router architecture',
+  'Apple M3 Max silicon benchmarks',
+  'DuckDuckGo open source privacy',
+  'Physics simulation in JavaScript',
+  'macOS liquid glass UI design',
+];
 
 // Generate realistic commit distribution grid (52 weeks x 7 days)
 const generateHeatmap = () => {
@@ -201,7 +218,6 @@ const generateHeatmap = () => {
     const week: { date: string; count: number; level: number }[] = [];
     for (let d = 0; d < 7; d++) {
       const isWeekend = d === 0 || d === 6;
-      // Weighted random commits: higher during weekdays
       const seed = Math.sin(w * 7 + d * 13) * 10000;
       const rand = seed - Math.floor(seed);
       let count = 0;
@@ -222,15 +238,33 @@ const generateHeatmap = () => {
 };
 
 export const GitHubApp: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('profile');
-  const [urlInput, setUrlInput] = useState<string>(TAB_URL_MAP.profile);
-  const [navHistory, setNavHistory] = useState<TabType[]>(['profile']);
+  const [activeTab, setActiveTab] = useState<TabType>('search');
+  const [urlInput, setUrlInput] = useState<string>(TAB_URL_MAP.search);
+  const [navHistory, setNavHistory] = useState<TabType[]>(['search']);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [repoSearch, setRepoSearch] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('All');
   const [hoveredCell, setHoveredCell] = useState<{ date: string; count: number } | null>(null);
   const [reposList, setReposList] = useState<RepoItem[]>(REPOSITORIES);
+
+  // Search Engine State
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<
+    Array<{ title: string; snippet: string; url: string; wordcount?: number; timestamp?: string }>
+  >([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [searchStats, setSearchStats] = useState<{ count: number; timeMs: number } | null>(null);
+  const [readerArticle, setReaderArticle] = useState<{
+    title: string;
+    description?: string;
+    extract?: string;
+    thumbnail?: string;
+    url: string;
+  } | null>(null);
+  const [webViewerUrl, setWebViewerUrl] = useState<string>('https://en.wikipedia.org');
+
   const [userProfile, setUserProfile] = useState<{
     public_repos: number;
     followers: number;
@@ -333,15 +367,101 @@ export const GitHubApp: React.FC = () => {
     }
   };
 
+  // Real-life Free & Open-Source Web Search Execution
+  const executeSearch = async (query: string) => {
+    if (!query.trim()) return;
+    setIsSearching(true);
+    setHasSearched(true);
+    setReaderArticle(null);
+    const startTime = performance.now();
+    setUrlInput(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`);
+
+    try {
+      // 1. Wikipedia Open Search API (100% Free & Open-Source, CORS-friendly, zero rate-limit blocks)
+      const wikiRes = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+          query
+        )}&utf8=&format=json&origin=*`
+      );
+      const wikiData = await wikiRes.json();
+      const endTime = performance.now();
+
+      if (wikiData?.query?.search) {
+        const results = wikiData.query.search.map((item: any) => ({
+          title: item.title,
+          snippet: item.snippet.replace(/<[^>]*>?/gm, ''),
+          url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
+          wordcount: item.wordcount,
+          timestamp: item.timestamp,
+        }));
+        setSearchResults(results);
+        setSearchStats({ count: results.length, timeMs: Math.round(endTime - startTime) });
+      } else {
+        setSearchResults([]);
+        setSearchStats({ count: 0, timeMs: Math.round(endTime - startTime) });
+      }
+    } catch (err) {
+      console.error('Search error:', err);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const openReaderArticle = async (title: string, url: string) => {
+    try {
+      setIsSearching(true);
+      const res = await fetch(
+        `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title.replace(/ /g, '_'))}`
+      );
+      if (res.ok) {
+        const data = await res.json();
+        setReaderArticle({
+          title: data.title || title,
+          description: data.description,
+          extract: data.extract,
+          thumbnail: data.thumbnail?.source,
+          url,
+        });
+      } else {
+        setReaderArticle({
+          title,
+          extract: 'Preview extracted. Click "Open External Page" to read the complete article on Wikipedia.',
+          url,
+        });
+      }
+    } catch (err) {
+      setReaderArticle({
+        title,
+        extract: 'Article summary preview. Click "Open External Page" to view.',
+        url,
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   const handleUrlSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const lower = urlInput.toLowerCase();
-    if (lower.includes('repositories') || lower.includes('repos')) {
-      switchTab('repos');
-    } else if (lower.includes('contributions') || lower.includes('streak') || lower.includes('activity')) {
-      switchTab('streak');
+    const trimmed = urlInput.trim();
+    if (!trimmed) return;
+
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      setWebViewerUrl(trimmed);
+      switchTab('webview');
+    } else if (trimmed.toLowerCase().includes('github.com') || trimmed.toLowerCase() === 'github') {
+      if (trimmed.toLowerCase().includes('repos')) {
+        switchTab('repos');
+      } else if (trimmed.toLowerCase().includes('streak') || trimmed.toLowerCase().includes('activity')) {
+        switchTab('streak');
+      } else {
+        switchTab('profile');
+      }
     } else {
-      switchTab('profile');
+      // Treat as open-source search query!
+      setSearchQuery(trimmed);
+      switchTab('search');
+      executeSearch(trimmed);
     }
   };
 
@@ -367,29 +487,32 @@ export const GitHubApp: React.FC = () => {
   const getHeatmapColor = (level: number) => {
     switch (level) {
       case 1:
-        return 'bg-emerald-200 border-emerald-300';
+        return 'bg-emerald-200 border-emerald-300 dark:bg-emerald-800 dark:border-emerald-700';
       case 2:
-        return 'bg-emerald-400 border-emerald-500';
+        return 'bg-emerald-400 border-emerald-500 dark:bg-emerald-600 dark:border-emerald-500';
       case 3:
-        return 'bg-emerald-600 border-emerald-700';
+        return 'bg-emerald-600 border-emerald-700 dark:bg-emerald-500 dark:border-emerald-400';
       case 4:
-        return 'bg-emerald-800 border-emerald-900';
+        return 'bg-emerald-800 border-emerald-900 dark:bg-emerald-400 dark:border-emerald-300';
       default:
-        return 'bg-slate-100 border-slate-200';
+        return 'bg-slate-100 border-slate-200 dark:bg-slate-800 dark:border-slate-700';
     }
   };
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 dark:text-slate-100 p-3 bg-white/95 dark:bg-slate-950 transition-colors">
+    <div className="flex flex-col h-full space-y-3 text-slate-900 dark:text-slate-100 p-3 bg-white/95 dark:bg-slate-950 transition-colors select-none font-sans">
       {/* Authentic macOS Safari Window Toolbar */}
-      <div className="flex items-center space-x-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex items-center space-x-2 pb-2 border-b border-slate-200 dark:border-slate-800 flex-shrink-0">
         {/* Navigation Buttons */}
         <div className="flex items-center space-x-1">
           <button
             onClick={handleBack}
             disabled={historyIndex === 0}
-            className={`p-1 rounded transition-colors ${historyIndex > 0 ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer' : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
-              }`}
+            className={`p-1 rounded transition-colors ${
+              historyIndex > 0
+                ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer'
+                : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
+            }`}
             title="Back"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -397,52 +520,72 @@ export const GitHubApp: React.FC = () => {
           <button
             onClick={handleForward}
             disabled={historyIndex >= navHistory.length - 1}
-            className={`p-1 rounded transition-colors ${historyIndex < navHistory.length - 1
-              ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer'
-              : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
-              }`}
+            className={`p-1 rounded transition-colors ${
+              historyIndex < navHistory.length - 1
+                ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer'
+                : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
+            }`}
             title="Forward"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
           <button
-            onClick={() => switchTab(activeTab, false)}
-            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            onClick={() => {
+              if (activeTab === 'search' && searchQuery) {
+                executeSearch(searchQuery);
+              } else {
+                switchTab(activeTab, false);
+              }
+            }}
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
             title="Reload"
           >
             <RotateCw className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Safari URL Address Bar */}
+        {/* Safari URL & Search Address Bar */}
         <form
           onSubmit={handleUrlSubmit}
           className="flex-1 flex items-center space-x-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1 text-xs text-slate-800 dark:text-slate-200 focus-within:border-blue-500 focus-within:bg-white dark:focus-within:bg-slate-950 transition-colors shadow-inner"
         >
-          <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+          {activeTab === 'search' ? (
+            <Compass className="w-3 h-3 text-blue-500 flex-shrink-0" />
+          ) : (
+            <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+          )}
           <input
             type="text"
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
             className="bg-transparent border-none outline-none w-full font-mono text-[11px] text-slate-900 dark:text-slate-100"
-            placeholder="https://github.com/AP-boi"
+            placeholder="Search DuckDuckGo & Wikipedia or enter URL..."
           />
+          {urlInput && (
+            <button
+              type="button"
+              onClick={() => setUrlInput('')}
+              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          )}
         </form>
 
         {/* Safari Action Controls */}
         <div className="flex items-center space-x-1">
           <button
             onClick={handleShare}
-            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors relative"
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors relative cursor-pointer"
             title="Share URL"
           >
             {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
           </button>
           <a
-            href={urlInput}
+            href={urlInput.startsWith('http') ? urlInput : `https://duckduckgo.com/?q=${encodeURIComponent(urlInput)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors cursor-pointer"
             title="Open in new browser tab"
           >
             <ExternalLink className="w-3.5 h-3.5" />
@@ -451,58 +594,331 @@ export const GitHubApp: React.FC = () => {
       </div>
 
       {/* Safari Tab Bar */}
-      <div className="flex items-center space-x-1 text-xs border-b border-slate-200 dark:border-slate-800 pb-2">
+      <div className="flex items-center space-x-1 text-xs border-b border-slate-200 dark:border-slate-800 pb-1 flex-shrink-0">
+        <button
+          onClick={() => switchTab('search')}
+          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
+            activeTab === 'search'
+              ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
+        >
+          <Compass className="w-3.5 h-3.5 text-blue-500" />
+          <span>Search Engine</span>
+        </button>
+
         <button
           onClick={() => switchTab('profile')}
-          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'profile'
-            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
+          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
+            activeTab === 'profile'
+              ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
         >
           <img src="/icons/github.png" alt="" className="w-3.5 h-3.5 rounded object-cover shadow-xs" />
-          <span>Overview</span>
+          <span>GitHub Profile</span>
         </button>
+
         <button
           onClick={() => switchTab('repos')}
-          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'repos'
-            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
+          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
+            activeTab === 'repos'
+              ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
         >
           <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-          <span>Repositories ({REPOSITORIES.length})</span>
+          <span>Repositories ({reposList.length})</span>
         </button>
+
         <button
           onClick={() => switchTab('streak')}
-          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'streak'
-            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
-            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-            }`}
+          className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
+            activeTab === 'streak'
+              ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+          }`}
         >
           <Flame className="w-3.5 h-3.5 text-amber-600" />
           <span>Commit Activity</span>
         </button>
+
+        {activeTab === 'webview' && (
+          <button
+            onClick={() => switchTab('webview')}
+            className="px-3 py-1 rounded-t-lg font-medium bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold flex items-center space-x-1.5 cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            <span>Web Reader</span>
+          </button>
+        )}
       </div>
 
       {/* Web Page Viewport Content */}
       <div className="flex-1 overflow-auto space-y-4 pt-1 pr-1">
+        {/* ================= TAB 0: OPEN-SOURCE SEARCH ENGINE ================= */}
+        {activeTab === 'search' && (
+          <div className="space-y-4 max-w-3xl mx-auto py-2">
+            {/* Search Input Banner */}
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold">
+                <Globe className="w-3.5 h-3.5" />
+                <span>Free & Open-Source Web Search</span>
+                <span className="text-[10px] text-slate-400 font-mono">• DuckDuckGo & Wikipedia Engine</span>
+              </div>
+
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Safari Open Search
+              </h1>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Search open web knowledge, articles, algorithms, code & documentation
+              </p>
+
+              {/* Instant Search Bar */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  executeSearch(searchQuery);
+                }}
+                className="flex items-center space-x-2 max-w-xl mx-auto mt-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 focus-within:border-blue-600 rounded-2xl px-4 py-2 shadow-sm transition-colors"
+              >
+                <Search className="w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Search anything (e.g. Three.js, Next.js, AI, macOS, Physics)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 bg-transparent border-none outline-none text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+                />
+                {isSearching ? (
+                  <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                ) : (
+                  <button
+                    type="submit"
+                    className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                  >
+                    Search
+                  </button>
+                )}
+              </form>
+            </div>
+
+            {/* Reader Article Preview Modal/Card (if selected) */}
+            {readerArticle && (
+              <div className="bg-slate-50 dark:bg-slate-900 p-5 rounded-2xl border-2 border-blue-500/50 shadow-lg space-y-3">
+                <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                  <div className="flex items-center space-x-2">
+                    <FileText className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400 font-mono uppercase">
+                      Safari Reader Mode
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <a
+                      href={readerArticle.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-semibold text-blue-600 hover:underline flex items-center gap-1"
+                    >
+                      <span>Open External Page</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </a>
+                    <button
+                      onClick={() => setReaderArticle(null)}
+                      className="p-1 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
+                  {readerArticle.thumbnail && (
+                    <img
+                      src={readerArticle.thumbnail}
+                      alt={readerArticle.title}
+                      className="w-28 h-28 object-cover rounded-xl border border-slate-300 dark:border-slate-700 shadow-sm flex-shrink-0"
+                    />
+                  )}
+                  <div className="space-y-1.5 flex-1">
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white">{readerArticle.title}</h2>
+                    {readerArticle.description && (
+                      <p className="text-xs font-medium text-slate-500 dark:text-slate-400 italic">
+                        {readerArticle.description}
+                      </p>
+                    )}
+                    <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-sans pt-1">
+                      {readerArticle.extract}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Live Search Results */}
+            {hasSearched ? (
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-1.5">
+                  <span>
+                    About {searchStats?.count || 0} open-source results ({searchStats?.timeMs || 0} ms)
+                  </span>
+                  <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+                    ✓ Verified Open Knowledge API
+                  </span>
+                </div>
+
+                {searchResults.length === 0 && !isSearching && (
+                  <div className="p-8 text-center bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                      No matching articles found for "{searchQuery}"
+                    </p>
+                    <p className="text-xs text-slate-500 mt-1">Try another keyword or search on DuckDuckGo directly.</p>
+                    <a
+                      href={`https://duckduckgo.com/?q=${encodeURIComponent(searchQuery)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-xs font-semibold"
+                    >
+                      <span>Search on DuckDuckGo Web</span>
+                      <ExternalLink className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                )}
+
+                <div className="space-y-2.5">
+                  {searchResults.map((result, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500/80 transition-all shadow-xs space-y-1.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-mono truncate max-w-md">
+                          {result.url}
+                        </span>
+                        {result.wordcount && (
+                          <span className="text-[10px] font-mono text-slate-400">
+                            {result.wordcount.toLocaleString()} words
+                          </span>
+                        )}
+                      </div>
+
+                      <h3
+                        onClick={() => openReaderArticle(result.title, result.url)}
+                        className="text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+                      >
+                        {result.title}
+                      </h3>
+
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
+                        {result.snippet}...
+                      </p>
+
+                      <div className="flex items-center space-x-3 pt-1 text-xs">
+                        <button
+                          onClick={() => openReaderArticle(result.title, result.url)}
+                          className="text-blue-600 dark:text-blue-400 font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>Preview in Safari Reader</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </button>
+                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <a
+                          href={result.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1"
+                        >
+                          <span>Open Full Page</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* Safari Start Page: Bookmarks & Trending */
+              <div className="space-y-5 pt-3">
+                {/* Favorites Grid */}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
+                    <Bookmark className="w-3.5 h-3.5 text-blue-500" />
+                    <span>Favorites & Quick Bookmarks</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    {QUICK_BOOKMARKS.map((b, idx) => (
+                      <div
+                        key={idx}
+                        onClick={() => {
+                          if (b.action === 'profile') {
+                            switchTab('profile');
+                          } else if (b.url) {
+                            if (b.isSearch) {
+                              setSearchQuery('');
+                              setUrlInput(b.url);
+                            } else {
+                              setWebViewerUrl(b.url);
+                              switchTab('webview');
+                            }
+                          }
+                        }}
+                        className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-400 dark:hover:border-blue-500 cursor-pointer transition-all shadow-xs flex items-center space-x-2.5"
+                      >
+                        <div className="text-xl flex-shrink-0">{b.icon}</div>
+                        <div className="truncate">
+                          <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{b.name}</p>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{b.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Suggested Search Prompts */}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wide">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-500" />
+                    <span>Suggested Searches</span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {SUGGESTED_SEARCHES.map((prompt, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setSearchQuery(prompt);
+                          executeSearch(prompt);
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 hover:bg-blue-50 dark:hover:bg-blue-950/60 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 border border-slate-200 dark:border-slate-800 text-xs font-medium transition-colors cursor-pointer"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* ================= TAB 1: PROFILE OVERVIEW ================= */}
         {activeTab === 'profile' && (
           <div className="space-y-4">
             {/* GitHub Profile Banner Header */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-50 via-slate-50 to-blue-50 border border-purple-200 shadow-xs gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-50 via-slate-50 to-blue-50 dark:from-slate-900 dark:via-slate-900/80 dark:to-blue-950/40 border border-purple-200 dark:border-purple-900 shadow-xs gap-4">
               <div className="flex items-center space-x-3">
-                <div className="p-1 rounded-2xl bg-white border border-purple-200 shadow-xs flex items-center justify-center">
+                <div className="p-1 rounded-2xl bg-white dark:bg-slate-800 border border-purple-200 dark:border-purple-800 shadow-xs flex items-center justify-center">
                   <img src="/icons/github.png" alt="GitHub" className="w-10 h-10 rounded-xl object-cover" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2">
-                    <h2 className="text-base font-bold text-slate-900 font-mono">github.com/AP-boi</h2>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-100 text-purple-800 border border-purple-200 font-semibold">
+                    <h2 className="text-base font-bold text-slate-900 dark:text-white font-mono">github.com/AP-boi</h2>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-700 font-semibold">
                       VERIFIED DEVELOPER
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 mt-0.5 font-medium">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5 font-medium">
                     Creative Developer & WebGL Systems Builder • Next.js, Three.js & Game Engines
                   </p>
                 </div>
@@ -512,7 +928,7 @@ export const GitHubApp: React.FC = () => {
                 href="https://github.com/AP-boi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-3.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center space-x-2 transition-all shadow-sm"
+                className="px-3.5 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs flex items-center space-x-2 transition-all shadow-sm cursor-pointer"
               >
                 <span>Follow on GitHub</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -521,46 +937,52 @@ export const GitHubApp: React.FC = () => {
 
             {/* Metric Cards Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
+              <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-xs">
                 <div className="flex items-center justify-between text-slate-500 text-[10px] font-mono uppercase font-semibold">
                   <span>Public Repos</span>
                   <BookOpen className="w-3.5 h-3.5 text-blue-600" />
                 </div>
-                <div className="text-lg font-bold text-slate-900 font-mono mt-1">{userProfile.public_repos || reposList.length} Repositories</div>
+                <div className="text-lg font-bold text-slate-900 dark:text-white font-mono mt-1">
+                  {userProfile.public_repos || reposList.length} Repositories
+                </div>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
+              <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-xs">
                 <div className="flex items-center justify-between text-slate-500 text-[10px] font-mono uppercase font-semibold">
                   <span>Primary Stacks</span>
                   <Code2 className="w-3.5 h-3.5 text-purple-600" />
                 </div>
-                <div className="text-lg font-bold text-purple-700 font-mono mt-1">TypeScript & Next.js</div>
+                <div className="text-lg font-bold text-purple-700 dark:text-purple-400 font-mono mt-1">
+                  TypeScript & Next.js
+                </div>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
+              <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-xs">
                 <div className="flex items-center justify-between text-slate-500 text-[10px] font-mono uppercase font-semibold">
                   <span>Active Deployments</span>
                   <Flame className="w-3.5 h-3.5 text-rose-500" />
                 </div>
-                <div className="text-lg font-bold text-rose-600 font-mono mt-1">4 Live Apps</div>
+                <div className="text-lg font-bold text-rose-600 dark:text-rose-400 font-mono mt-1">4 Live Apps</div>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
+              <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-xs">
                 <div className="flex items-center justify-between text-slate-500 text-[10px] font-mono uppercase font-semibold">
                   <span>Specialization</span>
                   <Code2 className="w-3.5 h-3.5 text-amber-500" />
                 </div>
-                <div className="text-lg font-bold text-amber-700 font-mono mt-1">3D WebGL & AI</div>
+                <div className="text-lg font-bold text-amber-700 dark:text-amber-400 font-mono mt-1">3D WebGL & AI</div>
               </div>
             </div>
 
             {/* Pinned Repositories Showcase */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">Pinned Repositories</h3>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
+                  Pinned Repositories
+                </h3>
                 <button
                   onClick={() => switchTab('repos')}
-                  className="text-[11px] text-purple-700 hover:text-purple-900 font-mono font-semibold hover:underline"
+                  className="text-[11px] text-purple-700 dark:text-purple-400 hover:underline font-mono font-semibold cursor-pointer"
                 >
                   View all repositories ({reposList.length}) →
                 </button>
@@ -570,23 +992,23 @@ export const GitHubApp: React.FC = () => {
                 {reposList.slice(0, 3).map((repo) => (
                   <div
                     key={repo.name}
-                    className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs hover:border-purple-400 transition-all flex flex-col justify-between"
+                    className="bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs hover:border-purple-400 dark:hover:border-purple-500 transition-all flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs text-slate-900 font-mono hover:text-purple-600 cursor-pointer">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white font-mono hover:text-purple-600 cursor-pointer truncate">
                           {repo.name}
                         </span>
-                        <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 text-slate-700 font-mono border border-slate-200">
+                        <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono border border-slate-200 dark:border-slate-700">
                           Public
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-600 mt-2 line-clamp-2 leading-relaxed font-medium">
+                      <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-2 line-clamp-2 leading-relaxed font-medium">
                         {repo.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-3 border-t border-slate-100 mt-3 font-mono">
+                    <div className="flex items-center justify-between text-[11px] text-slate-500 pt-3 border-t border-slate-100 dark:border-slate-800 mt-3 font-mono">
                       <div className="flex items-center space-x-1.5">
                         <span className={`w-2 h-2 rounded-full ${repo.langColor}`} />
                         <span>{repo.language}</span>
@@ -606,70 +1028,35 @@ export const GitHubApp: React.FC = () => {
                 ))}
               </div>
             </div>
-
-            {/* Languages Breakdown Bar */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-700 font-mono">
-                <span className="flex items-center gap-1.5">
-                  <Code2 className="w-3.5 h-3.5 text-slate-500" />
-                  Primary Languages & Tech Stack
-                </span>
-                <span className="text-slate-400 text-[11px]">Real GitHub Repository Codebase</span>
-              </div>
-              <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden flex">
-                <div style={{ width: '48%' }} className="bg-blue-500" title="TypeScript 48%" />
-                <div style={{ width: '26%' }} className="bg-amber-400" title="JavaScript 26%" />
-                <div style={{ width: '14%' }} className="bg-red-500" title="Java 14%" />
-                <div style={{ width: '12%' }} className="bg-orange-500" title="HTML/CSS 12%" />
-              </div>
-              <div className="flex flex-wrap items-center gap-4 text-[11px] font-mono text-slate-600 pt-1">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                  TypeScript (48.0%)
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                  JavaScript (26.0%)
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500" />
-                  Java (14.0%)
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-                  HTML/CSS (12.0%)
-                </span>
-              </div>
-            </div>
           </div>
         )}
 
-        {/* ================= TAB 2: REPOSITORIES CATALOG ================= */}
+        {/* ================= TAB 2: REPOSITORIES LIST ================= */}
         {activeTab === 'repos' && (
-          <div className="space-y-4">
-            {/* Filter & Search Bar */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-200">
-              <div className="relative flex-1">
-                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <div className="space-y-3">
+            {/* Filter and Search Bar */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center space-x-2 w-full sm:w-80 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5">
+                <Search className="w-3.5 h-3.5 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="Find a repository..."
+                  placeholder="Filter repositories by name or topic..."
                   value={repoSearch}
                   onChange={(e) => setRepoSearch(e.target.value)}
-                  className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                  className="bg-transparent border-none outline-none text-xs w-full text-slate-800 dark:text-slate-200 placeholder:text-slate-400"
                 />
               </div>
 
-              {/* Language Filter Pills */}
-              <div className="flex items-center space-x-1 overflow-x-auto pb-1 sm:pb-0">
+              <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto">
                 {languages.map((lang) => (
                   <button
                     key={lang}
                     onClick={() => setSelectedLanguage(lang)}
-                    className={`px-2.5 py-1 rounded-md text-[11px] font-mono font-medium transition-colors ${selectedLanguage === lang
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                      }`}
+                    className={`px-2.5 py-1 rounded-md text-xs font-mono font-medium transition-colors cursor-pointer ${
+                      selectedLanguage === lang
+                        ? 'bg-purple-600 text-white shadow-xs'
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                    }`}
                   >
                     {lang}
                   </button>
@@ -677,148 +1064,94 @@ export const GitHubApp: React.FC = () => {
               </div>
             </div>
 
-            {/* Repositories List Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {/* Repositories Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filteredRepos.map((repo) => (
                 <div
                   key={repo.name}
-                  className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs hover:border-blue-400 transition-all flex flex-col justify-between space-y-3"
+                  className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-purple-400 transition-all flex flex-col justify-between shadow-xs space-y-3"
                 >
-                  <div className="space-y-2">
+                  <div>
                     <div className="flex items-center justify-between">
                       <a
                         href={repo.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-bold text-xs text-blue-600 font-mono hover:underline flex items-center gap-1.5"
+                        className="font-bold text-xs text-blue-600 dark:text-blue-400 hover:underline font-mono flex items-center gap-1"
                       >
                         <span>{repo.name}</span>
-                        <ExternalLink className="w-3 h-3 text-slate-400" />
+                        <ExternalLink className="w-3 h-3" />
                       </a>
-                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-100 text-slate-600 font-mono border border-slate-200">
+                      <span className="px-1.5 py-0.5 rounded text-[9px] bg-slate-200/70 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono">
                         Public
                       </span>
                     </div>
 
-                    <p className="text-[11px] text-slate-600 leading-relaxed font-medium line-clamp-2">
+                    <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1.5 line-clamp-2 leading-relaxed">
                       {repo.description}
                     </p>
 
-                    {/* Topics */}
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {repo.topics.map((topic) => (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {repo.topics.slice(0, 4).map((topic) => (
                         <span
                           key={topic}
-                          className="px-2 py-0.5 rounded-full text-[9px] font-mono bg-blue-50 text-blue-700 border border-blue-200/60"
+                          className="px-1.5 py-0.5 rounded text-[9px] bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900 font-mono"
                         >
-                          {topic}
+                          #{topic}
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Repo Footer Metrics */}
-                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2.5 border-t border-slate-100 font-mono">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex items-center space-x-1.5">
-                        <span className={`w-2 h-2 rounded-full ${repo.langColor}`} />
-                        <span>{repo.language}</span>
-                      </div>
-                      <div className="flex items-center space-x-1 text-amber-600">
-                        <Star className="w-3 h-3 fill-amber-500" />
-                        <span>{repo.stars}</span>
-                      </div>
-                      <div className="flex items-center space-x-1 text-slate-500">
-                        <GitFork className="w-3 h-3" />
-                        <span>{repo.forks}</span>
-                      </div>
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2.5 border-t border-slate-200 dark:border-slate-800 font-mono">
+                    <div className="flex items-center space-x-1.5">
+                      <span className={`w-2 h-2 rounded-full ${repo.langColor}`} />
+                      <span>{repo.language}</span>
                     </div>
                     <span className="text-[10px] text-slate-400">{repo.updated}</span>
                   </div>
                 </div>
               ))}
             </div>
-
-            {filteredRepos.length === 0 && (
-              <div className="p-8 text-center bg-slate-50 rounded-xl border border-slate-200 text-slate-500 text-xs font-mono">
-                No repositories found matching your query "{repoSearch}".
-              </div>
-            )}
           </div>
         )}
 
-        {/* ================= TAB 3: COMMIT ACTIVITY & STREAK ================= */}
+        {/* ================= TAB 3: COMMIT STREAK ================= */}
         {activeTab === 'streak' && (
           <div className="space-y-4">
-            {/* Streak Summary Metrics */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl shadow-xs">
-                <div className="flex items-center justify-between text-rose-700 text-[10px] font-mono uppercase font-bold">
-                  <span>Active Streak</span>
-                  <Flame className="w-4 h-4 text-rose-600" />
-                </div>
-                <div className="text-xl font-bold text-rose-800 font-mono mt-1">142 Days</div>
-                <p className="text-[10px] text-rose-600 mt-0.5">Aug 2025 - Present</p>
-              </div>
-
-              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl shadow-xs">
-                <div className="flex items-center justify-between text-amber-700 text-[10px] font-mono uppercase font-bold">
-                  <span>Longest Streak</span>
-                  <Flame className="w-4 h-4 text-amber-600" />
-                </div>
-                <div className="text-xl font-bold text-amber-800 font-mono mt-1">218 Days</div>
-                <p className="text-[10px] text-amber-600 mt-0.5">Oct 2024 - May 2025</p>
-              </div>
-
-              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl shadow-xs">
-                <div className="flex items-center justify-between text-emerald-700 text-[10px] font-mono uppercase font-bold">
-                  <span>Year Contributions</span>
-                  <GitCommit className="w-4 h-4 text-emerald-600" />
-                </div>
-                <div className="text-xl font-bold text-emerald-800 font-mono mt-1">1,842</div>
-                <p className="text-[10px] text-emerald-600 mt-0.5">Past 52 weeks</p>
-              </div>
-
-              <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl shadow-xs">
-                <div className="flex items-center justify-between text-purple-700 text-[10px] font-mono uppercase font-bold">
-                  <span>Weekend Commits</span>
-                  <GitPullRequest className="w-4 h-4 text-purple-600" />
-                </div>
-                <div className="text-xl font-bold text-purple-800 font-mono mt-1">412 Commits</div>
-                <p className="text-[10px] text-purple-600 mt-0.5">22.3% of total</p>
-              </div>
-            </div>
-
-            {/* Interactive 52-Week GitHub Heatmap Graph */}
-            <div className="p-4 bg-white rounded-xl border border-slate-200 shadow-xs space-y-3">
+            <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xs font-bold text-slate-900 font-mono">
-                    1,842 contributions in the last year
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white font-mono">
+                    52-Week Contribution Matrix
                   </h3>
-                  <p className="text-[11px] text-slate-500 font-mono">Continuous delivery & open-source telemetry</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Continuous commit cadence across all open-source repositories
+                  </p>
                 </div>
-                {hoveredCell && (
-                  <span className="text-[11px] font-mono font-semibold px-2 py-0.5 bg-slate-900 text-white rounded shadow-xs">
-                    {hoveredCell.count} contribution{hoveredCell.count !== 1 ? 's' : ''} on {hoveredCell.date}
-                  </span>
-                )}
+                <div className="flex items-center space-x-1.5 text-[10px] font-mono text-slate-500">
+                  <span>Less</span>
+                  <div className="w-2.5 h-2.5 rounded-xs bg-slate-200 dark:bg-slate-800" />
+                  <div className="w-2.5 h-2.5 rounded-xs bg-emerald-300" />
+                  <div className="w-2.5 h-2.5 rounded-xs bg-emerald-500" />
+                  <div className="w-2.5 h-2.5 rounded-xs bg-emerald-700" />
+                  <span>More</span>
+                </div>
               </div>
 
-              {/* Heatmap Grid Container */}
-              <div className="overflow-x-auto pb-2 scrollbar-thin">
-                <div className="flex gap-[3px] min-w-[700px]">
+              {/* Heatmap Grid */}
+              <div className="overflow-x-auto pb-2">
+                <div className="flex gap-1 min-w-[720px]">
                   {heatmapWeeks.map((week, wIdx) => (
-                    <div key={`week-${wIdx}`} className="flex flex-col gap-[3px]">
+                    <div key={wIdx} className="flex flex-col gap-1">
                       {week.map((day, dIdx) => (
                         <div
-                          key={`day-${wIdx}-${dIdx}`}
+                          key={dIdx}
                           onMouseEnter={() => setHoveredCell({ date: day.date, count: day.count })}
                           onMouseLeave={() => setHoveredCell(null)}
-                          className={`w-[10px] h-[10px] rounded-[2px] border ${getHeatmapColor(
+                          className={`w-2.5 h-2.5 rounded-xs border transition-transform hover:scale-125 cursor-pointer ${getHeatmapColor(
                             day.level
-                          )} transition-all hover:scale-125 cursor-pointer`}
-                          title={`${day.count} commits on ${day.date}`}
+                          )}`}
                         />
                       ))}
                     </div>
@@ -826,50 +1159,46 @@ export const GitHubApp: React.FC = () => {
                 </div>
               </div>
 
-              {/* Heatmap Legend */}
-              <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono pt-2 border-t border-slate-100">
-                <span>Learn how we count contributions</span>
-                <div className="flex items-center space-x-1.5">
-                  <span>Less</span>
-                  <div className="w-2.5 h-2.5 rounded-[2px] bg-slate-100 border border-slate-200" />
-                  <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-200 border border-emerald-300" />
-                  <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-400 border border-emerald-500" />
-                  <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-600 border border-emerald-700" />
-                  <div className="w-2.5 h-2.5 rounded-[2px] bg-emerald-800 border border-emerald-900" />
-                  <span>More</span>
-                </div>
+              {/* Hover Indicator */}
+              <div className="text-right text-[11px] font-mono text-slate-500 h-4">
+                {hoveredCell ? (
+                  <span>
+                    <strong>{hoveredCell.count}</strong> contributions on {hoveredCell.date}
+                  </span>
+                ) : (
+                  <span>Hover over any square to view date and commit metrics</span>
+                )}
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Recent Key PRs & Milestones */}
-            <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2.5">
-              <h4 className="text-xs font-bold text-slate-800 font-mono flex items-center gap-1.5">
-                <GitPullRequest className="w-3.5 h-3.5 text-purple-600" />
-                Recent High-Impact Pull Requests
-              </h4>
-              <div className="space-y-2 text-xs font-mono">
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[9px] font-bold">MERGED</span>
-                    <span className="text-slate-800 font-medium">feat: Gemini 1.5 Flash itinerary planner & 3D museum artifacts</span>
-                  </div>
-                  <span className="text-slate-400 text-[10px]">BHARAT-DEKHO #12</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[9px] font-bold">MERGED</span>
-                    <span className="text-slate-800 font-medium">feat: 60 FPS cyberpunk canvas combat engine & branching narrative</span>
-                  </div>
-                  <span className="text-slate-400 text-[10px]">cyber-ascension #8</span>
-                </div>
-                <div className="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200">
-                  <div className="flex items-center space-x-2">
-                    <span className="px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[9px] font-bold">MERGED</span>
-                    <span className="text-slate-800 font-medium">perf: liquid glassmorphism & responsive macOS window ecosystem</span>
-                  </div>
-                  <span className="text-slate-400 text-[10px]">Anugamyas-Portofolio #4</span>
-                </div>
+        {/* ================= TAB 4: WEB READER / LIVE URL VIEWER ================= */}
+        {activeTab === 'webview' && (
+          <div className="h-full flex flex-col space-y-2">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+              <div className="flex items-center space-x-2 truncate">
+                <Globe className="w-4 h-4 text-emerald-600" />
+                <span className="font-mono font-bold truncate text-slate-900 dark:text-white">{webViewerUrl}</span>
               </div>
+              <a
+                href={webViewerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[11px] flex items-center gap-1 cursor-pointer flex-shrink-0"
+              >
+                <span>Open in Real Browser</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+
+            <div className="flex-1 min-h-[460px] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white relative">
+              <iframe
+                src={webViewerUrl}
+                title="Safari Web View"
+                className="w-full h-full border-none"
+                sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+              />
             </div>
           </div>
         )}

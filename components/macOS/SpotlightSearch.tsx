@@ -72,9 +72,9 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
     },
     {
       id: 'app-settings',
-      title: 'System Settings — Telemetry',
+      title: 'System Settings',
       category: 'Applications',
-      subtitle: 'Real-time connection performance & edge telemetry monitor',
+      subtitle: 'Appearance, wallpaper, displays, Wi-Fi, sound, and macOS preferences',
       iconSrc: '/icons/settings.png',
       action: () => openWindow('system-info'),
     },

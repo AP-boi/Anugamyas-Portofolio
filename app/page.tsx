@@ -12,6 +12,7 @@ import { GitHubApp } from '@/components/apps/GitHubApp';
 import { AIAssistantDrawer } from '@/components/apps/AIAssistantDrawer';
 import { CameraApp } from '@/components/apps/CameraApp';
 import TetrisApp from '@/components/apps/TetrisApp';
+import { SystemSettingsApp } from '@/components/apps/SystemSettingsApp';
 import { useOSStore } from '@/store/useOSStore';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
@@ -27,9 +28,8 @@ import { CalendarWidget } from '@/components/ui/calendar-widget';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { Activity, Sun } from 'lucide-react';
+import { Sun } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
-import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
 const DESKTOP_FOLDERS = [
   {
@@ -88,11 +88,29 @@ const DESKTOP_FOLDERS = [
   },
 ];
 
-const WALLPAPERS = ['/custom-wallpaper.jpg', '/spiderman-wallpaper.jpg'];
+const WALLPAPERS_LIST = [
+  '/custom-wallpaper.jpg',
+  '/spiderman-wallpaper.jpg',
+  'https://images.unsplash.com/photo-1511497584788-87676104235f?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80',
+];
 
 export default function Home() {
-  const { openWindow, telemetry, currentUser, isLocked, lockScreen, brightness, theme, toggleTheme } = useOSStore();
-  const [wallpaperIndex, setWallpaperIndex] = useState(0);
+  const {
+    openWindow,
+    currentUser,
+    isLocked,
+    lockScreen,
+    brightness,
+    theme,
+    toggleTheme,
+    wallpaper,
+    setWallpaper,
+    nightShift,
+  } = useOSStore();
+
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
 
@@ -149,14 +167,13 @@ export default function Home() {
   }, []);
 
   const handleCycleWallpaper = () => {
-    setWallpaperIndex((prev) => (prev + 1) % WALLPAPERS.length);
+    const currentIdx = WALLPAPERS_LIST.indexOf(wallpaper);
+    const nextIdx = (currentIdx + 1) % WALLPAPERS_LIST.length;
+    setWallpaper(WALLPAPERS_LIST[nextIdx]);
   };
 
   const handleSelectWallpaper = (src: string) => {
-    const idx = WALLPAPERS.indexOf(src);
-    if (idx !== -1) {
-      setWallpaperIndex(idx);
-    }
+    setWallpaper(src);
   };
 
   return (
@@ -171,7 +188,7 @@ export default function Home() {
       />
 
       {/* Main Desktop Background: Animated Wallpaper */}
-      <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
+      <AnimatedWallpaper imageSrc={wallpaper} />
 
       {/* Dynamic Display Dimmer Overlay for Live Brightness Control */}
       {brightness < 100 && (
@@ -179,6 +196,11 @@ export default function Home() {
           className="pointer-events-none fixed inset-0 z-[99990] bg-black transition-opacity duration-200"
           style={{ opacity: ((100 - brightness) / 100) * 0.72 }}
         />
+      )}
+
+      {/* Real Night Shift Eye Comfort Filter */}
+      {nightShift && (
+        <div className="pointer-events-none fixed inset-0 z-[99989] bg-amber-500/15 mix-blend-multiply transition-opacity duration-300" />
       )}
 
       {/* Desktop Tactile Selection Marquee Box */}
@@ -204,7 +226,7 @@ export default function Home() {
         isOpen={isControlCenterOpen}
         onClose={() => setIsControlCenterOpen(false)}
         onSelectWallpaper={handleSelectWallpaper}
-        currentWallpaper={WALLPAPERS[wallpaperIndex]}
+        currentWallpaper={wallpaper}
       />
 
       {/* Authentic Anugamya OS Startup Boot Screen */}
@@ -317,65 +339,9 @@ export default function Home() {
         <AIAssistantDrawer />
       </Window>
 
-      {/* 6. System Telemetry & Appearance Settings Window */}
+      {/* 6. System Settings App Window */}
       <Window id="system-info">
-        <div className="p-4 space-y-4 text-xs font-mono text-slate-800 dark:text-slate-200 bg-white/95 dark:bg-slate-950 h-full transition-colors">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-            <div className="flex items-center space-x-2 text-slate-900 dark:text-white font-bold text-xs">
-              <img src="/icons/settings.png" alt="Settings" className="w-5 h-5 rounded object-contain shadow-xs" />
-              <span>Real-Time Edge Node Telemetry & Settings</span>
-            </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-semibold">
-              SYSTEM ONLINE
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Target Frame Rate</span>
-              <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-1">{telemetry.fps} FPS (Smoothed)</p>
-            </div>
-            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Edge Connection Latency</span>
-              <p className="text-base font-bold text-cyan-600 dark:text-cyan-400 mt-1">{telemetry.latencyMs} ms</p>
-            </div>
-            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Active Memory</span>
-              <p className="text-base font-bold text-purple-600 dark:text-purple-400 mt-1">{telemetry.activeMemoryMb} MB</p>
-            </div>
-            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Deployed Region</span>
-              <p className="text-base font-bold text-amber-600 dark:text-amber-400 mt-1">{telemetry.region}</p>
-            </div>
-          </div>
-
-          {/* Appearance & Skiper4 Dedicated Theme Toggle */}
-          <div className="bg-slate-50 dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2.5 shadow-xs">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">System Appearance</span>
-                <p className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">
-                  Current Theme: <span className="text-blue-600 dark:text-blue-400 font-bold">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
-                </p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Switches all windows, apps, menus, dock, and widgets between Dark and Light
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <ThemeToggleButton1
-                  isDark={theme === 'dark'}
-                  onToggle={toggleTheme}
-                  className="w-9 h-9 cursor-pointer drop-shadow-md"
-                  title="Toggle Global System Theme"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl text-emerald-800 dark:text-emerald-300 text-[11px] flex items-center justify-between">
-            <span>Edge Health: <strong>{telemetry.edgeStatus}</strong></span>
-            <span><strong>{telemetry.websocketConnections}</strong> active WebSockets</span>
-          </div>
-        </div>
+        <SystemSettingsApp />
       </Window>
 
       {/* 7. Camera & Motion Grid App Window */}

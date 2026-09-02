@@ -182,10 +182,10 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
           </div>
         </div>
 
-        {/* Telemetry Footer */}
-        <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-1">
-          <span>Edge Status: <strong className="text-emerald-600">ONLINE</strong></span>
-          <span>{telemetry.fps} FPS • {telemetry.latencyMs}ms</span>
+        {/* System Status Footer */}
+        <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 px-1 border-t border-slate-200/60 pt-2">
+          <span>macOS Sonoma 14.4</span>
+          <span className="text-emerald-600 font-semibold">System Operational</span>
         </div>
       </motion.div>
     </AnimatePresence>
