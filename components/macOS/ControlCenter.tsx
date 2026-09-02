@@ -7,8 +7,7 @@ import {
   Wifi,
   Bluetooth,
   Sun,
-  Volume2,
-  VolumeX,
+  Moon,
   Radio,
   Image,
   Sparkles,
@@ -40,9 +39,8 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
   const { telemetry, lockScreen, openWindow } = useOSStore();
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
-  const [soundMuted, setSoundMuted] = useState(!sounds.enabled);
+  const [focusEnabled, setFocusEnabled] = useState(false);
   const [brightness, setBrightness] = useState(90);
-  const [volume, setVolume] = useState(80);
 
   if (!isOpen) return null;
 
@@ -56,40 +54,34 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
         onClick={(e) => e.stopPropagation()}
         className="liquid-glass-card fixed top-10 right-4 w-80 rounded-3xl shadow-2xl p-3.5 z-[99995] border border-white/40 backdrop-blur-[30px] bg-white/80 text-slate-800 select-none space-y-3"
       >
-        {/* Top Toggles Grid (Wi-Fi, Bluetooth, Sound) */}
+        {/* Top Toggles Grid (Wi-Fi, Bluetooth, Focus, Lock) */}
         <div className="grid grid-cols-2 gap-2.5">
           {/* Wi-Fi & Bluetooth Stack */}
           <div className="bg-slate-100/80 p-2.5 rounded-2xl border border-slate-200/80 space-y-2.5">
             <div
-              onClick={() => {
-                sounds.playClick();
-                setWifiEnabled(!wifiEnabled);
-              }}
+              onClick={() => setWifiEnabled(!wifiEnabled)}
               className="flex items-center space-x-2.5 cursor-pointer"
             >
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-xs ${
-                  wifiEnabled ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'
+                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-2xs ${
+                  wifiEnabled ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'
                 }`}
               >
                 <Wifi className="w-3.5 h-3.5" />
               </div>
               <div className="leading-tight">
                 <p className="text-xs font-bold text-slate-900">Wi-Fi</p>
-                <span className="text-[10px] text-slate-500">{wifiEnabled ? 'Gigabit Fiber' : 'Off'}</span>
+                <span className="text-[10px] text-slate-500">{wifiEnabled ? 'Anugamya 5G' : 'Off'}</span>
               </div>
             </div>
 
             <div
-              onClick={() => {
-                sounds.playClick();
-                setBluetoothEnabled(!bluetoothEnabled);
-              }}
+              onClick={() => setBluetoothEnabled(!bluetoothEnabled)}
               className="flex items-center space-x-2.5 cursor-pointer"
             >
               <div
-                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-xs ${
-                  bluetoothEnabled ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'
+                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-2xs ${
+                  bluetoothEnabled ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'
                 }`}
               >
                 <Bluetooth className="w-3.5 h-3.5" />
@@ -101,31 +93,27 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
             </div>
           </div>
 
-          {/* Sound FX & Lock Screen Stack */}
+          {/* Focus & Lock Screen Stack */}
           <div className="flex flex-col justify-between gap-2">
             <button
-              onClick={() => {
-                const isEnabled = sounds.toggleSound();
-                setSoundMuted(!isEnabled);
-              }}
+              onClick={() => setFocusEnabled(!focusEnabled)}
               className={`p-2.5 rounded-2xl border flex items-center space-x-2 transition-all text-left shadow-xs ${
-                !soundMuted
-                  ? 'bg-blue-50 border-blue-200 text-blue-800'
+                focusEnabled
+                  ? 'bg-purple-50 border-purple-200 text-purple-800'
                   : 'bg-slate-100 border-slate-200 text-slate-600'
               }`}
             >
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center ${!soundMuted ? 'bg-blue-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
-                {soundMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center ${focusEnabled ? 'bg-purple-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
+                <Moon className="w-3.5 h-3.5" />
               </div>
               <div className="leading-tight">
-                <p className="text-xs font-bold">UI Audio</p>
-                <span className="text-[9px] text-slate-500">{soundMuted ? 'Muted' : 'Stereo FX'}</span>
+                <p className="text-xs font-bold">Focus</p>
+                <span className="text-[9px] text-slate-500">{focusEnabled ? 'Active' : 'Off'}</span>
               </div>
             </button>
 
             <button
               onClick={() => {
-                sounds.playClick();
                 lockScreen();
                 onClose();
               }}
@@ -161,25 +149,6 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
           />
         </div>
 
-        {/* System Sound Slider */}
-        <div className="bg-slate-100/80 p-3 rounded-2xl border border-slate-200/80 space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
-            <span className="flex items-center gap-1.5">
-              <Volume2 className="w-3.5 h-3.5 text-blue-500" />
-              <span>System Volume</span>
-            </span>
-            <span className="text-[10px] font-mono text-slate-500">{volume}%</span>
-          </div>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={volume}
-            onChange={(e) => setVolume(parseInt(e.target.value))}
-            className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-          />
-        </div>
-
         {/* Wallpaper Picker Mini Gallery */}
         <div className="bg-slate-100/80 p-3 rounded-2xl border border-slate-200/80 space-y-2">
           <span className="text-[10px] font-mono uppercase text-slate-500 font-semibold tracking-wider flex items-center gap-1">
@@ -193,7 +162,6 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
                 <button
                   key={wp.id}
                   onClick={() => {
-                    sounds.playClick();
                     onSelectWallpaper(wp.src);
                   }}
                   className={`p-1.5 rounded-xl border text-left flex items-center space-x-2 transition-all ${

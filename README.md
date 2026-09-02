@@ -42,7 +42,6 @@ Anugamya Portfolio OS is a web-based operating system simulator designed to pres
 - **Animations**: Framer Motion
 - **Graphics & 3D**: Three.js, React Three Fiber, HTML5 Canvas
 - **Icons**: Custom 3D Skeuomorphic Asset Suite, Lucide React
-- **Audio**: Web Audio API Sound Engine
 
 ---
 
@@ -99,8 +98,8 @@ npm start
 │   ├── macOS/           # OS UI components (Dock, MenuBar, Window, Launchpad, Spotlight)
 │   ├── originkit/       # Specialized interactive UI elements
 │   └── ui/              # Widgets, badges, and shared components
-├── hooks/               # Custom React hooks (keyboard shortcuts, audio)
-├── lib/                 # Utilities, animations, and sound engine
+├── hooks/               # Custom React hooks (keyboard shortcuts)
+├── lib/                 # Utilities, data, and motion configurations
 ├── public/              # Static assets, wallpapers, and 3D icons
 ├── store/               # Zustand OS state and app registry
 └── types/               # TypeScript definitions for windows, sessions, and telemetry
