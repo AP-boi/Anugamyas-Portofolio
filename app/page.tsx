@@ -29,6 +29,13 @@ import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Activity, Sun } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
+import {
+  ThemeToggleButton1,
+  ThemeToggleButton2,
+  ThemeToggleButton3,
+  ThemeToggleButton4,
+  ThemeToggleButton5,
+} from '@/components/ui/skiper-ui/skiper4';
 
 const DESKTOP_FOLDERS = [
   {
@@ -90,7 +97,7 @@ const DESKTOP_FOLDERS = [
 const WALLPAPERS = ['/custom-wallpaper.jpg', '/spiderman-wallpaper.jpg'];
 
 export default function Home() {
-  const { openWindow, telemetry, currentUser, isLocked, lockScreen, brightness } = useOSStore();
+  const { openWindow, telemetry, currentUser, isLocked, lockScreen, brightness, theme, toggleTheme } = useOSStore();
   const [wallpaperIndex, setWallpaperIndex] = useState(0);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
@@ -346,6 +353,36 @@ export default function Home() {
               <p className="text-base font-bold text-amber-600 mt-1">{telemetry.region}</p>
             </div>
           </div>
+          {/* Appearance & Skiper4 Theme Toggle Suite */}
+          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2.5 shadow-xs">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-[10px] text-slate-500 uppercase font-semibold">Appearance Theme</span>
+                <p className="text-xs font-bold text-slate-900 mt-0.5">
+                  Currently: <span className="text-blue-600 font-bold">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                </p>
+              </div>
+              <button
+                onClick={toggleTheme}
+                className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold transition-all shadow-xs cursor-pointer"
+              >
+                Toggle Theme
+              </button>
+            </div>
+            
+            {/* Skiper4 Interactive Toggle Showcase */}
+            <div className="pt-2 border-t border-slate-200">
+              <span className="text-[10px] text-slate-500 font-medium">Skiper4 Animation Styles:</span>
+              <div className="flex items-center space-x-3 mt-1.5">
+                <ThemeToggleButton1 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8" title="Style 1: Yin-Yang Eclipse" />
+                <ThemeToggleButton2 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 2: Rotating Sunburst Rays" />
+                <ThemeToggleButton3 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 3: Dotted Solar Orbit" />
+                <ThemeToggleButton4 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 4: Filament Lightbulb" />
+                <ThemeToggleButton5 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 5: Crescent Moon Slide" />
+              </div>
+            </div>
+          </div>
+
           <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] flex items-center justify-between">
             <span>Edge Health: <strong>{telemetry.edgeStatus}</strong></span>
             <span><strong>{telemetry.websocketConnections}</strong> active WebSockets</span>

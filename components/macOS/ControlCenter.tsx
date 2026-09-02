@@ -15,6 +15,7 @@ import {
   Activity,
   Sliders,
 } from 'lucide-react';
+import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
 
 interface ControlCenterProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
   onSelectWallpaper,
   currentWallpaper,
 }) => {
-  const { telemetry, lockScreen, openWindow, brightness, setBrightness } = useOSStore();
+  const { telemetry, lockScreen, openWindow, brightness, setBrightness, theme, toggleTheme } = useOSStore();
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
   const [focusEnabled, setFocusEnabled] = useState(false);
@@ -90,24 +91,30 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
             </div>
           </div>
 
-          {/* Focus & Lock Screen Stack */}
+          {/* Appearance & Lock Screen Stack */}
           <div className="flex flex-col justify-between gap-2">
-            <button
-              onClick={() => setFocusEnabled(!focusEnabled)}
-              className={`p-2.5 rounded-2xl border flex items-center space-x-2 transition-all text-left shadow-xs ${
-                focusEnabled
-                  ? 'bg-purple-50 border-purple-200 text-purple-800'
-                  : 'bg-slate-100 border-slate-200 text-slate-600'
+            <div
+              onClick={toggleTheme}
+              className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all cursor-pointer shadow-xs ${
+                theme === 'dark'
+                  ? 'bg-slate-900/90 border-slate-700 text-white'
+                  : 'bg-slate-100 border-slate-200 text-slate-800'
               }`}
             >
-              <div className={`w-7 h-7 rounded-full flex items-center justify-center ${focusEnabled ? 'bg-purple-600 text-white' : 'bg-slate-300 text-slate-600'}`}>
-                <Moon className="w-3.5 h-3.5" />
+              <div className="flex items-center space-x-2">
+                <ThemeToggleButton2
+                  className="w-7 h-7 p-1"
+                  isDark={theme === 'dark'}
+                  onToggle={toggleTheme}
+                />
+                <div className="leading-tight">
+                  <p className="text-xs font-bold">Appearance</p>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400">
+                    {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+                  </span>
+                </div>
               </div>
-              <div className="leading-tight">
-                <p className="text-xs font-bold">Focus</p>
-                <span className="text-[9px] text-slate-500">{focusEnabled ? 'Active' : 'Off'}</span>
-              </div>
-            </button>
+            </div>
 
             <button
               onClick={() => {

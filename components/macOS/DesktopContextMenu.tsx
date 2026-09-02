@@ -13,6 +13,9 @@ import {
   ExternalLink,
 } from 'lucide-react';
 
+import { APLogo } from '@/components/ui/APLogo';
+import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
+
 interface DesktopContextMenuProps {
   x: number;
   y: number;
@@ -28,7 +31,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
   onClose,
   onChangeWallpaper,
 }) => {
-  const { openWindow, lockScreen } = useOSStore();
+  const { openWindow, lockScreen, theme, toggleTheme } = useOSStore();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -90,6 +93,26 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
           <span>Change Wallpaper</span>
         </div>
       </button>
+
+      <div
+        onClick={() => {
+          toggleTheme();
+          onClose();
+        }}
+        className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group cursor-pointer"
+      >
+        <div className="flex items-center space-x-2">
+          <ThemeToggleButton2
+            className="w-4 h-4 p-0.5"
+            isDark={theme === 'dark'}
+            onToggle={() => {
+              toggleTheme();
+              onClose();
+            }}
+          />
+          <span>{theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</span>
+        </div>
+      </div>
 
       <div className="my-1 border-t border-slate-200/80" />
 

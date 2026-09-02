@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { APLogo } from '@/components/ui/APLogo';
+import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
 
 interface MenuBarProps {
   onToggleSpotlight?: () => void;
@@ -31,6 +32,8 @@ export const MenuBar: React.FC<MenuBarProps> = ({
     openWindow,
     lockScreen,
     logout,
+    theme,
+    toggleTheme,
   } = useOSStore();
 
   const [timeString, setTimeString] = useState<string>('');
@@ -279,6 +282,19 @@ export const MenuBar: React.FC<MenuBarProps> = ({
         >
           <Search className="w-3.5 h-3.5" />
         </button>
+
+        {/* Skiper4 Animated Theme Toggle */}
+        <div className="flex items-center">
+          <ThemeToggleButton2
+            className="w-5 h-5 p-0.5"
+            isDark={theme === 'dark'}
+            onToggle={() => {
+              sounds.playClick();
+              toggleTheme();
+            }}
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+          />
+        </div>
 
         {/* Control Center Toggle */}
         <button

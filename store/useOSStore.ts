@@ -113,6 +113,9 @@ interface OSStoreState {
   logout: () => void;
 
   // System Settings Actions
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
+  toggleTheme: () => void;
   brightness: number;
   setBrightness: (b: number) => void;
   updateTelemetry: (data: Partial<TelemetryData>) => void;
@@ -326,6 +329,31 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
           size: size ?? target.size,
         },
       },
+    });
+  },
+
+  theme: 'dark',
+  setTheme: (theme: 'light' | 'dark') => {
+    if (typeof document !== 'undefined') {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    set({ theme });
+  },
+  toggleTheme: () => {
+    set((state) => {
+      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+      if (typeof document !== 'undefined') {
+        if (nextTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      return { theme: nextTheme };
     });
   },
 
