@@ -270,10 +270,16 @@ export const SmoothInput = React.forwardRef<HTMLInputElement, SmoothInputProps>(
   }, []);
 
   return (
-    <div className={cn(inputWrapperClassName, wrapperClassName)}>
+    <div
+      className={
+        wrapperClassName
+          ? cn("relative w-full", wrapperClassName)
+          : inputWrapperClassName
+      }
+    >
       <div
         ref={containerRef}
-        className="relative grid grid-cols-1 p-0 items-center"
+        className="relative grid grid-cols-1 p-0 items-center w-full"
         style={{ caretColor: "transparent" }}
       >
         <input
@@ -282,9 +288,8 @@ export const SmoothInput = React.forwardRef<HTMLInputElement, SmoothInputProps>(
           type={type}
           placeholder={displayPlaceholder}
           className={cn(
-            inputClassName,
-            "col-start-1 col-end-2 row-start-1 row-end-2 text-inherit",
-            className,
+            "w-full bg-transparent outline-none col-start-1 col-end-2 row-start-1 row-end-2",
+            className ? className : inputClassName,
           )}
           style={style}
           value={inputValue}

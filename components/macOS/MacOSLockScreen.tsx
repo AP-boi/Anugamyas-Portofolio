@@ -316,8 +316,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                       placeholder="e.g. Sundar Pichai, Jane Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
-                      className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                      wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
+                      className="w-full bg-transparent dark:bg-transparent text-xs text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-400"
                       caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       autoFocus
                     />
@@ -334,8 +334,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                         placeholder="Recruiter / Dev"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
-                        wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
-                        className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                        wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
+                        className="w-full bg-transparent dark:bg-transparent text-xs text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-400"
                         caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       />
                     </div>
@@ -349,8 +349,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                         placeholder="Google / Self"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
-                        wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
-                        className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                        wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
+                        className="w-full bg-transparent dark:bg-transparent text-xs text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-400"
                         caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       />
                     </div>
@@ -366,8 +366,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                       placeholder="e.g. Loved Bharat Dekho! Let's connect."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
-                      className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                      wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
+                      className="w-full bg-transparent dark:bg-transparent text-xs text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-400"
                       caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                     />
                   </div>
@@ -412,8 +412,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                       placeholder="Enter owner passcode ('2026')"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
-                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
-                      className="w-full bg-transparent text-xs text-slate-900 outline-none"
+                      wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
+                      className="w-full bg-transparent dark:bg-transparent text-xs text-slate-900 dark:text-slate-900 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-400"
                       caretColor="bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.8)]"
                       autoFocus
                     />
