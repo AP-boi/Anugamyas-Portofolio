@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Html, Environment, Stars } from '@react-three/drei';
 import * as THREE from 'three';
 import { RomeModelLoader } from './RomeModelLoader';
-import { Loader2, Sparkles, Compass } from 'lucide-react';
+import { Loader2, Compass } from 'lucide-react';
 
 // Smooth Mouse Parallax & Dynamic Camera Controller
 const MouseCameraController: React.FC = () => {

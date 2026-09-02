@@ -19,7 +19,8 @@ import {
   Calendar,
   GitPullRequest,
   Tag,
-  Sparkles,
+  Layers,
+  Zap,
 } from 'lucide-react';
 
 interface RepoItem {
@@ -423,7 +424,7 @@ export const GitHubApp: React.FC = () => {
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
                 <div className="flex items-center justify-between text-slate-500 text-[10px] font-mono uppercase font-semibold">
                   <span>Specialization</span>
-                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  <Code2 className="w-3.5 h-3.5 text-amber-500" />
                 </div>
                 <div className="text-lg font-bold text-amber-700 font-mono mt-1">AI & WebGL 3D</div>
               </div>
@@ -639,7 +640,7 @@ export const GitHubApp: React.FC = () => {
               <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl shadow-xs">
                 <div className="flex items-center justify-between text-amber-700 text-[10px] font-mono uppercase font-bold">
                   <span>Longest Streak</span>
-                  <Sparkles className="w-4 h-4 text-amber-600" />
+                  <Flame className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="text-xl font-bold text-amber-800 font-mono mt-1">218 Days</div>
                 <p className="text-[10px] text-amber-600 mt-0.5">Oct 2024 - May 2025</p>

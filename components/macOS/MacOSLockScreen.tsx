@@ -7,7 +7,6 @@ import {
   Lock,
   User,
   Shield,
-  Sparkles,
   ArrowRight,
   KeyRound,
   Building,
@@ -387,7 +386,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   disabled={isLoading}
                   className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold transition-all shadow-lg flex items-center justify-center space-x-2"
                 >
-                  <Sparkles className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4" />
                   <span>{isLoading ? 'Entering...' : 'Instant One-Click Guest Access'}</span>
                 </button>
               </div>

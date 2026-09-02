@@ -10,13 +10,11 @@ import {
   Moon,
   Radio,
   Image,
-  Sparkles,
   Lock,
   RotateCcw,
   Activity,
   Sliders,
 } from 'lucide-react';
-import { sounds } from '@/lib/soundEngine';
 
 interface ControlCenterProps {
   isOpen: boolean;

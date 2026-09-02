@@ -8,7 +8,6 @@ import {
   ShieldCheck,
   Lock,
   Terminal as TerminalIcon,
-  Sparkles,
   Trash2,
   HelpCircle,
   Cpu,

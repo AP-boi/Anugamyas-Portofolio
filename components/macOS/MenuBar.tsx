@@ -9,7 +9,6 @@ import {
   Search,
   Lock,
   LogOut,
-  Sparkles,
   Shield,
   Volume2,
 } from 'lucide-react';

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { WebcamPixelGrid } from '@/components/ui/webcam-pixel-grid';
-import { RefreshCw, Eye, Sparkles } from 'lucide-react';
+import { RefreshCw, Eye } from 'lucide-react';
 
 export const CameraApp: React.FC = () => {
   const [gridCols, setGridCols] = useState<number>(50);
@@ -29,7 +29,6 @@ export const CameraApp: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
               Camera & Motion Grid
               <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-cyan-50 border border-cyan-300 text-cyan-800 font-mono font-semibold">
-                <Sparkles className="w-3 h-3 text-cyan-600" />
                 {isWebcamActive ? 'Live Camera' : 'Motion Matrix'}
               </span>
             </h3>

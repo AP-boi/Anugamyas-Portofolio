@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOSStore, APP_REGISTRY } from '@/store/useOSStore';
 import { AppId } from '@/types/os';
-import { Search, ArrowRight, CornerDownLeft, Sparkles, Folder, FileText, Terminal, Activity, Lock } from 'lucide-react';
+import { Search, ArrowRight, CornerDownLeft, Folder, FileText, Terminal, Activity, Lock } from 'lucide-react';
 
 interface SearchResult {
   id: string;

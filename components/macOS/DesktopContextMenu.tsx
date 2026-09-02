@@ -9,7 +9,6 @@ import {
   Activity,
   Lock,
   Layers,
-  Sparkles,
   Info,
   ExternalLink,
 } from 'lucide-react';
