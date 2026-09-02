@@ -71,14 +71,6 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
       action: () => openWindow('terminal'),
     },
     {
-      id: 'app-analytics',
-      title: 'Activity Monitor — Visitor Intelligence',
-      category: 'Applications',
-      subtitle: 'Real-time visitor logs, analytics, and Node.js telemetry',
-      iconSrc: '/icons/activity.png',
-      action: () => openWindow('analytics'),
-    },
-    {
       id: 'app-settings',
       title: 'System Settings — Telemetry',
       category: 'Applications',

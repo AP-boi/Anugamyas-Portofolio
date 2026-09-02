@@ -126,12 +126,12 @@ export const MenuBar: React.FC<MenuBarProps> = ({
               <button
                 onClick={() => {
                   sounds.playClick();
-                  openWindow('analytics');
+                  openWindow('system-info');
                   setIsSystemMenuOpen(false);
                 }}
                 className="w-full text-left px-3 py-1.5 hover:bg-blue-600 hover:text-white rounded text-xs transition-colors flex items-center justify-between"
               >
-                <span>Visitor Intelligence</span>
+                <span>System Settings</span>
                 <span className="text-[10px] text-slate-400 group-hover:text-white">⌘2</span>
               </button>
 
@@ -197,11 +197,11 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           <button
             onClick={() => {
               sounds.playClick();
-              openWindow('analytics');
+              openWindow('terminal');
             }}
             className="text-slate-700 hover:text-blue-600 transition-colors font-medium"
           >
-            Analytics
+            Terminal
           </button>
           <button
             onClick={() => {
@@ -243,12 +243,12 @@ export const MenuBar: React.FC<MenuBarProps> = ({
                 <button
                   onClick={() => {
                     sounds.playClick();
-                    openWindow('analytics');
+                    openWindow('system-info');
                     setIsUserMenuOpen(false);
                   }}
                   className="w-full text-left px-2 py-1 rounded hover:bg-blue-600 hover:text-white text-[11px] transition-colors"
                 >
-                  View Activity & Logs
+                  System Settings
                 </button>
 
                 <button

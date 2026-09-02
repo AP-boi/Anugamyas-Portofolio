@@ -11,7 +11,6 @@ import { GitHubApp } from '@/components/apps/GitHubApp';
 import { AIAssistantDrawer } from '@/components/apps/AIAssistantDrawer';
 import { CameraApp } from '@/components/apps/CameraApp';
 import TetrisApp from '@/components/apps/TetrisApp';
-import { AnalyticsApp } from '@/components/apps/AnalyticsApp';
 import { useOSStore } from '@/store/useOSStore';
 
 import { ImagesBadge } from '@/components/ui/images-badge';
@@ -19,7 +18,6 @@ import { AnimatedWallpaper } from '@/components/ui/animated-wallpaper';
 import { BootScreen } from '@/components/macOS/BootScreen';
 import { MacOSLockScreen } from '@/components/macOS/MacOSLockScreen';
 import { SpotlightSearch } from '@/components/macOS/SpotlightSearch';
-import { Launchpad } from '@/components/macOS/Launchpad';
 import { ControlCenter } from '@/components/macOS/ControlCenter';
 import { DesktopContextMenu } from '@/components/macOS/DesktopContextMenu';
 import { DesktopMarquee } from '@/components/ui/DesktopMarquee';
@@ -94,7 +92,6 @@ export default function Home() {
   const { openWindow, telemetry, currentUser, isLocked, lockScreen } = useOSStore();
   const [wallpaperIndex, setWallpaperIndex] = useState(0);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
-  const [isLaunchpadOpen, setIsLaunchpadOpen] = useState(false);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
 
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; isOpen: boolean }>({
@@ -112,22 +109,10 @@ export default function Home() {
     }).catch(() => {});
   }, []);
 
-  // Keyboard Shortcuts (⌘Space, ⌘K, ⌘L, F4 Launchpad)
+  // Keyboard Shortcuts (⌘Space, ⌘K, ⌘L)
   useKeyboardShortcuts({
     onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),
   });
-
-  // F4 Key opens Launchpad
-  useEffect(() => {
-    const handleF4 = (e: KeyboardEvent) => {
-      if (e.key === 'F4') {
-        e.preventDefault();
-        setIsLaunchpadOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleF4);
-    return () => window.removeEventListener('keydown', handleF4);
-  }, []);
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -171,16 +156,10 @@ export default function Home() {
       {/* macOS Sonoma Interactive Lock Screen */}
       <MacOSLockScreen />
 
-      {/* Spotlight Search Overlay (⌘Space) */}
+      {/* Spotlight Universal Search Modal (⌘Space) */}
       <SpotlightSearch
         isOpen={isSpotlightOpen}
         onClose={() => setIsSpotlightOpen(false)}
-      />
-
-      {/* Launchpad App Drawer Overlay (F4) */}
-      <Launchpad
-        isOpen={isLaunchpadOpen}
-        onClose={() => setIsLaunchpadOpen(false)}
       />
 
       {/* Control Center Panel */}
@@ -303,12 +282,7 @@ export default function Home() {
         <AIAssistantDrawer />
       </Window>
 
-      {/* 6. Visitor Intelligence & Login Tracker Window */}
-      <Window id="analytics">
-        <AnalyticsApp />
-      </Window>
-
-      {/* 7. System Telemetry Window */}
+      {/* 6. System Telemetry Window */}
       <Window id="system-info">
         <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200">
@@ -345,18 +319,18 @@ export default function Home() {
         </div>
       </Window>
 
-      {/* 9. Camera & Motion Grid App Window */}
+      {/* 7. Camera & Motion Grid App Window */}
       <Window id="camera">
         <CameraApp />
       </Window>
 
-      {/* 10. Autonomous Tetris AI Game Window */}
+      {/* 8. Autonomous Tetris AI Game Window */}
       <Window id="tetris">
         <TetrisApp />
       </Window>
 
-      {/* Dock Launcher */}
-      <Dock onOpenLaunchpad={() => setIsLaunchpadOpen(true)} />
+      {/* Dock */}
+      <Dock />
 
       {/* Custom User Cursor Follower */}
       <UserCursor name={currentUser?.name || "Anugamya"} />

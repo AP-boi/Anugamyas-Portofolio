@@ -87,14 +87,14 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
 
       <button
         onClick={() => {
-          openWindow('analytics');
+          openWindow('system-info');
           onClose();
         }}
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <img src="/icons/activity.png" alt="" className="w-3.5 h-3.5 object-contain rounded-xs" />
-          <span>Visitor Intelligence</span>
+          <img src="/icons/settings.png" alt="" className="w-3.5 h-3.5 object-contain rounded-xs" />
+          <span>System Settings</span>
         </div>
       </button>
 
