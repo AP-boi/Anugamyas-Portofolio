@@ -1,10 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { VisitorSession } from '@/types/os';
+import { getClientIp, checkRateLimit, createRateLimitResponse } from '@/lib/rateLimit';
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '2026';
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = getClientIp(req);
+    const loginRateLimit = checkRateLimit(`login-attempt:${ip}`, {
+      limit: 12, // 12 attempts per minute
+      windowMs: 60 * 1000,
+    });
+
+    if (!loginRateLimit.success) {
+      return createRateLimitResponse(loginRateLimit);
+    }
+
     const body = await req.json().catch(() => ({}));
     const { name, role, company, contact, message, isGuest, adminPassword } = body;
 
