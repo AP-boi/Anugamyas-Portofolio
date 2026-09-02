@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Star,
   GitFork,
@@ -37,92 +37,147 @@ interface RepoItem {
 
 const REPOSITORIES: RepoItem[] = [
   {
-    name: 'BHARAT-DEKHO',
-    description: '🇮🇳 AI-powered Indian Tourism & Digital Heritage Portal with AI Itinerary Planner, 3D Museum, WebGL Photo Gallery & Heritage Quiz.',
-    stars: 12,
-    forks: 3,
-    language: 'TypeScript',
-    langColor: 'bg-blue-500',
-    updated: 'Updated recently',
-    topics: ['ai', 'framer-motion', 'gemini-ai', 'heritage', 'india', 'nextjs', 'threejs', 'tourism'],
-    url: 'https://github.com/AP-boi/BHARAT-DEKHO',
-  },
-  {
-    name: 'cyber-ascension-game',
-    description: 'CYBER ASCENSION // 2D Cyberpunk Action Game Engine with Video Cutscenes & Detroit-style Branching Narrative.',
-    stars: 8,
-    forks: 2,
-    language: 'JavaScript',
-    langColor: 'bg-amber-400',
-    updated: 'Updated recently',
-    topics: ['javascript', 'canvas', 'game-engine', 'cyberpunk', 'web-audio', 'netlify'],
-    url: 'https://github.com/AP-boi/cyber-ascension-game',
-  },
-  {
     name: 'Anugamyas-Portofolio',
-    description: 'macOS Desktop OS Portfolio — interactive desktop environment with liquid glass UI, Tetris AI, WebGL effects & Siri Intelligence.',
-    stars: 15,
-    forks: 4,
+    description: 'macOS Desktop OS Portfolio — interactive desktop environment with liquid glass UI, Tetris AI, WebGL effects & full multi-window OS.',
+    stars: 1,
+    forks: 0,
     language: 'TypeScript',
     langColor: 'bg-blue-500',
     updated: 'Updated today',
-    topics: ['nextjs', 'react-three-fiber', 'threejs', 'zustand', 'framer-motion', 'macos'],
+    topics: ['nextjs', 'threejs', 'zustand', 'framer-motion', 'macos', 'portfolio'],
     url: 'https://github.com/AP-boi/Anugamyas-Portofolio',
   },
   {
-    name: 'airpure-delhi',
-    description: 'iOS-inspired air purifier platform for Delhi - Premium glassmorphic design with live AQI tracking UI.',
-    stars: 5,
-    forks: 1,
-    language: 'HTML',
-    langColor: 'bg-orange-500',
+    name: 'BHARAT-DEKHO',
+    description: '🇮🇳 Chalo Dekhe Bharat — AI-powered Indian Tourism & Digital Heritage Portal. Features AI Itinerary Planner, 3D Interactive Museum, WebGL Photo Gallery, Heritage Quiz & Lenis smooth scroll. Built with Next.js 15, Gemini AI, Three.js & Framer Motion.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
     updated: 'Updated recently',
-    topics: ['html5', 'css3', 'glassmorphism', 'delhi-aqi', 'responsive-design'],
-    url: 'https://github.com/AP-boi/airpure-delhi',
+    topics: ['ai', 'framer-motion', 'gemini-ai', 'heritage', 'india', 'nextjs', 'react', 'threejs', 'tourism', 'typescript'],
+    url: 'https://github.com/AP-boi/BHARAT-DEKHO',
   },
   {
-    name: 'gravity-client',
-    description: 'Custom Java gaming client utility and runtime modification engine with modular HUD overlays and event dispatching.',
-    stars: 6,
-    forks: 1,
-    language: 'Java',
-    langColor: 'bg-red-500',
+    name: 'PhysX-Studio',
+    description: '🔬 Real-time 3D physics sandbox & CAD playground — spawn objects, tweak physics, trigger explosions. Built with React, Three.js, and Rapier 3D.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
     updated: 'Updated recently',
-    topics: ['java', 'jvm', 'opengl', 'game-architecture', 'event-bus'],
-    url: 'https://github.com/AP-boi/gravity-client',
+    topics: ['react', 'threejs', 'rapier3d', 'physics', 'cad', 'webgl'],
+    url: 'https://github.com/AP-boi/PhysX-Studio',
+  },
+  {
+    name: 'flow-os',
+    description: 'A web-based desktop operating system engineered for deep work, flow sessions, and focus.',
+    stars: 1,
+    forks: 0,
+    language: 'JavaScript',
+    langColor: 'bg-amber-400',
+    updated: 'Updated recently',
+    topics: ['web-os', 'javascript', 'productivity', 'flow-state'],
+    url: 'https://github.com/AP-boi/flow-os',
+  },
+  {
+    name: 'cyber-ascension-game',
+    description: 'CYBER ASCENSION // 2D Cyberpunk Action Game Engine with Video Cutscenes & Detroit Branching Narrative.',
+    stars: 1,
+    forks: 0,
+    language: 'JavaScript',
+    langColor: 'bg-amber-400',
+    updated: 'Updated recently',
+    topics: ['javascript', 'canvas-2d', 'game-engine', 'cyberpunk', 'web-audio'],
+    url: 'https://github.com/AP-boi/cyber-ascension-game',
+  },
+  {
+    name: 'OMNIS',
+    description: 'OMNIS Web Application & Cloud Interface Platform.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated recently',
+    topics: ['typescript', 'react', 'nextjs', 'cloud'],
+    url: 'https://github.com/AP-boi/OMNIS',
+  },
+  {
+    name: 'classroom-pen-fight-3d',
+    description: '3D WebGL Classroom Pen Fight action game simulation.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated recently',
+    topics: ['threejs', 'game-dev', 'webgl', 'typescript'],
+    url: 'https://github.com/AP-boi/classroom-pen-fight-3d',
+  },
+  {
+    name: 'eesa-website',
+    description: 'Electrical Engineering Students Association (EESA) departmental portal and event management hub.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated recently',
+    topics: ['typescript', 'react', 'tailwind', 'education'],
+    url: 'https://github.com/AP-boi/eesa-website',
   },
   {
     name: 'diesel-ldr',
-    description: 'Dynamic lightweight resource loader and system utility framework in TypeScript with streaming buffer parsing.',
-    stars: 4,
+    description: 'Diesel Engine telemetry & LDR sensor data parsing module and hardware streaming buffer in TypeScript.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated recently',
+    topics: ['typescript', 'hardware-telemetry', 'sensor-data', 'iot'],
+    url: 'https://github.com/AP-boi/diesel-ldr',
+  },
+  {
+    name: 'gravity-client',
+    description: 'Custom Java game engine client utility and runtime event modification platform.',
+    stars: 0,
+    forks: 0,
+    language: 'Java',
+    langColor: 'bg-red-500',
+    updated: 'Updated recently',
+    topics: ['java', 'jvm', 'game-engine', 'client-architecture'],
+    url: 'https://github.com/AP-boi/gravity-client',
+  },
+  {
+    name: 'STELLARNET',
+    description: 'STELLARNET — Decentralized space and telemetry mesh network architecture.',
+    stars: 0,
+    forks: 0,
+    language: 'TypeScript',
+    langColor: 'bg-blue-500',
+    updated: 'Updated recently',
+    topics: ['networking', 'telemetry', 'space', 'distributed-systems'],
+    url: 'https://github.com/AP-boi/STELLARNET',
+  },
+  {
+    name: 'chalo-dekhe-bharat',
+    description: '🇮🇳 Chalo Dekhe Bharat — AI-powered Indian Tourism & Digital Heritage Portal with 3D Museum and AI itinerary planner.',
+    stars: 1,
     forks: 1,
     language: 'TypeScript',
     langColor: 'bg-blue-500',
     updated: 'Updated recently',
-    topics: ['typescript', 'nodejs', 'streams', 'cli-tools', 'caching'],
-    url: 'https://github.com/AP-boi/diesel-ldr',
+    topics: ['ai', 'framer-motion', 'gemini-ai', 'heritage', 'india', 'nextjs', 'threejs'],
+    url: 'https://github.com/AP-boi/chalo-dekhe-bharat',
   },
   {
-    name: 'LIFEOS-X',
-    description: 'Comprehensive personal productivity and operating system framework for automated life workflows.',
-    stars: 7,
-    forks: 2,
+    name: 'flowOS',
+    description: 'Crypto and developer web desktop OS with custom workflows and developer tools.',
+    stars: 0,
+    forks: 0,
     language: 'JavaScript',
     langColor: 'bg-amber-400',
     updated: 'Updated recently',
-    topics: ['productivity', 'system-framework', 'automation', 'open-source'],
-    url: 'https://github.com/AP-boi/LIFEOS-X',
-  },
-  {
-    name: 'Dumb-Calculator',
-    description: 'Playful and interactive web calculator interface with retro digital display and smooth animations.',
-    stars: 2,
-    forks: 0,
-    language: 'HTML',
-    langColor: 'bg-orange-500',
-    updated: 'Updated recently',
-    topics: ['html5', 'css3', 'calculator', 'web-ui'],
-    url: 'https://github.com/AP-boi/Dumb-Calculator',
+    topics: ['javascript', 'crypto', 'web-os', 'developer-tools'],
+    url: 'https://github.com/AP-boi/flowOS',
   },
 ];
 
@@ -175,6 +230,75 @@ export const GitHubApp: React.FC = () => {
   const [repoSearch, setRepoSearch] = useState<string>('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('All');
   const [hoveredCell, setHoveredCell] = useState<{ date: string; count: number } | null>(null);
+  const [reposList, setReposList] = useState<RepoItem[]>(REPOSITORIES);
+  const [userProfile, setUserProfile] = useState<{
+    public_repos: number;
+    followers: number;
+    following: number;
+    avatar_url: string;
+  }>({
+    public_repos: 13,
+    followers: 0,
+    following: 1,
+    avatar_url: 'https://avatars.githubusercontent.com/u/189377676?v=4',
+  });
+
+  // Fetch real-time GitHub data directly from API
+  useEffect(() => {
+    const fetchLiveGitHubData = async () => {
+      try {
+        const [userRes, reposRes] = await Promise.all([
+          fetch('https://api.github.com/users/AP-boi'),
+          fetch('https://api.github.com/users/AP-boi/repos?per_page=100&sort=updated'),
+        ]);
+
+        if (userRes.ok) {
+          const u = await userRes.json();
+          setUserProfile({
+            public_repos: u.public_repos || 13,
+            followers: u.followers || 0,
+            following: u.following || 1,
+            avatar_url: u.avatar_url || 'https://avatars.githubusercontent.com/u/189377676?v=4',
+          });
+        }
+
+        if (reposRes.ok) {
+          const data = await reposRes.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const mapped: RepoItem[] = data.map((r: any) => {
+              const lang = r.language || 'TypeScript';
+              const langColor =
+                lang === 'TypeScript'
+                  ? 'bg-blue-500'
+                  : lang === 'JavaScript'
+                  ? 'bg-amber-400'
+                  : lang === 'Java'
+                  ? 'bg-red-500'
+                  : lang === 'HTML'
+                  ? 'bg-orange-500'
+                  : 'bg-purple-500';
+              return {
+                name: r.name,
+                description: r.description || `${r.name} repository by AP-boi`,
+                stars: r.stargazers_count || 0,
+                forks: r.forks_count || 0,
+                language: lang,
+                langColor,
+                updated: `Updated ${new Date(r.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+                topics: Array.isArray(r.topics) ? r.topics : [],
+                url: r.html_url,
+              };
+            });
+            setReposList(mapped);
+          }
+        }
+      } catch (e) {
+        // Fallback to preloaded real repositories
+      }
+    };
+
+    fetchLiveGitHubData();
+  }, []);
 
   const heatmapWeeks = useMemo(() => generateHeatmap(), []);
 
@@ -231,7 +355,7 @@ export const GitHubApp: React.FC = () => {
 
   const languages = ['All', 'TypeScript', 'JavaScript', 'Java', 'HTML'];
 
-  const filteredRepos = REPOSITORIES.filter((repo) => {
+  const filteredRepos = reposList.filter((repo) => {
     const matchesLang = selectedLanguage === 'All' || repo.language === selectedLanguage;
     const matchesSearch =
       repo.name.toLowerCase().includes(repoSearch.toLowerCase()) ||
@@ -402,7 +526,7 @@ export const GitHubApp: React.FC = () => {
                   <span>Public Repos</span>
                   <BookOpen className="w-3.5 h-3.5 text-blue-600" />
                 </div>
-                <div className="text-lg font-bold text-slate-900 font-mono mt-1">{REPOSITORIES.length} Projects</div>
+                <div className="text-lg font-bold text-slate-900 font-mono mt-1">{userProfile.public_repos || reposList.length} Repositories</div>
               </div>
 
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
@@ -410,7 +534,7 @@ export const GitHubApp: React.FC = () => {
                   <span>Primary Stacks</span>
                   <Code2 className="w-3.5 h-3.5 text-purple-600" />
                 </div>
-                <div className="text-lg font-bold text-purple-700 font-mono mt-1">Next.js & Three.js</div>
+                <div className="text-lg font-bold text-purple-700 font-mono mt-1">TypeScript & Next.js</div>
               </div>
 
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
@@ -418,7 +542,7 @@ export const GitHubApp: React.FC = () => {
                   <span>Active Deployments</span>
                   <Flame className="w-3.5 h-3.5 text-rose-500" />
                 </div>
-                <div className="text-lg font-bold text-rose-600 font-mono mt-1">3 Live Apps</div>
+                <div className="text-lg font-bold text-rose-600 font-mono mt-1">4 Live Apps</div>
               </div>
 
               <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between shadow-xs">
@@ -426,7 +550,7 @@ export const GitHubApp: React.FC = () => {
                   <span>Specialization</span>
                   <Code2 className="w-3.5 h-3.5 text-amber-500" />
                 </div>
-                <div className="text-lg font-bold text-amber-700 font-mono mt-1">AI & WebGL 3D</div>
+                <div className="text-lg font-bold text-amber-700 font-mono mt-1">3D WebGL & AI</div>
               </div>
             </div>
 
@@ -438,12 +562,12 @@ export const GitHubApp: React.FC = () => {
                   onClick={() => switchTab('repos')}
                   className="text-[11px] text-purple-700 hover:text-purple-900 font-mono font-semibold hover:underline"
                 >
-                  View all repositories →
+                  View all repositories ({reposList.length}) →
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {REPOSITORIES.slice(0, 3).map((repo) => (
+                {reposList.slice(0, 3).map((repo) => (
                   <div
                     key={repo.name}
                     className="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs hover:border-purple-400 transition-all flex flex-col justify-between"
