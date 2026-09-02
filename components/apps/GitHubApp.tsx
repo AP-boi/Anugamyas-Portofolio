@@ -294,8 +294,9 @@ export const GitHubApp: React.FC = () => {
         {/* Safari URL Address Bar */}
         <form
           onSubmit={handleUrlSubmit}
-          className="flex-1 flex items-center space-x-2 bg-slate-100 border border-slate-300 rounded-lg px-3 py-1 text-xs text-slate-800 focus-within:border-blue-500 focus-within:bg-white transition-colors shadow-inner"
+          className="flex-1 flex items-center space-x-2 bg-slate-100 border border-slate-300 rounded-lg px-2.5 py-1 text-xs text-slate-800 focus-within:border-blue-500 focus-within:bg-white transition-colors shadow-inner"
         >
+          <img src="/icons/safari.png" alt="Safari" className="w-4 h-4 object-contain flex-shrink-0" />
           <Lock className="w-3 h-3 text-emerald-600 flex-shrink-0" />
           <input
             type="text"
