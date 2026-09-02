@@ -100,15 +100,6 @@ export default function Home() {
     isOpen: false,
   });
 
-  // Track initial visit in Node.js backend
-  useEffect(() => {
-    fetch('/api/visitors/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'visit' }),
-    }).catch(() => {});
-  }, []);
-
   // Keyboard Shortcuts (⌘Space, ⌘K, ⌘L)
   useKeyboardShortcuts({
     onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),

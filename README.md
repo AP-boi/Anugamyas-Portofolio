@@ -6,7 +6,7 @@ An interactive macOS Sonoma desktop environment simulator built with Next.js 14 
 
 ## Overview
 
-Anugamya Portfolio OS is a web-based operating system simulator designed to present engineering projects, technical milestones, live GitHub activity, interactive utilities, and real-time visitor telemetry in an authentic desktop interface.
+Anugamya Portfolio OS is a web-based operating system simulator designed to present engineering projects, technical milestones, live GitHub activity, interactive utilities, and real-time edge telemetry in an authentic desktop interface.
 
 ---
 
@@ -15,10 +15,9 @@ Anugamya Portfolio OS is a web-based operating system simulator designed to pres
 ### Desktop Environment
 - **Multi-Window Management**: Draggable, minimizable, maximizable, and focus-aware window architecture powered by Zustand.
 - **Words Preloader (Skiper8)**: Sequential multilingual entrance animation with curved SVG transition effects.
-- **Visitor Authentication & Lock Screen**: Interactive visitor sign-up, guest explorer session, and administrator telemetry login.
+- **Lock Screen & Profile**: Interactive user profile sign-up and administrator login.
 - **Dynamic Dock**: Interactive dock with spring physics, icon magnification, bounce animations, and running indicator status.
 - **Spotlight Search (Command + Space)**: Rapid system-wide launcher for applications, project repositories, and actions.
-- **Launchpad (F4)**: Full-screen grid application drawer with real-time search.
 - **System Menu Bar & Control Center**: macOS menu bar with dynamic time/battery indicators, lock controls, and wallpaper picker.
 - **Tactile Marquee & Desktop Context Menu**: Desktop drag selection marquee and right-click contextual actions.
 
@@ -26,12 +25,11 @@ Anugamya Portfolio OS is a web-based operating system simulator designed to pres
 1. **Finder — Projects Showcase**: Categorized portfolio repository browser with live demos, source links, and architecture notes.
 2. **Safari — GitHub Explorer**: Live repository view, commit stream, language metrics, and profile streak tracker.
 3. **Notes — Milestones & Credentials**: Scrollytelling document viewer detailing hackathons, project launches, and verified credentials.
-4. **Terminal — zsh Shell**: Interactive CLI shell with command parser, command history, and utility commands (projects, skills, theme, visitor audits).
-5. **Activity Monitor — Visitor Intelligence**: Real-time visitor logs, device breakdown, session tracking, and guestbook submissions.
-6. **AP Intelligence Assistant**: Interactive AI assistant trained on portfolio architecture and engineering experience.
-7. **Camera & Motion Grid**: Interactive 3D voxel webcam pixel grid and cyber motion matrix canvas.
-8. **Game Center — Autonomous Tetris AI**: Heuristic-driven self-playing Tetris engine with selectable visual palettes.
-9. **System Settings — Edge Telemetry**: Live telemetry monitor displaying FPS, latency, memory usage, and connection health.
+4. **Terminal — zsh Shell**: Interactive CLI shell with command parser, command history, and utility commands (projects, skills, theme).
+5. **AP Intelligence Assistant**: Interactive AI assistant trained on portfolio architecture and engineering experience.
+6. **Camera & Motion Grid**: Interactive 3D voxel webcam pixel grid and cyber motion matrix canvas.
+7. **Game Center — Autonomous Tetris AI**: Heuristic-driven self-playing Tetris engine with selectable visual palettes.
+8. **System Settings — Edge Telemetry**: Live telemetry monitor displaying FPS, latency, memory usage, and connection health.
 
 ---
 
@@ -115,8 +113,7 @@ npm start
 - **Command + Space** or **Ctrl + Space**: Toggle Spotlight Search
 - **Command + K** or **Ctrl + K**: Open Terminal
 - **Command + L** or **Ctrl + L**: Lock Screen
-- **F4**: Open Launchpad
-- **Escape**: Close Spotlight, Launchpad, or active modal
+- **Escape**: Close Spotlight or active modal
 
 ---
 

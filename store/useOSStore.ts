@@ -56,15 +56,6 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
     defaultPosition: { x: 320, y: 80 },
     defaultSize: { width: 440, height: 620 },
   },
-  analytics: {
-    id: 'analytics',
-    title: 'Activity Monitor — Visitor Intelligence',
-    description: 'Real-time visitor logs, login tracker, telemetry and aggregate analytics',
-    iconName: 'Activity',
-    iconSrc: '/icons/activity.png',
-    defaultPosition: { x: 120, y: 70 },
-    defaultSize: { width: 960, height: 620 },
-  },
   'system-info': {
     id: 'system-info',
     title: 'System Settings — Telemetry',
@@ -120,7 +111,6 @@ interface OSStoreState {
   lockScreen: () => void;
   unlockScreen: () => void;
   logout: () => void;
-  trackAppOpen: (appId: string) => void;
 
   // System Settings Actions
   updateTelemetry: (data: Partial<TelemetryData>) => void;
@@ -197,27 +187,10 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
     });
   },
 
-  trackAppOpen: (appId: string) => {
-    const { currentUser } = get();
-    if (typeof window !== 'undefined') {
-      fetch('/api/visitors/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: currentUser?.id,
-          appOpened: appId,
-        }),
-      }).catch(() => { });
-    }
-  },
-
   openWindow: (id: AppId) => {
-    const { windows, maxZIndex, trackAppOpen } = get();
+    const { windows, maxZIndex } = get();
     const target = windows[id];
     if (!target) return;
-
-    // Track app opening on backend
-    trackAppOpen(id);
 
     const nextZ = maxZIndex + 1;
     set({

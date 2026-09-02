@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/store/useOSStore';
-import { TerminalHistory, VisitorRecord } from '@/types/os';
+import { TerminalHistory } from '@/types/os';
 import {
   CornerDownLeft,
   ShieldCheck,
@@ -24,7 +24,7 @@ export const TerminalApp: React.FC = () => {
 Anugamya OS zsh (x86_64-apple-darwin23.0)${
     isAdmin ? ' — 👑 [ADMINISTRATOR SESSION ACTIVE]' : ''
   }
-Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view available system commands.`;
+Type "help" to view available system commands.`;
 
   const [history, setHistory] = useState<TerminalHistory[]>([
     {
@@ -81,92 +81,13 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
               <p><span className="text-emerald-400 font-bold w-24 inline-block">ls</span> List files and directories</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">whoami</span> Developer biography</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">projects</span> Open Projects Finder</p>
-              <p><span className="text-emerald-400 font-bold w-24 inline-block">analytics</span> Open Activity Monitor</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">settings</span> Open System Settings</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query AP Intelligence</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">cat &lt;file&gt;</span> Print file contents</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">clear</span> Clear terminal screen</p>
             </div>
           </div>
         );
-        break;
-
-      case 'check':
-      case 'visitors':
-      case 'audit':
-        if (!isAdmin) {
-          outputResult = (
-            <div className="space-y-1 text-rose-400 text-xs py-1">
-              <p className="font-bold flex items-center gap-1.5">
-                <Lock className="w-3.5 h-3.5" />
-                <span>zsh: permission denied: 'check' is an Administrator-only command.</span>
-              </p>
-              <p className="text-slate-400">
-                Please log in with administrator passcode <strong className="text-white">2026</strong> from the lock screen (⌘L) to unlock.
-              </p>
-            </div>
-          );
-          outputType = 'error';
-        } else {
-          try {
-            const res = await fetch('/api/admin/visitors');
-            const data = await res.json();
-            const visitors: VisitorRecord[] = data.analytics?.recentLogins || [];
-            const summary = data.analytics;
-
-            outputResult = (
-              <div className="space-y-2 text-xs font-mono text-slate-200 py-1">
-                <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 space-y-1">
-                  <div className="font-bold flex items-center justify-between">
-                    <span className="flex items-center gap-1.5">
-                      <ShieldCheck className="w-4 h-4 text-amber-400" />
-                      <span>VISITOR INTELLIGENCE AUDIT — LIVE NODE TELEMETRY</span>
-                    </span>
-                    <span className="text-[10px] text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
-                      ONLINE
-                    </span>
-                  </div>
-                  <div className="flex space-x-4 text-[11px] text-slate-300 pt-0.5">
-                    <span>Total Visits: <strong className="text-white">{summary?.totalVisits || 0}</strong></span>
-                    <span>Total Logins: <strong className="text-white">{summary?.totalLogins || 0}</strong></span>
-                    <span>Active Sessions: <strong className="text-emerald-400">{summary?.activeSessions || 1}</strong></span>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto rounded-lg border border-white/10 bg-black/40">
-                  <table className="w-full text-left text-[11px] border-collapse">
-                    <thead>
-                      <tr className="border-b border-white/15 bg-white/5 text-slate-400 uppercase text-[9px] tracking-wider">
-                        <th className="py-1.5 px-3">Visitor Name</th>
-                        <th className="py-1.5 px-3">Role</th>
-                        <th className="py-1.5 px-3">Company</th>
-                        <th className="py-1.5 px-3">Device / OS</th>
-                        <th className="py-1.5 px-3">Location</th>
-                        <th className="py-1.5 px-3 text-right">Logins</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                      {visitors.map((v) => (
-                        <tr key={v.id} className="hover:bg-white/5 transition-colors">
-                          <td className="py-1.5 px-3 font-semibold text-white truncate max-w-[120px]">
-                            {v.name} {v.isAdmin ? '👑' : ''}
-                          </td>
-                          <td className="py-1.5 px-3 text-slate-300 truncate max-w-[100px]">{v.role || 'Visitor'}</td>
-                          <td className="py-1.5 px-3 text-slate-400 truncate max-w-[110px]">{v.company || 'Guest'}</td>
-                          <td className="py-1.5 px-3 text-cyan-400">{v.os} • {v.browser}</td>
-                          <td className="py-1.5 px-3 text-slate-400">{v.city || 'Delhi'}, {v.country || 'IN'}</td>
-                          <td className="py-1.5 px-3 text-right font-bold text-amber-400">{v.sessionCount || 1}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            );
-          } catch (err) {
-            outputResult = 'Error retrieving visitor intelligence data from backend node.';
-            outputType = 'error';
-          }
-        }
         break;
 
       case 'neofetch':
@@ -208,7 +129,7 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
             <span className="text-emerald-400 font-bold">-rw-r--r-- about.txt</span>
             <span className="text-purple-400 font-bold">-rw-r--r-- telemetry.log</span>
             <span className="text-cyan-400 font-bold">drwxr-xr-x AI_Assistant/</span>
-            <span className="text-pink-400 font-bold">drwxr-xr-x Analytics/</span>
+            <span className="text-pink-400 font-bold">drwxr-xr-x Settings/</span>
           </div>
         );
         break;
@@ -237,9 +158,10 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
         outputResult = 'Opening Projects Finder...';
         break;
 
-      case 'analytics':
-        openWindow('analytics');
-        outputResult = 'Opening Visitor Intelligence & Analytics...';
+      case 'settings':
+      case 'preferences':
+        openWindow('system-info');
+        outputResult = 'Opening System Settings & Telemetry...';
         break;
 
       case 'camera':
@@ -274,9 +196,9 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
         } else if (args === 'projects') {
           openWindow('projects');
           outputResult = 'Opening Projects...';
-        } else if (args === 'analytics') {
-          openWindow('analytics');
-          outputResult = 'Opening Analytics...';
+        } else if (args === 'settings' || args === 'telemetry') {
+          openWindow('system-info');
+          outputResult = 'Opening System Settings...';
         } else {
           outputResult = `open: unknown target "${args}". Try "open github" or "open projects"`;
           outputType = 'error';

@@ -87,7 +87,7 @@ export const AIAssistantDrawer: React.FC = () => {
     }
 
     if (q.includes('portfolio') || q.includes('macos') || q.includes('desktop') || q.includes('liquid') || q.includes('glass')) {
-      return `✨ Portfolio OS is an authentic simulation of macOS Sonoma & Sequoia inside a modern web browser.\n\n• Tech Stack: Next.js 14 App Router, TypeScript, Zustand (Window state management), Framer Motion, and Web Audio API synthesizer.\n• Features: Fullstack Node.js persistent visitor tracker, AP Dynamic Island HUD, Activity Monitor with CSV/JSON exports, Launchpad (F4), Spotlight Search (⌘Space), and realistic frosted liquid glass surfaces.`;
+      return `✨ Portfolio OS is an authentic simulation of macOS Sonoma & Sequoia inside a modern web browser.\n\n• Tech Stack: Next.js 14 App Router, TypeScript, Zustand (Window state management), Framer Motion, and Web Audio API synthesizer.\n• Features: AP Dynamic Island HUD, Autonomous Tetris AI, Spotlight Search (⌘Space), Camera Motion Matrix, and realistic frosted liquid glass surfaces.`;
     }
 
     if (q.includes('airpure') || q.includes('aqi') || q.includes('delhi')) {
@@ -106,7 +106,7 @@ export const AIAssistantDrawer: React.FC = () => {
       return `📬 Let's connect with Anugamya!\n\n• GitHub: https://github.com/AP-boi\n• Role: Creative Full-Stack & 3D WebGL Developer\n• Collaboration: Open for high-impact fullstack, 3D graphics, and AI engineering opportunities!`;
     }
 
-    return `Anugamya (@AP-boi) is a creative software engineer building next-generation web applications, interactive 3D WebGL simulations, and intelligent AI tools. You can explore his projects in Finder (⌘1) or check real-time visitor stats in Activity Monitor (⌘2).`;
+    return `Anugamya (@AP-boi) is a creative software engineer building next-generation web applications, interactive 3D WebGL simulations, and intelligent AI tools. You can explore his projects in Finder (⌘1) or check achievements in Notes (⌘2).`;
   };
 
   const handleSend = (text: string) => {

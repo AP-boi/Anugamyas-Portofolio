@@ -37,13 +37,13 @@ export function useKeyboardShortcuts(options: KeyboardShortcutOptions = {}) {
         return;
       }
 
-      // App shortcuts: Cmd+1 (Projects), Cmd+2 (Analytics), Cmd+3 (GitHub), Cmd+4 (Notes)
+      // App shortcuts: Cmd+1 (Projects), Cmd+2 (Settings), Cmd+3 (GitHub), Cmd+4 (Notes)
       if (isCmdOrCtrl && e.key === '1') {
         e.preventDefault();
         openWindow('projects');
       } else if (isCmdOrCtrl && e.key === '2') {
         e.preventDefault();
-        openWindow('analytics');
+        openWindow('system-info');
       } else if (isCmdOrCtrl && e.key === '3') {
         e.preventDefault();
         openWindow('github');

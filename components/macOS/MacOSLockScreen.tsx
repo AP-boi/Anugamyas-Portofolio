@@ -246,8 +246,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
               </h2>
               <p className="text-xs text-slate-600 mt-0.5">
                 {loginMode === 'admin'
-                  ? 'Enter owner passcode to manage analytics'
-                  : 'Create your visitor profile to record your session & explore the OS'}
+                  ? 'Enter owner passcode for administrator access'
+                  : 'Create your profile to explore the desktop OS'}
               </p>
             </div>
 
