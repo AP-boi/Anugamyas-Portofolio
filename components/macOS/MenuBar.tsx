@@ -189,10 +189,9 @@ export const MenuBar: React.FC<MenuBarProps> = ({
               sounds.playClick();
               openWindow('analytics');
             }}
-            className="text-slate-700 hover:text-blue-600 transition-colors font-medium flex items-center gap-1"
+            className="text-slate-700 hover:text-blue-600 transition-colors font-medium"
           >
-            <span>Analytics</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Analytics
           </button>
           <button
             onClick={() => {

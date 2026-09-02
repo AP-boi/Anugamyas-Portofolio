@@ -278,9 +278,8 @@ export const AnalyticsApp: React.FC = () => {
               <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs flex flex-col justify-between">
                 <div className="flex items-center justify-between text-slate-500">
                   <span className="text-[11px] font-semibold uppercase tracking-wider font-mono">Active Right Now</span>
-                  <div className="flex items-center space-x-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>ONLINE</span>
+                  <div className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
+                    ONLINE
                   </div>
                 </div>
                 <div className="mt-2">

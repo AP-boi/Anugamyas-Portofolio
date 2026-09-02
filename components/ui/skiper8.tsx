@@ -128,8 +128,7 @@ export const Skiper8: React.FC<Skiper8Props> = ({
               </motion.div>
 
               {/* Main Animated Word Display */}
-              <div className="relative flex items-center justify-center space-x-3.5 z-10">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+              <div className="relative flex items-center justify-center z-10">
                 <AnimatePresence mode="wait">
                   <motion.p
                     key={words[index]}

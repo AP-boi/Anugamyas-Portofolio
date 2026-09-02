@@ -121,9 +121,8 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
                       <ShieldCheck className="w-4 h-4 text-amber-400" />
                       <span>VISITOR INTELLIGENCE AUDIT — LIVE NODE TELEMETRY</span>
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-bold flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span>ONLINE</span>
+                    <span className="text-[10px] text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                      ONLINE
                     </span>
                   </div>
                   <div className="flex space-x-4 text-[11px] text-slate-300 pt-0.5">
