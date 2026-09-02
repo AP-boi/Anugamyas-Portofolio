@@ -345,7 +345,7 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
     });
   },
 
-  theme: 'dark',
+  theme: 'light',
   setTheme: (theme: 'light' | 'dark') => {
     if (typeof document !== 'undefined') {
       if (theme === 'dark') {

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 
 interface APLogoProps {
   className?: string;
@@ -23,8 +24,11 @@ export const APLogo: React.FC<APLogoProps> = ({
       : '/icons/ap-logo-black.png';
 
   return (
-    <span
-      className={`inline-flex items-center justify-center select-none pointer-events-none ${className} ${
+    <motion.span
+      whileHover={{ scale: 1.15, rotate: [0, -6, 6, 0] }}
+      whileTap={{ scale: 0.9 }}
+      transition={{ type: 'spring', stiffness: 350, damping: 18 }}
+      className={`inline-flex items-center justify-center select-none ${className} ${
         glow ? 'drop-shadow-[0_0_20px_rgba(255,255,255,0.85)]' : ''
       }`}
       style={{ width: size, height: size ? `${size * 0.6}px` : undefined }}
@@ -32,9 +36,9 @@ export const APLogo: React.FC<APLogoProps> = ({
       <img
         src={imgSrc}
         alt="AP Monogram"
-        className="w-full h-full object-contain pointer-events-none select-none"
+        className="w-full h-full object-contain pointer-events-none select-none transition-all duration-300"
       />
-    </span>
+    </motion.span>
   );
 };
 

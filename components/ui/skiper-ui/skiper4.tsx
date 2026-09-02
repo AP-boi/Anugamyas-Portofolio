@@ -33,20 +33,29 @@ export const ThemeToggleButton1 = ({
   };
 
   return (
-    <button
+    <motion.button
       type="button"
       title={title}
       aria-label={title}
+      whileHover={{ scale: 1.15, rotate: isDark ? -15 : 15 }}
+      whileTap={{ scale: 0.88 }}
+      transition={{ type: "spring", stiffness: 300, damping: 15 }}
       className={cn(
-        "rounded-full bg-black text-white transition-all duration-300 active:scale-95 cursor-pointer flex items-center justify-center p-1",
+        "rounded-full bg-slate-950 dark:bg-slate-900 border border-slate-700/60 dark:border-white/30 text-white cursor-pointer flex items-center justify-center p-0.5 shadow-xs hover:shadow-[0_0_12px_rgba(59,130,246,0.5)] transition-shadow",
         className,
       )}
       onClick={handleToggle}
     >
-      <svg viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <svg
+        viewBox="0 0 240 240"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full overflow-visible"
+      >
         <motion.g
           animate={{ rotate: isDark ? -180 : 0 }}
-          transition={{ ease: "easeInOut", duration: 0.35 }}
+          transition={{ type: "spring", stiffness: 220, damping: 16 }}
+          style={{ transformOrigin: "120px 120px" }}
         >
           <path
             d="M120 67.5C149.25 67.5 172.5 90.75 172.5 120C172.5 149.25 149.25 172.5 120 172.5"
@@ -54,17 +63,18 @@ export const ThemeToggleButton1 = ({
           />
           <path
             d="M120 67.5C90.75 67.5 67.5 90.75 67.5 120C67.5 149.25 90.75 172.5 120 172.5"
-            fill="black"
+            fill="#0f172a"
           />
         </motion.g>
         <motion.path
           animate={{ rotate: isDark ? 180 : 0 }}
-          transition={{ ease: "easeInOut", duration: 0.35 }}
+          transition={{ type: "spring", stiffness: 220, damping: 16 }}
+          style={{ transformOrigin: "120px 120px" }}
           d="M120 3.75C55.5 3.75 3.75 55.5 3.75 120C3.75 184.5 55.5 236.25 120 236.25C184.5 236.25 236.25 184.5 236.25 120C236.25 55.5 184.5 3.75 120 3.75ZM120 214.5V172.5C90.75 172.5 67.5 149.25 67.5 120C67.5 90.75 90.75 67.5 120 67.5V25.5C172.5 25.5 214.5 67.5 214.5 120C214.5 172.5 172.5 214.5 120 214.5Z"
           fill="white"
         />
       </svg>
-    </button>
+    </motion.button>
   );
 };
 

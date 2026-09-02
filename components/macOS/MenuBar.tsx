@@ -294,7 +294,7 @@ export const MenuBar: React.FC<MenuBarProps> = ({
         {/* Skiper4 Animated Theme Toggle (Style 1 as requested) */}
         <div className="flex items-center">
           <ThemeToggleButton1
-            className="w-4 h-4 cursor-pointer"
+            className="w-5 h-5 cursor-pointer"
             isDark={theme === 'dark'}
             onToggle={() => {
               sounds.playClick();
