@@ -265,13 +265,13 @@ Type "help" to view available system commands.`;
   };
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95 select-none overflow-hidden">
-      {/* Top macOS App Subheader Bar (Matching Finder, Notes, Analytics) */}
-      <div className="flex items-center justify-between pb-2 border-b border-slate-200 flex-shrink-0">
+    <div className="flex flex-col h-full space-y-2.5 text-slate-100 p-3.5 bg-slate-950 select-none overflow-hidden font-sans">
+      {/* Top macOS App Subheader Bar */}
+      <div className="flex items-center justify-between pb-2 border-b border-slate-800 flex-shrink-0">
         <div className="flex items-center space-x-2.5">
           <img src="/icons/terminal.png" alt="Terminal" className="w-5 h-5 rounded-md object-contain shadow-xs" />
-          <span className="text-xs font-bold text-slate-900">Terminal — zsh</span>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-600">
+          <span className="text-xs font-bold text-slate-200">Terminal — zsh</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700 text-slate-400">
             {isAdmin ? '👑 Administrator' : 'Guest / Visitor'}
           </span>
         </div>
@@ -281,40 +281,40 @@ Type "help" to view available system commands.`;
           {isAdmin && (
             <button
               onClick={() => executeCommand('check')}
-              className="px-2 py-1 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[10px] font-bold flex items-center gap-1 transition-colors"
+              className="px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-bold flex items-center gap-1 transition-colors"
             >
-              <ShieldCheck className="w-3 h-3 text-amber-700" />
+              <ShieldCheck className="w-3 h-3 text-amber-400" />
               <span>Check Visitors</span>
             </button>
           )}
 
           <button
             onClick={() => executeCommand('neofetch')}
-            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+            className="px-2 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 text-[10px] font-semibold flex items-center gap-1 transition-colors"
           >
-            <Cpu className="w-3 h-3 text-cyan-600" />
+            <Cpu className="w-3 h-3 text-cyan-400" />
             <span>Neofetch</span>
           </button>
 
           <button
             onClick={() => executeCommand('projects')}
-            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+            className="px-2 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 text-[10px] font-semibold flex items-center gap-1 transition-colors"
           >
-            <FolderGit2 className="w-3 h-3 text-blue-600" />
+            <FolderGit2 className="w-3 h-3 text-blue-400" />
             <span>Projects</span>
           </button>
 
           <button
             onClick={() => executeCommand('help')}
-            className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[10px] font-semibold flex items-center gap-1 transition-colors"
+            className="px-2 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700/80 text-[10px] font-semibold flex items-center gap-1 transition-colors"
           >
-            <HelpCircle className="w-3 h-3 text-slate-600" />
+            <HelpCircle className="w-3 h-3 text-slate-400" />
             <span>Help</span>
           </button>
 
           <button
             onClick={() => setHistory([])}
-            className="p-1 rounded-lg hover:bg-slate-200 text-slate-500 hover:text-slate-900 transition-colors"
+            className="p-1 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors"
             title="Clear Buffer"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -325,7 +325,7 @@ Type "help" to view available system commands.`;
       {/* Inner Sleek Dark Terminal Console Pane */}
       <div
         onClick={() => inputRef.current?.focus()}
-        className="flex-1 min-h-0 w-full rounded-2xl bg-slate-950 text-slate-100 p-4 border border-slate-800 shadow-inner flex flex-col font-mono text-xs overflow-hidden cursor-text"
+        className="flex-1 min-h-0 w-full rounded-xl bg-slate-950 text-slate-100 p-2 flex flex-col font-mono text-xs overflow-hidden cursor-text"
       >
         <div
           ref={scrollContainerRef}

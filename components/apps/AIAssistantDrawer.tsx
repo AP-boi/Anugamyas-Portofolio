@@ -160,19 +160,19 @@ export const AIAssistantDrawer: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-900/95 text-slate-100 select-none overflow-hidden font-sans">
-      {/* Siri Apple Intelligence Iridescent Glowing Header */}
-      <div className="relative p-3.5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 flex-shrink-0">
+    <div className="flex flex-col h-full w-full bg-slate-900 text-slate-100 select-none overflow-hidden font-sans">
+      {/* Siri Apple Intelligence Clean Header */}
+      <div className="relative p-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-900 flex-shrink-0">
         <div className="flex items-center space-x-3">
-          {/* 3D Siri Icon */}
-          <div className="relative w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 shadow-md">
+          {/* Siri Icon */}
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
             <img src="/icons/siri.png" alt="Siri" className="w-full h-full object-contain rounded-lg" />
           </div>
 
           <div>
             <div className="flex items-center space-x-1.5">
               <h3 className="text-xs font-bold text-white tracking-wide">AP Intelligence</h3>
-              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30">
+              <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
                 AP-AI
               </span>
             </div>
