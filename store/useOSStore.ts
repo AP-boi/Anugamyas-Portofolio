@@ -61,7 +61,7 @@ export const APP_REGISTRY: Record<AppId, AppMetadata> = {
     title: 'Activity Monitor — Visitor Intelligence',
     description: 'Real-time visitor logs, login tracker, telemetry and aggregate analytics',
     iconName: 'Activity',
-    iconSrc: '/icons/settings.png',
+    iconSrc: '/icons/activity.png',
     defaultPosition: { x: 120, y: 70 },
     defaultSize: { width: 960, height: 620 },
   },

@@ -146,9 +146,7 @@ export const AnalyticsApp: React.FC = () => {
       {/* Top Application Toolbar */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-slate-100/90 border-b border-slate-200 backdrop-blur-md z-10 select-none">
         <div className="flex items-center space-x-3">
-          <div className="p-1.5 rounded-lg bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-xs">
-            <Activity className="w-4 h-4" />
-          </div>
+          <img src="/icons/activity.png" alt="Activity Monitor" className="w-8 h-8 rounded-lg object-contain shadow-xs" />
           <div>
             <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
               Visitor Intelligence & Login Tracker

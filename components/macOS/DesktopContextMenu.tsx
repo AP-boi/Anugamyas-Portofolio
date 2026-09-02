@@ -65,7 +65,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <FolderPlus className="w-3.5 h-3.5 text-blue-600 group-hover:text-white" />
+          <img src="/icons/folder.png" alt="" className="w-3.5 h-3.5 object-contain" />
           <span>New Folder / Projects</span>
         </div>
       </button>
@@ -78,7 +78,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <Image className="w-3.5 h-3.5 text-purple-600 group-hover:text-white" />
+          <img src="/icons/photos.png" alt="" className="w-3.5 h-3.5 object-contain" />
           <span>Change Wallpaper</span>
         </div>
       </button>
@@ -93,7 +93,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <Activity className="w-3.5 h-3.5 text-cyan-600 group-hover:text-white" />
+          <img src="/icons/activity.png" alt="" className="w-3.5 h-3.5 object-contain rounded-xs" />
           <span>Visitor Intelligence</span>
         </div>
       </button>
@@ -106,7 +106,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <Terminal className="w-3.5 h-3.5 text-emerald-600 group-hover:text-white" />
+          <img src="/icons/terminal.png" alt="" className="w-3.5 h-3.5 object-contain rounded-xs" />
           <span>Open in Terminal</span>
         </div>
         <span className="text-[10px] text-slate-400 group-hover:text-white font-mono">⌘K</span>
@@ -120,7 +120,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
       >
         <div className="flex items-center space-x-2">
-          <Info className="w-3.5 h-3.5 text-slate-500 group-hover:text-white" />
+          <img src="/icons/settings.png" alt="" className="w-3.5 h-3.5 object-contain rounded-xs" />
           <span>About Portfolio Architecture</span>
         </div>
       </button>

@@ -313,7 +313,7 @@ export default function Home() {
         <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200">
             <div className="flex items-center space-x-2 text-slate-900 font-bold text-xs">
-              <Activity className="w-4 h-4 text-cyan-600" />
+              <img src="/icons/settings.png" alt="Settings" className="w-5 h-5 rounded object-contain shadow-xs" />
               <span>Real-Time Edge Node Telemetry</span>
             </div>
             <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold">

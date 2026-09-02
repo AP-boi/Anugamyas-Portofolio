@@ -75,8 +75,16 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
       title: 'Activity Monitor — Visitor Intelligence',
       category: 'Applications',
       subtitle: 'Real-time visitor logs, analytics, and Node.js telemetry',
-      iconSrc: '/icons/settings.png',
+      iconSrc: '/icons/activity.png',
       action: () => openWindow('analytics'),
+    },
+    {
+      id: 'app-settings',
+      title: 'System Settings — Telemetry',
+      category: 'Applications',
+      subtitle: 'Real-time connection performance & edge telemetry monitor',
+      iconSrc: '/icons/settings.png',
+      action: () => openWindow('system-info'),
     },
     {
       id: 'app-siri',

@@ -225,13 +225,13 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                 {loginMode === 'admin'
                   ? 'Administrator Access'
                   : loginMode === 'guest'
-                  ? 'Instant Guest Login'
-                  : 'Welcome to Anugamya’s Portfolio'}
+                  ? 'Instant Guest Access'
+                  : 'Visitor Sign-Up & Login'}
               </h2>
               <p className="text-xs text-slate-600 mt-0.5">
                 {loginMode === 'admin'
                   ? 'Enter owner passcode to manage analytics'
-                  : 'Sign in to record your visit & explore the OS'}
+                  : 'Create your visitor profile to record your session & explore the OS'}
               </p>
             </div>
 
@@ -249,7 +249,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                     : 'hover:text-slate-900'
                 }`}
               >
-                Visitor
+                Sign Up
               </button>
               <button
                 type="button"

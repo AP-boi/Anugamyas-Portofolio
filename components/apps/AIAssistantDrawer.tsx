@@ -157,12 +157,9 @@ export const AIAssistantDrawer: React.FC = () => {
       {/* Siri Apple Intelligence Iridescent Glowing Header */}
       <div className="relative p-3.5 border-b border-white/10 flex items-center justify-between bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 flex-shrink-0">
         <div className="flex items-center space-x-3">
-          {/* Glowing Animated Siri Orb */}
-          <div className="relative w-8 h-8 rounded-full flex items-center justify-center overflow-hidden shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-            <div className="absolute inset-0 bg-gradient-to-tr from-cyan-400 via-fuchsia-500 to-amber-400 animate-spin" style={{ animationDuration: '4s' }} />
-            <div className="absolute inset-0.5 rounded-full bg-slate-950 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-cyan-300 animate-pulse" />
-            </div>
+          {/* 3D Siri Icon */}
+          <div className="relative w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 shadow-md">
+            <img src="/icons/siri.png" alt="Siri" className="w-full h-full object-contain rounded-lg" />
           </div>
 
           <div>

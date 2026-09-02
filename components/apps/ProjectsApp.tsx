@@ -153,9 +153,9 @@ export const ProjectsApp: React.FC = () => {
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
-          <div className="flex items-center space-x-1.5">
-            <img src="/icons/finder.png" alt="" className="w-4 h-4 rounded object-cover shadow-xs" />
-            <span className="text-xs font-semibold text-slate-900">Projects & Repositories</span>
+          <div className="flex items-center space-x-2">
+            <img src="/icons/finder.png" alt="Finder" className="w-5 h-5 rounded-md object-contain shadow-xs" />
+            <span className="text-xs font-bold text-slate-900">Finder — Projects & Repositories</span>
           </div>
           <span className="text-[11px] font-mono text-slate-500">({filteredProjects.length} items)</span>
         </div>
@@ -188,7 +188,7 @@ export const ProjectsApp: React.FC = () => {
                     isSelected ? 'bg-blue-600 text-white font-semibold shadow-xs' : 'text-slate-700 hover:bg-slate-200/70 hover:text-slate-900'
                   }`}
                 >
-                  <Folder className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-blue-600'}`} />
+                  <img src="/icons/folder.png" alt="" className={`w-3.5 h-3.5 object-contain ${isSelected ? 'brightness-200' : ''}`} />
                   <span className="truncate">{cat}</span>
                 </button>
               );

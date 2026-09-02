@@ -349,9 +349,7 @@ Type ${isAdmin ? '"check" to audit visitor logs or ' : ''}"help" to view availab
       {/* Top macOS App Subheader Bar (Matching Finder, Notes, Analytics) */}
       <div className="flex items-center justify-between pb-2 border-b border-slate-200 flex-shrink-0">
         <div className="flex items-center space-x-2.5">
-          <div className="w-5 h-5 rounded-md bg-gradient-to-tr from-slate-900 to-slate-700 flex items-center justify-center text-white shadow-xs">
-            <TerminalIcon className="w-3 h-3 text-emerald-400" />
-          </div>
+          <img src="/icons/terminal.png" alt="Terminal" className="w-5 h-5 rounded-md object-contain shadow-xs" />
           <span className="text-xs font-bold text-slate-900">Terminal — zsh</span>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 border border-slate-300 text-slate-600">
             {isAdmin ? '👑 Administrator' : 'Guest / Visitor'}

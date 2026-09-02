@@ -76,7 +76,7 @@ export const Launchpad: React.FC<LaunchpadProps> = ({ isOpen, onClose }) => {
                   <img
                     src={app.iconSrc}
                     alt={app.title}
-                    className="w-full h-full object-contain drop-shadow-md pointer-events-none"
+                    className="w-full h-full object-contain rounded-[14px] drop-shadow-md pointer-events-none"
                   />
                 ) : (
                   <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center text-white font-bold">

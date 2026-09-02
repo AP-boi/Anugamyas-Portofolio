@@ -25,6 +25,7 @@ const DOCK_ITEMS: DockIconConfig[] = [
   {
     id: 'launchpad',
     label: 'Launchpad (F4)',
+    iconSrc: '/icons/launchpad.png',
     isSpecial: true,
   },
   {
@@ -50,7 +51,7 @@ const DOCK_ITEMS: DockIconConfig[] = [
   {
     id: 'analytics',
     label: 'Activity Monitor — Visitor Intelligence',
-    customIcon: 'activity',
+    iconSrc: '/icons/activity.png',
   },
   {
     id: 'camera',
@@ -160,9 +161,14 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                   <DockTooltip label={item.label} />
                   <motion.div
                     animate={isBouncing ? bounceKeyframes : { y: 0, scaleX: 1, scaleY: 1 }}
-                    className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-700 via-slate-800 to-slate-900 border border-white/20 shadow-md flex items-center justify-center text-white origin-bottom"
+                    className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all origin-bottom"
                   >
-                    <Grid className="w-6 h-6 text-white" />
+                    <img
+                      src="/icons/launchpad.png"
+                      alt={item.label}
+                      className="w-full h-full object-contain select-none pointer-events-none transform transition-transform group-hover/icon:scale-105 rounded-[14px]"
+                      draggable={false}
+                    />
                   </motion.div>
                 </DockIcon>
               );
@@ -186,15 +192,11 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                   animate={isBouncing ? bounceKeyframes : { y: 0, scaleX: 1, scaleY: 1 }}
                   className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all origin-bottom"
                 >
-                  {item.customIcon === 'activity' ? (
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-900 via-slate-800 to-slate-950 border border-emerald-500/30 shadow-lg flex items-center justify-center text-emerald-400 group-hover/icon:scale-105 transition-transform">
-                      <Activity className="w-6 h-6 animate-pulse" />
-                    </div>
-                  ) : item.iconSrc ? (
+                  {item.iconSrc ? (
                     <img
                       src={item.iconSrc}
                       alt={item.label}
-                      className="w-full h-full object-contain select-none pointer-events-none transform transition-transform group-hover/icon:scale-105"
+                      className="w-full h-full object-contain select-none pointer-events-none transform transition-transform group-hover/icon:scale-105 rounded-[14px]"
                       draggable={false}
                     />
                   ) : (
