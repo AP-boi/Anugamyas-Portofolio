@@ -127,7 +127,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           dragControls={dragControls}
           dragMomentum={false}
           dragElastic={false}
-          className={`flex flex-col rounded-2xl overflow-hidden ${
+          className={`flex flex-col rounded-2xl overflow-hidden max-w-[calc(100vw-16px)] max-h-[calc(100vh-48px)] ${
             isDarkApp
               ? `border border-slate-700/80 bg-slate-900 text-slate-100 backdrop-blur-[24px] shadow-2xl`
               : `liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${

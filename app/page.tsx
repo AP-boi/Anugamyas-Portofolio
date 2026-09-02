@@ -200,7 +200,7 @@ export default function Home() {
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
           
           {/* Left Desktop Folders Column */}
-          <div className="col-span-3 flex flex-col space-y-7 pt-2 pointer-events-auto z-10">
+          <div className="col-span-3 hidden md:flex flex-col space-y-6 pt-2 pointer-events-auto z-10">
             {DESKTOP_FOLDERS.map((folder) => (
               <ImagesBadge
                 key={folder.id}
@@ -217,7 +217,7 @@ export default function Home() {
           </div>
 
           {/* Center Desktop Hero Title Section */}
-          <div className="col-span-6 flex flex-col items-center justify-center text-center pointer-events-auto select-none z-10">
+          <div className="col-span-12 md:col-span-6 flex flex-col items-center justify-center text-center pointer-events-auto select-none z-10">
             <h2 className="text-2xl md:text-3xl font-light text-slate-800 tracking-wide drop-shadow-xs">
               Hey, I'm <span className="font-semibold text-slate-950">Anugamya</span>! Welcome to my
             </h2>
@@ -239,7 +239,7 @@ export default function Home() {
           </div>
 
           {/* Right Desktop Widgets Column */}
-          <div className="col-span-3 flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
+          <div className="col-span-3 hidden lg:flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
             <AnalogClockWidget />
 
             <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
