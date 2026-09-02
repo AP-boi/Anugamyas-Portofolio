@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { useOSStore } from '@/store/useOSStore';
+import { SmoothInput } from '@/components/ui/skiper-ui/skiper106';
 
 interface ChatMessage {
   id: string;
@@ -307,7 +308,7 @@ export const AIAssistantDrawer: React.FC = () => {
         ))}
       </div>
 
-      {/* Message Input Bar */}
+      {/* Message Input Bar with Skiper106 Smooth Caret Texting Animation */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -315,18 +316,20 @@ export const AIAssistantDrawer: React.FC = () => {
         }}
         className="p-3 border-t border-white/10 bg-slate-950 flex items-center space-x-2 flex-shrink-0"
       >
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputQuery}
-          onChange={(e) => setInputQuery(e.target.value)}
-          placeholder="Ask Siri about Anugamya's projects, tech stack, WebGL..."
-          className="flex-1 px-3.5 py-2 rounded-xl bg-white/10 border border-white/15 text-xs text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/50"
-        />
+        <div className="flex-1">
+          <SmoothInput
+            value={inputQuery}
+            onChange={(e) => setInputQuery(e.target.value)}
+            placeholder="Ask Siri about Anugamya's projects, tech stack, WebGL..."
+            wrapperClassName="bg-white/10 border-white/15 rounded-xl p-2"
+            className="text-xs text-white placeholder:text-slate-400"
+            caretColor="bg-fuchsia-400 shadow-[0_0_8px_rgba(232,121,249,0.8)]"
+          />
+        </div>
         <button
           type="submit"
           disabled={!inputQuery.trim() || isTyping}
-          className="w-8 h-8 rounded-xl bg-gradient-to-tr from-cyan-500 to-fuchsia-600 text-white flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shadow-md cursor-pointer"
+          className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-fuchsia-600 text-white flex items-center justify-center hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 transition-all shadow-md cursor-pointer flex-shrink-0"
         >
           <Send className="w-3.5 h-3.5" />
         </button>
