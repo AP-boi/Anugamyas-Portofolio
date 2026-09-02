@@ -163,17 +163,34 @@ export default function Home() {
       onContextMenu={handleContextMenu}
       className="fixed inset-0 w-full h-full overflow-hidden select-none bg-slate-100"
     >
-      {/* Authentic Anugamya OS Startup Boot Screen */}
-      <BootScreen
-        onComplete={() => {
-          if (!currentUser) {
-            lockScreen();
-          }
-        }}
+      {/* Top System Menu Bar with Dynamic Island - Always Fixed at Top */}
+      <MenuBar
+        onToggleSpotlight={() => setIsSpotlightOpen((prev) => !prev)}
+        onToggleControlCenter={() => setIsControlCenterOpen((prev) => !prev)}
       />
 
-      {/* macOS Sonoma Interactive Lock Screen */}
-      <MacOSLockScreen />
+      {/* Main Desktop Background: Animated Wallpaper */}
+      <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
+
+      {/* Dynamic Display Dimmer Overlay for Live Brightness Control */}
+      {brightness < 100 && (
+        <div
+          className="pointer-events-none fixed inset-0 z-[99990] bg-black transition-opacity duration-200"
+          style={{ opacity: ((100 - brightness) / 100) * 0.72 }}
+        />
+      )}
+
+      {/* Desktop Tactile Selection Marquee Box */}
+      <DesktopMarquee />
+
+      {/* Desktop Right-Click Context Menu */}
+      <DesktopContextMenu
+        x={contextMenu.x}
+        y={contextMenu.y}
+        isOpen={contextMenu.isOpen}
+        onClose={() => setContextMenu((prev) => ({ ...prev, isOpen: false }))}
+        onChangeWallpaper={handleCycleWallpaper}
+      />
 
       {/* Spotlight Universal Search Modal (⌘Space) */}
       <SpotlightSearch
@@ -189,34 +206,17 @@ export default function Home() {
         currentWallpaper={WALLPAPERS[wallpaperIndex]}
       />
 
-      {/* Desktop Right-Click Context Menu */}
-      <DesktopContextMenu
-        x={contextMenu.x}
-        y={contextMenu.y}
-        isOpen={contextMenu.isOpen}
-        onClose={() => setContextMenu((prev) => ({ ...prev, isOpen: false }))}
-        onChangeWallpaper={handleCycleWallpaper}
+      {/* Authentic Anugamya OS Startup Boot Screen */}
+      <BootScreen
+        onComplete={() => {
+          if (!currentUser) {
+            lockScreen();
+          }
+        }}
       />
 
-      {/* Desktop Tactile Selection Marquee Box */}
-      <DesktopMarquee />
-
-      {/* Main Desktop Background: Animated Wallpaper */}
-      <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
-
-      {/* Dynamic Display Dimmer Overlay for Live Brightness Control */}
-      {brightness < 100 && (
-        <div
-          className="pointer-events-none fixed inset-0 z-[99990] bg-black transition-opacity duration-200"
-          style={{ opacity: ((100 - brightness) / 100) * 0.72 }}
-        />
-      )}
-
-      {/* Top System Menu Bar with Dynamic Island */}
-      <MenuBar
-        onToggleSpotlight={() => setIsSpotlightOpen((prev) => !prev)}
-        onToggleControlCenter={() => setIsControlCenterOpen((prev) => !prev)}
-      />
+      {/* macOS Sonoma Interactive Lock Screen */}
+      <MacOSLockScreen />
 
       {/* Desktop Main Workspace Surface Area */}
       <div className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between">
