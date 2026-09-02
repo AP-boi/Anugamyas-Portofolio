@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { APLogo } from '@/components/ui/APLogo';
+import { SmoothInput } from '@/components/ui/skiper-ui/skiper106';
 
 interface MacOSLockScreenProps {
   onUnlock?: () => void;
@@ -310,12 +311,14 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Your Name *</label>
                   <div className="flex items-center px-3 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all shadow-inner">
                     <User className="w-3.5 h-3.5 text-slate-400 mr-2 flex-shrink-0" />
-                    <input
+                    <SmoothInput
                       type="text"
                       placeholder="e.g. Sundar Pichai, Jane Doe"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
+                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
                       className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                      caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       autoFocus
                     />
                   </div>
@@ -326,12 +329,14 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                     <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Role / Title</label>
                     <div className="flex items-center px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                       <Briefcase className="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" />
-                      <input
+                      <SmoothInput
                         type="text"
                         placeholder="Recruiter / Dev"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
+                        wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
                         className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                        caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       />
                     </div>
                   </div>
@@ -339,12 +344,14 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                     <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Company / Org</label>
                     <div className="flex items-center px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                       <Building className="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" />
-                      <input
+                      <SmoothInput
                         type="text"
                         placeholder="Google / Self"
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
+                        wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
                         className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                        caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                       />
                     </div>
                   </div>
@@ -354,12 +361,14 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Quick Note to Anugamya (Optional)</label>
                   <div className="flex items-center px-3 py-1.5 bg-white border border-slate-300 rounded-xl focus-within:border-blue-500 transition-all shadow-inner">
                     <MessageSquare className="w-3.5 h-3.5 text-slate-400 mr-2 flex-shrink-0" />
-                    <input
+                    <SmoothInput
                       type="text"
                       placeholder="e.g. Loved Bharat Dekho! Let's connect."
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
+                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
                       className="w-full bg-transparent text-xs text-slate-900 outline-none placeholder:text-slate-400"
+                      caretColor="bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.7)]"
                     />
                   </div>
                 </div>
@@ -398,12 +407,14 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                   <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Admin Passcode</label>
                   <div className="flex items-center px-3 py-2 bg-white border border-slate-300 rounded-xl focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-100 transition-all shadow-inner">
                     <KeyRound className="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" />
-                    <input
+                    <SmoothInput
                       type="password"
                       placeholder="Enter owner passcode ('2026')"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
+                      wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none flex-1"
                       className="w-full bg-transparent text-xs text-slate-900 outline-none"
+                      caretColor="bg-indigo-600 shadow-[0_0_8px_rgba(79,70,229,0.8)]"
                       autoFocus
                     />
                   </div>

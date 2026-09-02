@@ -54,27 +54,33 @@ const getPasswordChar = () => {
   return "\u2022";
 };
 
-export const SmoothInput = ({
-  className,
-  wrapperClassName,
-  value,
-  defaultValue,
-  onChange,
-  onBlur,
-  onFocus,
-  type = "text",
-  placeholder,
-  style,
-  caretColor = "bg-blue-600 dark:bg-cyan-400",
-  ...props
-}: SmoothInputProps) => {
-  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
-  const caretX = useMotionValue(0);
-  const caretOpacity = useMotionValue(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
-  const prefersReducedMotion = useReducedMotion();
+export const SmoothInput = React.forwardRef<HTMLInputElement, SmoothInputProps>(
+  (
+    {
+      className,
+      wrapperClassName,
+      value,
+      defaultValue,
+      onChange,
+      onBlur,
+      onFocus,
+      type = "text",
+      placeholder,
+      style,
+      caretColor = "bg-blue-600 dark:bg-cyan-400",
+      ...props
+    },
+    forwardedRef,
+  ) => {
+    const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+    const caretX = useMotionValue(0);
+    const caretOpacity = useMotionValue(0);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const measureRef = useRef<HTMLSpanElement>(null);
+    const prefersReducedMotion = useReducedMotion();
+
+    React.useImperativeHandle(forwardedRef, () => inputRef.current as HTMLInputElement);
 
   const isControlled = value !== undefined;
   const PASSWORD_CHAR = getPasswordChar();
@@ -315,8 +321,11 @@ export const SmoothInput = ({
         />
       </div>
     </div>
-  );
-};
+    );
+  }
+);
+
+SmoothInput.displayName = "SmoothInput";
 
 export const Skiper106 = () => {
   return (

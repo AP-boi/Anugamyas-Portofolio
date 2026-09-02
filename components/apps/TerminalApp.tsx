@@ -14,6 +14,7 @@ import {
   FolderGit2,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
+import { SmoothInput } from '@/components/ui/skiper-ui/skiper106';
 
 export const TerminalApp: React.FC = () => {
   const { openWindow, telemetry, isAdmin, currentUser } = useOSStore();
@@ -373,17 +374,21 @@ Type "help" to view available system commands.`;
           </span>
           <span className="text-cyan-400 font-bold">~</span>
           <span className="text-slate-400">{isAdmin ? '#' : '$'}</span>
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputCommand}
-            onChange={(e) => setInputCommand(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={isAdmin ? "Type 'check' for visitor log..." : "Type 'help' for commands..."}
-            className="flex-1 bg-transparent text-white focus:outline-none font-mono caret-cyan-400"
-            autoFocus
-            spellCheck={false}
-          />
+          <div className="flex-1">
+            <SmoothInput
+              ref={inputRef}
+              type="text"
+              value={inputCommand}
+              onChange={(e) => setInputCommand(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={isAdmin ? "Type 'check' for visitor log..." : "Type 'help' for commands..."}
+              wrapperClassName="bg-transparent border-none p-0 rounded-none shadow-none"
+              className="bg-transparent text-white focus:outline-none font-mono text-xs"
+              caretColor="bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.9)]"
+              autoFocus
+              spellCheck={false}
+            />
+          </div>
           <button type="submit" className="text-slate-500 hover:text-cyan-400 transition-colors cursor-pointer">
             <CornerDownLeft className="w-3.5 h-3.5" />
           </button>
