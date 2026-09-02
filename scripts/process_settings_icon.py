@@ -1,0 +1,89 @@
+import os
+from PIL import Image, ImageFilter
+from collections import deque
+
+uploaded_dir = r"C:\Users\Neetu\.gemini\antigravity-ide\brain\dcf31eb3-d018-45f2-b201-d5af331c1e91\.user_uploaded"
+output_dir = r"c:\Users\Neetu\Downloads\Anugamya's portofolio\public\icons"
+
+fname = "media_1788359523674.png"
+img = Image.open(os.path.join(uploaded_dir, fname)).convert("RGBA")
+w, h = img.size
+pixels = img.load()
+
+visited = [[False]*w for _ in range(h)]
+queue = deque()
+
+# Add border pixels that are checkerboard (r > 230, g > 230, b > 230, abs diff <= 4)
+for x in range(w):
+    for y in [0, h-1]:
+        r, g, b, a = pixels[x, y]
+        diff = max(abs(r - g), abs(g - b), abs(r - b))
+        if r >= 230 and g >= 230 and b >= 230 and diff <= 6:
+            visited[y][x] = True
+            queue.append((x, y))
+
+for y in range(h):
+    for x in [0, w-1]:
+        if not visited[y][x]:
+            r, g, b, a = pixels[x, y]
+            diff = max(abs(r - g), abs(g - b), abs(r - b))
+            if r >= 230 and g >= 230 and b >= 230 and diff <= 6:
+                visited[y][x] = True
+                queue.append((x, y))
+
+while queue:
+    cx, cy = queue.popleft()
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nx, ny = cx + dx, cy + dy
+        if 0 <= nx < w and 0 <= ny < h and not visited[ny][nx]:
+            nr, ng, nb, na = pixels[nx, ny]
+            diff = max(abs(nr - ng), abs(ng - nb), abs(nr - nb))
+            # Checkerboard is pure white/light gray
+            if nr >= 230 and ng >= 230 and nb >= 230 and diff <= 5:
+                visited[ny][nx] = True
+                queue.append((nx, ny))
+
+mask = Image.new("L", (w, h), 255)
+mask_pixels = mask.load()
+for y in range(h):
+    for x in range(w):
+        if visited[y][x]:
+            mask_pixels[x, y] = 0
+
+feathered_mask = mask.filter(ImageFilter.GaussianBlur(radius=0.7))
+
+out_img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+for y in range(h):
+    for x in range(w):
+        r, g, b, a = pixels[x, y]
+        m_alpha = feathered_mask.getpixel((x, y))
+        if m_alpha > 0:
+            out_img.putpixel((x, y), (r, g, b, int(m_alpha)))
+
+# Crop to squircle bounding box with 2px padding
+bbox = out_img.getbbox()
+if bbox:
+    bw = bbox[2] - bbox[0]
+    bh = bbox[3] - bbox[1]
+    max_dim = max(bw, bh)
+    cx = (bbox[0] + bbox[2]) // 2
+    cy = (bbox[1] + bbox[3]) // 2
+    sq_box = (
+        max(0, cx - max_dim // 2 - 2),
+        max(0, cy - max_dim // 2 - 2),
+        min(w, cx + (max_dim + 1) // 2 + 2),
+        min(h, cy + (max_dim + 1) // 2 + 2)
+    )
+    cropped_img = out_img.crop(sq_box)
+else:
+    cropped_img = out_img
+
+# Pad to exact square canvas
+cw, ch = cropped_img.size
+sq_dim = max(cw, ch)
+final_img = Image.new("RGBA", (sq_dim, sq_dim), (0, 0, 0, 0))
+final_img.paste(cropped_img, ((sq_dim - cw) // 2, (sq_dim - ch) // 2), cropped_img)
+
+out_path = os.path.join(output_dir, "settings.png")
+final_img.save(out_path, "PNG")
+print(f"Saved settings.png to {out_path} (size={final_img.size}, corner alpha={final_img.getpixel((0,0))[3]})")
