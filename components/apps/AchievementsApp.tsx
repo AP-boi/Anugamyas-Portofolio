@@ -91,7 +91,7 @@ export const AchievementsApp: React.FC = () => {
       <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1.5">
-            <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-cover shadow-xs" />
+            <img src="/icons/notes.png" alt="" className="w-4 h-4 rounded object-contain shadow-xs" />
             <span className="font-bold text-xs text-slate-900">Notes — Achievements & Milestones</span>
           </div>
           <div className="h-3 w-px bg-slate-300" />
