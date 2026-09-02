@@ -233,41 +233,41 @@ export const ProjectsApp: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95">
-      <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+    <div className="flex flex-col h-full space-y-3 text-slate-900 dark:text-slate-100 p-3 bg-white/95 dark:bg-slate-950 transition-colors">
+      <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center space-x-3">
           <div className="flex items-center space-x-1">
-            <button className="p-1 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors" title="Back">
+            <button className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Back">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <button className="p-1 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors" title="Forward">
+            <button className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Forward">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
           <div className="flex items-center space-x-2">
             <img src="/icons/finder.png" alt="Finder" className="w-5 h-5 rounded-md object-contain shadow-xs" />
-            <span className="text-xs font-bold text-slate-900">Finder — Projects & Repositories</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white">Finder — Projects & Repositories</span>
           </div>
-          <span className="text-[11px] font-mono text-slate-500">({filteredProjects.length} items)</span>
+          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">({filteredProjects.length} items)</span>
         </div>
 
         <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-1.5 bg-slate-100 border border-slate-300 rounded-md px-2 py-0.5 text-xs text-slate-800">
-            <Search className="w-3 h-3 text-slate-500" />
+          <div className="flex items-center space-x-1.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-2 py-0.5 text-xs text-slate-800 dark:text-slate-200">
+            <Search className="w-3 h-3 text-slate-500 dark:text-slate-400" />
             <input
               type="text"
               placeholder="Search Projects..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none outline-none text-[11px] text-slate-900 placeholder:text-slate-400 w-36"
+              className="bg-transparent border-none outline-none text-[11px] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 w-36"
             />
           </div>
         </div>
       </div>
 
       <div className="flex-1 flex flex-col md:flex-row gap-3 overflow-hidden">
-        <div className="w-full md:w-48 bg-slate-100/80 border border-slate-200 rounded-xl p-2 space-y-1.5">
-          <span className="px-2 text-[10px] font-mono uppercase text-slate-500 tracking-wider font-semibold">Categories</span>
+        <div className="w-full md:w-48 bg-slate-100/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-2 space-y-1.5">
+          <span className="px-2 text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 tracking-wider font-semibold">Categories</span>
           <div className="space-y-0.5">
             {categories.map((cat) => {
               const isSelected = selectedCategory === cat;
@@ -276,7 +276,7 @@ export const ProjectsApp: React.FC = () => {
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center space-x-2 ${
-                    isSelected ? 'bg-blue-600 text-white font-semibold shadow-xs' : 'text-slate-700 hover:bg-slate-200/70 hover:text-slate-900'
+                    isSelected ? 'bg-blue-600 text-white font-semibold shadow-xs' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   <img src="/icons/folder.png" alt="" className={`w-3.5 h-3.5 object-contain ${isSelected ? 'brightness-200' : ''}`} />
@@ -292,22 +292,22 @@ export const ProjectsApp: React.FC = () => {
             {filteredProjects.map((proj) => (
               <div
                 key={proj.id}
-                className="bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs hover:border-blue-500/60 transition-all space-y-3"
+                className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-xs hover:border-blue-500/60 transition-all space-y-3"
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h3 className="text-sm font-bold text-slate-900">{proj.title}</h3>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-semibold">
+                      <h3 className="text-sm font-bold text-slate-900 dark:text-white">{proj.title}</h3>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/60 font-semibold">
                         {proj.category}
                       </span>
                       {proj.featured && (
-                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 font-semibold">
+                        <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700/60 font-semibold">
                           FEATURED
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-slate-600 font-medium mt-1">{proj.tagline}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 font-medium mt-1">{proj.tagline}</p>
                   </div>
 
                   <div className="flex items-center space-x-1.5">
@@ -316,7 +316,7 @@ export const ProjectsApp: React.FC = () => {
                         href={proj.liveDemoUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors border border-blue-200 text-xs font-semibold flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-200 transition-colors border border-blue-200 dark:border-blue-700 text-xs font-semibold flex items-center gap-1"
                         title="Open Live Demo"
                       >
                         <span>Demo</span>
@@ -327,7 +327,7 @@ export const ProjectsApp: React.FC = () => {
                       href={proj.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
+                      className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors border border-slate-200 dark:border-slate-700"
                       title="View Source on GitHub"
                     >
                       <Github className="w-4 h-4" />
@@ -335,26 +335,26 @@ export const ProjectsApp: React.FC = () => {
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-700 leading-relaxed">{proj.description}</p>
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{proj.description}</p>
 
                 <div className="grid grid-cols-3 gap-2 pt-1">
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Performance</span>
-                    <div className="text-xs font-bold text-cyan-700 font-mono mt-0.5">{proj.metrics.latency}</div>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-center">
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase font-mono font-semibold">Performance</span>
+                    <div className="text-xs font-bold text-cyan-600 dark:text-cyan-400 font-mono mt-0.5">{proj.metrics.latency}</div>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Architecture</span>
-                    <div className="text-xs font-bold text-emerald-700 font-mono mt-0.5">{proj.metrics.throughput}</div>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-center">
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase font-mono font-semibold">Architecture</span>
+                    <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5">{proj.metrics.throughput}</div>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
-                    <span className="text-[9px] text-slate-500 uppercase font-mono font-semibold">Availability</span>
-                    <div className="text-xs font-bold text-purple-700 font-mono mt-0.5">{proj.metrics.uptime}</div>
+                  <div className="bg-slate-50 dark:bg-slate-800/60 p-2 rounded-lg border border-slate-200 dark:border-slate-700/80 text-center">
+                    <span className="text-[9px] text-slate-500 dark:text-slate-400 uppercase font-mono font-semibold">Availability</span>
+                    <div className="text-xs font-bold text-purple-600 dark:text-purple-400 font-mono mt-0.5">{proj.metrics.uptime}</div>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {proj.technologies.map((tech) => (
-                    <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-700 font-medium">
+                    <span key={tech} className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-medium">
                       {tech}
                     </span>
                   ))}

@@ -73,7 +73,7 @@ const bounceKeyframes = {
 };
 
 export const Dock: React.FC<DockProps> = memo(() => {
-  const { windows, activeAppId, openWindow, focusWindow, minimizeWindow } = useOSStore();
+  const { windows, activeAppId, openWindow, focusWindow, minimizeWindow, theme } = useOSStore();
   // Apps currently playing the launch bounce (macOS bounces icons on open)
   const [bouncingApps, setBouncingApps] = useState<Set<string>>(new Set());
 
@@ -119,7 +119,11 @@ export const Dock: React.FC<DockProps> = memo(() => {
           iconMagnification={90}
           iconDistance={150}
           direction="middle"
-          className="liquid-glass-surface mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[22px] backdrop-saturate-[150%]"
+          className={`mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border backdrop-blur-[24px] backdrop-saturate-[150%] transition-colors ${
+            theme === 'dark'
+              ? 'bg-slate-900/75 border-slate-700/80 shadow-[0_20px_70px_rgba(0,0,0,0.6)]'
+              : 'liquid-glass-surface border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)]'
+          }`}
         >
           {DOCK_ITEMS.map((item, index) => {
             const appId = item.id;

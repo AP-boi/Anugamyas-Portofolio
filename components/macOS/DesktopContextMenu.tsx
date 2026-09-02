@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 import { APLogo } from '@/components/ui/APLogo';
-import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
+import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
 interface DesktopContextMenuProps {
   x: number;
@@ -102,8 +102,8 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group cursor-pointer"
       >
         <div className="flex items-center space-x-2">
-          <ThemeToggleButton2
-            className="w-4 h-4 p-0.5"
+          <ThemeToggleButton1
+            className="w-4 h-4 cursor-pointer"
             isDark={theme === 'dark'}
             onToggle={() => {
               toggleTheme();

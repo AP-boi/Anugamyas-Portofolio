@@ -27,6 +27,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
     closeWindow,
     minimizeWindow,
     toggleMaximizeWindow,
+    theme,
   } = useOSStore();
 
   const windowRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
   const isActive = activeAppId === id;
   const isVisible = windowState?.isOpen && !windowState?.isMinimized;
   const isMaximized = !!windowState?.isMaximized;
-  const isDarkApp = id === 'terminal' || id === 'ai-assistant';
+  const isDarkApp = theme === 'dark';
 
   // Distance from the window's bottom edge to the dock (bottom-center) —
   // used by the genie exit so the window visibly travels *into* the dock.

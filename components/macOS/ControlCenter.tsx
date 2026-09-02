@@ -15,7 +15,7 @@ import {
   Activity,
   Sliders,
 } from 'lucide-react';
-import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
+import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
 interface ControlCenterProps {
   isOpen: boolean;
@@ -102,8 +102,8 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
               }`}
             >
               <div className="flex items-center space-x-2">
-                <ThemeToggleButton2
-                  className="w-7 h-7 p-1"
+                <ThemeToggleButton1
+                  className="w-6 h-6 cursor-pointer"
                   isDark={theme === 'dark'}
                   onToggle={toggleTheme}
                 />

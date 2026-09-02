@@ -68,9 +68,9 @@ export const AnalogClockWidget: React.FC = memo(() => {
   const dateStr = `${dayShorts[time.getDay()]}, ${monthShorts[time.getMonth()]} ${time.getDate()}`;
 
   return (
-    <div className="liquid-glass-card w-48 p-4 text-slate-900 select-none flex flex-col items-center justify-between">
+    <div className="liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-4 text-slate-900 dark:text-slate-100 select-none flex flex-col items-center justify-between transition-colors">
       {/* Analog Clock Dial */}
-      <div className="relative z-10 w-28 h-28 rounded-full bg-slate-100/90 border border-slate-200/90 shadow-inner flex items-center justify-center">
+      <div className="relative z-10 w-28 h-28 rounded-full bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700 shadow-inner flex items-center justify-center">
         {/* Hour Markers (12, 3, 6, 9 emphasized) */}
         {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg, i) => (
           <div
@@ -80,7 +80,7 @@ export const AnalogClockWidget: React.FC = memo(() => {
           >
             <div
               className={`rounded-full ${
-                i % 3 === 0 ? 'w-1 h-2 bg-slate-800' : 'w-0.5 h-1 bg-slate-400/80'
+                i % 3 === 0 ? 'w-1 h-2 bg-slate-800 dark:bg-slate-200' : 'w-0.5 h-1 bg-slate-400/80 dark:bg-slate-500'
               }`}
             />
           </div>
@@ -89,7 +89,7 @@ export const AnalogClockWidget: React.FC = memo(() => {
         {/* Hour Hand — driven by direct DOM ref, not React state */}
         <div
           ref={hourHandRef}
-          className="absolute w-1 bg-slate-900 rounded-full origin-bottom z-10 shadow-sm"
+          className="absolute w-1 bg-slate-900 dark:bg-slate-100 rounded-full origin-bottom z-10 shadow-sm"
           style={{
             height: '28px',
             bottom: '50%',
@@ -100,7 +100,7 @@ export const AnalogClockWidget: React.FC = memo(() => {
         {/* Minute Hand */}
         <div
           ref={minuteHandRef}
-          className="absolute w-0.5 bg-slate-800 rounded-full origin-bottom z-20 shadow-sm"
+          className="absolute w-0.5 bg-slate-800 dark:bg-slate-200 rounded-full origin-bottom z-20 shadow-sm"
           style={{
             height: '38px',
             bottom: '50%',
@@ -108,30 +108,30 @@ export const AnalogClockWidget: React.FC = memo(() => {
           }}
         />
 
-        {/* Second Hand (Signature macOS Red / Orange) — smooth sweep via rAF */}
+        {/* Second Hand — smooth continuous sweep via requestAnimationFrame */}
         <div
           ref={secondHandRef}
-          className="absolute w-0.5 bg-orange-500 rounded-full origin-bottom z-30"
+          className="absolute w-0.5 bg-rose-500 rounded-full origin-bottom z-30"
           style={{
-            height: '42px',
+            height: '46px',
             bottom: '50%',
             willChange: 'transform',
           }}
         />
 
-        {/* Center Pivot Point */}
-        <div className="w-2.5 h-2.5 rounded-full bg-orange-500 border-2 border-white z-40 shadow-sm" />
+        {/* Center Pin */}
+        <div className="relative z-40 w-2.5 h-2.5 rounded-full bg-rose-500 border border-white shadow-xs" />
       </div>
 
-      {/* Digital Time & Date Label below clock */}
-      <div className="flex flex-col items-center mt-2.5">
-        <div className="flex items-baseline space-x-1">
-          <span className="text-base font-bold text-slate-900 tracking-tight">
-            {formattedHours}:{formattedMins}
-          </span>
-          <span className="text-[10px] font-bold text-blue-600">{ampm}</span>
+      {/* Digital Readout Subtitle */}
+      <div className="relative z-10 mt-3 text-center">
+        <div className="text-sm font-bold text-slate-900 dark:text-white tracking-tight">
+          {formattedHours}:{formattedMins}{' '}
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">{ampm}</span>
         </div>
-        <span className="text-[10px] text-slate-500 font-medium mt-0.5">{dateStr}</span>
+        <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide mt-0.5">
+          {dateStr}
+        </div>
       </div>
     </div>
   );

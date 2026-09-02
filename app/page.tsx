@@ -29,13 +29,7 @@ import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Activity, Sun } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
-import {
-  ThemeToggleButton1,
-  ThemeToggleButton2,
-  ThemeToggleButton3,
-  ThemeToggleButton4,
-  ThemeToggleButton5,
-} from '@/components/ui/skiper-ui/skiper4';
+import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
 const DESKTOP_FOLDERS = [
   {
@@ -256,15 +250,15 @@ export default function Home() {
 
           {/* Center Desktop Hero Title Section */}
           <div className="col-span-12 md:col-span-6 flex flex-col items-center justify-center text-center pointer-events-auto select-none z-10">
-            <h2 className="text-2xl md:text-3xl font-light text-slate-800 tracking-wide drop-shadow-xs">
-              Hey, I'm <span className="font-semibold text-slate-950">Anugamya</span>! Welcome to my
+            <h2 className="text-2xl md:text-3xl font-light text-slate-800 dark:text-slate-200 tracking-wide drop-shadow-xs transition-colors">
+              Hey, I'm <span className="font-semibold text-slate-950 dark:text-white">Anugamya</span>! Welcome to my
             </h2>
             <div className="w-full max-w-[620px] h-[160px] md:h-[200px] -mt-2">
               <MeshText
                 text="portfolio"
-                color="#0f172a"
+                color={theme === 'dark' ? "#f8fafc" : "#0f172a"}
                 colorSplit={true}
-                customColors={["#2563eb", "#0284c7"]}
+                customColors={["#3b82f6", "#06b6d4"]}
                 force={22}
                 font={{
                   fontFamily: "Dancing Script",
@@ -280,15 +274,15 @@ export default function Home() {
           <div className="col-span-3 hidden lg:flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
             <AnalogClockWidget />
 
-            <div className="liquid-glass-card w-48 p-3.5 text-slate-900 flex flex-col justify-between select-none">
+            <div className="liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 flex flex-col justify-between select-none transition-colors">
               <div className="relative z-10 flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-light text-slate-900">30°</span>
-                  <p className="text-[10px] text-slate-600 font-medium">Partly Cloudy</p>
+                  <span className="text-2xl font-light text-slate-900 dark:text-white">30°</span>
+                  <p className="text-[10px] text-slate-600 dark:text-slate-400 font-medium">Partly Cloudy</p>
                 </div>
                 <Sun className="w-7 h-7 text-amber-500 drop-shadow" />
               </div>
-              <span className="relative z-10 text-[9px] text-slate-500 font-mono mt-2">New Delhi, India</span>
+              <span className="relative z-10 text-[9px] text-slate-500 dark:text-slate-400 font-mono mt-2">New Delhi, India</span>
             </div>
 
             <CalendarWidget />
@@ -323,67 +317,61 @@ export default function Home() {
         <AIAssistantDrawer />
       </Window>
 
-      {/* 6. System Telemetry Window */}
+      {/* 6. System Telemetry & Appearance Settings Window */}
       <Window id="system-info">
-        <div className="p-4 space-y-4 text-xs font-mono text-slate-800 bg-white/95 h-full">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
-            <div className="flex items-center space-x-2 text-slate-900 font-bold text-xs">
+        <div className="p-4 space-y-4 text-xs font-mono text-slate-800 dark:text-slate-200 bg-white/95 dark:bg-slate-950 h-full transition-colors">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+            <div className="flex items-center space-x-2 text-slate-900 dark:text-white font-bold text-xs">
               <img src="/icons/settings.png" alt="Settings" className="w-5 h-5 rounded object-contain shadow-xs" />
-              <span>Real-Time Edge Node Telemetry</span>
+              <span>Real-Time Edge Node Telemetry & Settings</span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold">
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700 font-semibold">
               SYSTEM ONLINE
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Target Frame Rate</span>
-              <p className="text-base font-bold text-emerald-600 mt-1">{telemetry.fps} FPS (Smoothed)</p>
+            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Target Frame Rate</span>
+              <p className="text-base font-bold text-emerald-600 dark:text-emerald-400 mt-1">{telemetry.fps} FPS (Smoothed)</p>
             </div>
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Edge Connection Latency</span>
-              <p className="text-base font-bold text-cyan-600 mt-1">{telemetry.latencyMs} ms</p>
+            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Edge Connection Latency</span>
+              <p className="text-base font-bold text-cyan-600 dark:text-cyan-400 mt-1">{telemetry.latencyMs} ms</p>
             </div>
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Active Memory</span>
-              <p className="text-base font-bold text-purple-600 mt-1">{telemetry.activeMemoryMb} MB</p>
+            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Active Memory</span>
+              <p className="text-base font-bold text-purple-600 dark:text-purple-400 mt-1">{telemetry.activeMemoryMb} MB</p>
             </div>
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 shadow-xs">
-              <span className="text-[10px] text-slate-500 uppercase font-semibold">Deployed Region</span>
-              <p className="text-base font-bold text-amber-600 mt-1">{telemetry.region}</p>
+            <div className="bg-slate-50 dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-xs">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Deployed Region</span>
+              <p className="text-base font-bold text-amber-600 dark:text-amber-400 mt-1">{telemetry.region}</p>
             </div>
           </div>
-          {/* Appearance & Skiper4 Theme Toggle Suite */}
-          <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2.5 shadow-xs">
+
+          {/* Appearance & Skiper4 Dedicated Theme Toggle */}
+          <div className="bg-slate-50 dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 space-y-2.5 shadow-xs">
             <div className="flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-500 uppercase font-semibold">Appearance Theme</span>
-                <p className="text-xs font-bold text-slate-900 mt-0.5">
-                  Currently: <span className="text-blue-600 font-bold">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">System Appearance</span>
+                <p className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">
+                  Current Theme: <span className="text-blue-600 dark:text-blue-400 font-bold">{theme === 'dark' ? 'Dark Mode' : 'Light Mode'}</span>
+                </p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Switches all windows, apps, menus, dock, and widgets between Dark and Light
                 </p>
               </div>
-              <button
-                onClick={toggleTheme}
-                className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold transition-all shadow-xs cursor-pointer"
-              >
-                Toggle Theme
-              </button>
-            </div>
-            
-            {/* Skiper4 Interactive Toggle Showcase */}
-            <div className="pt-2 border-t border-slate-200">
-              <span className="text-[10px] text-slate-500 font-medium">Skiper4 Animation Styles:</span>
-              <div className="flex items-center space-x-3 mt-1.5">
-                <ThemeToggleButton1 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8" title="Style 1: Yin-Yang Eclipse" />
-                <ThemeToggleButton2 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 2: Rotating Sunburst Rays" />
-                <ThemeToggleButton3 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 3: Dotted Solar Orbit" />
-                <ThemeToggleButton4 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 4: Filament Lightbulb" />
-                <ThemeToggleButton5 isDark={theme === 'dark'} onToggle={toggleTheme} className="size-8 p-1.5" title="Style 5: Crescent Moon Slide" />
+              <div className="flex items-center space-x-2">
+                <ThemeToggleButton1
+                  isDark={theme === 'dark'}
+                  onToggle={toggleTheme}
+                  className="w-9 h-9 cursor-pointer drop-shadow-md"
+                  title="Toggle Global System Theme"
+                />
               </div>
             </div>
           </div>
 
-          <div className="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl text-emerald-800 text-[11px] flex items-center justify-between">
+          <div className="p-3 bg-emerald-50/80 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/80 rounded-xl text-emerald-800 dark:text-emerald-300 text-[11px] flex items-center justify-between">
             <span>Edge Health: <strong>{telemetry.edgeStatus}</strong></span>
             <span><strong>{telemetry.websocketConnections}</strong> active WebSockets</span>
           </div>

@@ -60,28 +60,28 @@ export const CalendarWidget: React.FC = () => {
   };
 
   return (
-    <div className="liquid-glass-card w-48 p-3.5 text-slate-900 select-none flex flex-col justify-between">
+    <div className="liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 select-none flex flex-col justify-between transition-colors">
       {/* Header: Month & Navigation */}
-      <div className="relative z-10 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+      <div className="relative z-10 flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-700">
         <div className="flex items-center space-x-1.5">
           <img src="/icons/calendar.png" alt="" className="w-4 h-4 rounded object-cover shadow-2xs" />
-          <span className="text-[11px] font-bold text-red-600 uppercase tracking-wide">
+          <span className="text-[11px] font-bold text-red-500 uppercase tracking-wide">
             {monthNames[month].slice(0, 3)}
           </span>
-          <span className="text-[11px] font-semibold text-slate-700">{year}</span>
+          <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">{year}</span>
         </div>
 
         <div className="flex items-center space-x-0.5">
           <button
             onClick={handlePrevMonth}
-            className="p-0.5 rounded hover:bg-slate-200/70 text-slate-600 transition-colors"
+            className="p-0.5 rounded hover:bg-slate-200/70 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
             title="Previous Month"
           >
             <ChevronLeft className="w-3 h-3" />
           </button>
           <button
             onClick={handleNextMonth}
-            className="p-0.5 rounded hover:bg-slate-200/70 text-slate-600 transition-colors"
+            className="p-0.5 rounded hover:bg-slate-200/70 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
             title="Next Month"
           >
             <ChevronRight className="w-3 h-3" />
@@ -90,7 +90,7 @@ export const CalendarWidget: React.FC = () => {
       </div>
 
       {/* Weekday Labels Header */}
-      <div className="grid grid-cols-7 text-center pt-1.5 text-[9px] font-bold text-slate-500 font-mono">
+      <div className="grid grid-cols-7 text-center pt-1.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 font-mono">
         <span>S</span>
         <span>M</span>
         <span>T</span>
@@ -104,7 +104,7 @@ export const CalendarWidget: React.FC = () => {
       <div className="grid grid-cols-7 gap-y-0.5 text-center text-[10px] font-medium pt-1">
         {/* Previous Month Days */}
         {prevPadding.map((d, i) => (
-          <div key={`prev-${i}`} className="text-slate-300 py-0.5">
+          <div key={`prev-${i}`} className="text-slate-300 dark:text-slate-600 py-0.5">
             {d}
           </div>
         ))}
@@ -118,7 +118,7 @@ export const CalendarWidget: React.FC = () => {
                 className={`w-5 h-5 rounded-full flex items-center justify-center transition-all ${
                   activeToday
                     ? 'bg-red-500 text-white font-bold shadow-sm scale-110'
-                    : 'text-slate-800 hover:bg-slate-200/70 cursor-pointer'
+                    : 'text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
                 {d}
@@ -129,7 +129,7 @@ export const CalendarWidget: React.FC = () => {
 
         {/* Next Month Days */}
         {nextPadding.map((d, i) => (
-          <div key={`next-${i}`} className="text-slate-300 py-0.5">
+          <div key={`next-${i}`} className="text-slate-300 dark:text-slate-600 py-0.5">
             {d}
           </div>
         ))}

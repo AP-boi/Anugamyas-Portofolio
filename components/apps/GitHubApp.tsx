@@ -380,15 +380,15 @@ export const GitHubApp: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-3 text-slate-900 p-3 bg-white/95">
+    <div className="flex flex-col h-full space-y-3 text-slate-900 dark:text-slate-100 p-3 bg-white/95 dark:bg-slate-950 transition-colors">
       {/* Authentic macOS Safari Window Toolbar */}
-      <div className="flex items-center space-x-2 pb-2 border-b border-slate-200">
+      <div className="flex items-center space-x-2 pb-2 border-b border-slate-200 dark:border-slate-800">
         {/* Navigation Buttons */}
         <div className="flex items-center space-x-1">
           <button
             onClick={handleBack}
             disabled={historyIndex === 0}
-            className={`p-1 rounded transition-colors ${historyIndex > 0 ? 'hover:bg-slate-100 text-slate-700 cursor-pointer' : 'text-slate-300 cursor-not-allowed'
+            className={`p-1 rounded transition-colors ${historyIndex > 0 ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer' : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
               }`}
             title="Back"
           >
@@ -398,8 +398,8 @@ export const GitHubApp: React.FC = () => {
             onClick={handleForward}
             disabled={historyIndex >= navHistory.length - 1}
             className={`p-1 rounded transition-colors ${historyIndex < navHistory.length - 1
-              ? 'hover:bg-slate-100 text-slate-700 cursor-pointer'
-              : 'text-slate-300 cursor-not-allowed'
+              ? 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer'
+              : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
               }`}
             title="Forward"
           >
@@ -407,7 +407,7 @@ export const GitHubApp: React.FC = () => {
           </button>
           <button
             onClick={() => switchTab(activeTab, false)}
-            className="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors"
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
             title="Reload"
           >
             <RotateCw className="w-3.5 h-3.5" />
@@ -417,14 +417,14 @@ export const GitHubApp: React.FC = () => {
         {/* Safari URL Address Bar */}
         <form
           onSubmit={handleUrlSubmit}
-          className="flex-1 flex items-center space-x-2 bg-slate-100 border border-slate-300 rounded-lg px-3 py-1 text-xs text-slate-800 focus-within:border-blue-500 focus-within:bg-white transition-colors shadow-inner"
+          className="flex-1 flex items-center space-x-2 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-1 text-xs text-slate-800 dark:text-slate-200 focus-within:border-blue-500 focus-within:bg-white dark:focus-within:bg-slate-950 transition-colors shadow-inner"
         >
-          <Lock className="w-3 h-3 text-emerald-600 flex-shrink-0" />
+          <Lock className="w-3 h-3 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
           <input
             type="text"
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            className="bg-transparent border-none outline-none w-full font-mono text-[11px] text-slate-900"
+            className="bg-transparent border-none outline-none w-full font-mono text-[11px] text-slate-900 dark:text-slate-100"
             placeholder="https://github.com/AP-boi"
           />
         </form>
@@ -433,16 +433,16 @@ export const GitHubApp: React.FC = () => {
         <div className="flex items-center space-x-1">
           <button
             onClick={handleShare}
-            className="p-1 rounded hover:bg-slate-100 text-slate-600 hover:text-slate-900 transition-colors relative"
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors relative"
             title="Share URL"
           >
-            {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
+            {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
           </button>
           <a
             href={urlInput}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-1 rounded hover:bg-slate-100 text-blue-600 hover:text-blue-800 transition-colors"
+            className="p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
             title="Open in new browser tab"
           >
             <ExternalLink className="w-3.5 h-3.5" />
@@ -451,12 +451,12 @@ export const GitHubApp: React.FC = () => {
       </div>
 
       {/* Safari Tab Bar */}
-      <div className="flex items-center space-x-1 text-xs border-b border-slate-200 pb-2">
+      <div className="flex items-center space-x-1 text-xs border-b border-slate-200 dark:border-slate-800 pb-2">
         <button
           onClick={() => switchTab('profile')}
           className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'profile'
-            ? 'bg-white text-slate-900 border-t border-x border-slate-300 shadow-xs font-semibold'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
         >
           <img src="/icons/github.png" alt="" className="w-3.5 h-3.5 rounded object-cover shadow-xs" />
@@ -465,18 +465,18 @@ export const GitHubApp: React.FC = () => {
         <button
           onClick={() => switchTab('repos')}
           className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'repos'
-            ? 'bg-white text-slate-900 border-t border-x border-slate-300 shadow-xs font-semibold'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
         >
-          <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+          <BookOpen className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
           <span>Repositories ({REPOSITORIES.length})</span>
         </button>
         <button
           onClick={() => switchTab('streak')}
           className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 ${activeTab === 'streak'
-            ? 'bg-white text-slate-900 border-t border-x border-slate-300 shadow-xs font-semibold'
-            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
         >
           <Flame className="w-3.5 h-3.5 text-amber-600" />

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 import { APLogo } from '@/components/ui/APLogo';
-import { ThemeToggleButton2 } from '@/components/ui/skiper-ui/skiper4';
+import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
 interface MenuBarProps {
   onToggleSpotlight?: () => void;
@@ -89,7 +89,11 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   return (
     <header
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999 }}
-      className="h-8 select-none flex items-center justify-between px-3 liquid-glass-surface rounded-none border-t-0 border-x-0 border-b border-white/25 backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]"
+      className={`h-8 select-none flex items-center justify-between px-3 rounded-none border-t-0 border-x-0 border-b backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium transition-colors ${
+        theme === 'dark'
+          ? 'bg-slate-900/85 border-slate-800/80 text-slate-200 shadow-md'
+          : 'liquid-glass-surface border-white/25 text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]'
+      }`}
     >
       {/* Left AP Menu & App Navigation */}
       <div className="flex items-center space-x-3.5 relative z-10">
@@ -100,20 +104,24 @@ export const MenuBar: React.FC<MenuBarProps> = ({
               setIsSystemMenuOpen(!isSystemMenuOpen);
               setIsUserMenuOpen(false);
             }}
-            className="flex items-center space-x-1 p-1 hover:bg-black/5 rounded transition-colors"
+            className="flex items-center space-x-1 p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded transition-colors"
             title="Anugamya System Menu"
           >
-            <APLogo className="w-5 h-3.5" variant="dark" />
+            <APLogo className="w-5 h-3.5" variant={theme === 'dark' ? 'light' : 'dark'} />
           </button>
 
           {isSystemMenuOpen && (
             <div
-              className="liquid-glass-card absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1 text-slate-800 z-[10000] border border-white/30 backdrop-blur-[24px] bg-white/85 text-xs"
+              className={`absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1 z-[10000] border backdrop-blur-[24px] text-xs transition-colors ${
+                theme === 'dark'
+                  ? 'bg-slate-900/95 border-slate-700/80 text-slate-100 shadow-black/60'
+                  : 'liquid-glass-card border-white/30 bg-white/85 text-slate-800'
+              }`}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="px-3 py-1.5 border-b border-slate-200">
-                <div className="font-bold text-slate-950">About Anugamya OS</div>
-                <div className="text-[10px] text-slate-500 font-mono">macOS Sonoma • v2026.1</div>
+              <div className="px-3 py-1.5 border-b border-slate-200 dark:border-slate-800">
+                <div className="font-bold text-slate-950 dark:text-white">About Anugamya OS</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">macOS Sonoma • v2026.1</div>
               </div>
 
               <button
@@ -283,10 +291,10 @@ export const MenuBar: React.FC<MenuBarProps> = ({
           <Search className="w-3.5 h-3.5" />
         </button>
 
-        {/* Skiper4 Animated Theme Toggle */}
+        {/* Skiper4 Animated Theme Toggle (Style 1 as requested) */}
         <div className="flex items-center">
-          <ThemeToggleButton2
-            className="w-5 h-5 p-0.5"
+          <ThemeToggleButton1
+            className="w-4 h-4 cursor-pointer"
             isDark={theme === 'dark'}
             onToggle={() => {
               sounds.playClick();
@@ -302,23 +310,23 @@ export const MenuBar: React.FC<MenuBarProps> = ({
             sounds.playClick();
             if (onToggleControlCenter) onToggleControlCenter();
           }}
-          className="p-1 hover:bg-black/5 rounded transition-colors text-slate-700 hover:text-slate-950"
+          className="p-1 hover:bg-black/5 dark:hover:bg-white/10 rounded transition-colors text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
           title="Control Center"
         >
           <Sliders className="w-3.5 h-3.5" />
         </button>
 
         {/* Status Indicators */}
-        <div className="flex items-center space-x-1.5 text-slate-700">
-          <Wifi className="w-3.5 h-3.5 text-slate-800" />
+        <div className="flex items-center space-x-1.5 text-slate-700 dark:text-slate-300">
+          <Wifi className="w-3.5 h-3.5" />
           <div className="flex items-center space-x-0.5">
             <span className="text-[10px] font-mono font-medium">{batteryLevel}%</span>
-            <Battery className="w-4 h-4 text-slate-800" />
+            <Battery className="w-4 h-4" />
           </div>
         </div>
 
         {/* Live Date & Time */}
-        <div className="flex items-center space-x-1.5 pl-1 font-medium text-slate-900">
+        <div className="flex items-center space-x-1.5 pl-1 font-medium text-slate-900 dark:text-slate-100">
           <span>{dateString}</span>
           <span className="font-semibold">{timeString}</span>
         </div>
