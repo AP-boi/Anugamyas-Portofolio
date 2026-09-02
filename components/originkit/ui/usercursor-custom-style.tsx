@@ -56,6 +56,19 @@ const COMPONENT_DEFAULTS = {
   labelOffsetY: 10,
 };
 
+export const VIBRANT_PASTEL_PALETTE = [
+  { bg: "#38bdf8", text: "#0f172a", name: "Sky Blue" },
+  { bg: "#c084fc", text: "#0f172a", name: "Lilac Lavender" },
+  { bg: "#f472b6", text: "#0f172a", name: "Blush Rose" },
+  { bg: "#fb923c", text: "#0f172a", name: "Vibrant Peach" },
+  { bg: "#34d399", text: "#0f172a", name: "Mint Emerald" },
+  { bg: "#2dd4bf", text: "#0f172a", name: "Pastel Turquoise" },
+  { bg: "#facc15", text: "#0f172a", name: "Sun Butter" },
+  { bg: "#a78bfa", text: "#0f172a", name: "Soft Violet" },
+  { bg: "#fb7185", text: "#0f172a", name: "Coral Rose" },
+  { bg: "#4ade80", text: "#0f172a", name: "Spring Lime" },
+];
+
 export function UserCursor(props: Props) {
   const mergedProps = { ...COMPONENT_DEFAULTS, ...props };
   const {
@@ -78,6 +91,24 @@ export function UserCursor(props: Props) {
 
   const { currentUser, isLocked } = useOSStore();
   const displayName = currentUser?.name ? currentUser.name.split(' ')[0] : (label || name);
+
+  // Randomized Vibrant Pastel Color state
+  const [paletteIndex, setPaletteIndex] = useState(() =>
+    Math.floor(Math.random() * VIBRANT_PASTEL_PALETTE.length)
+  );
+
+  const activeColor = props.color || VIBRANT_PASTEL_PALETTE[paletteIndex].bg;
+  const activeTextColor = props.textColor || VIBRANT_PASTEL_PALETTE[paletteIndex].text;
+
+  const randomizeColor = React.useCallback(() => {
+    setPaletteIndex((prev) => {
+      let next = Math.floor(Math.random() * VIBRANT_PASTEL_PALETTE.length);
+      while (next === prev && VIBRANT_PASTEL_PALETTE.length > 1) {
+        next = Math.floor(Math.random() * VIBRANT_PASTEL_PALETTE.length);
+      }
+      return next;
+    });
+  }, []);
 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -184,7 +215,10 @@ export function UserCursor(props: Props) {
       labelTiltTarget.set(sign * norm * labelTiltStrength);
     };
 
-    const onDown = () => setPressed(true);
+    const onDown = () => {
+      setPressed(true);
+      randomizeColor();
+    };
     const onUp = () => setPressed(false);
     const onLeave = () => setHovering(false);
 
@@ -202,13 +236,13 @@ export function UserCursor(props: Props) {
       const existing = document.getElementById("originkit-usercursor-style");
       if (existing) existing.remove();
     };
-  }, [isTouchDevice, offsetX, offsetY, mouseX, mouseY, labelTiltTarget, labelTiltStrength]);
+  }, [isTouchDevice, offsetX, offsetY, mouseX, mouseY, labelTiltTarget, labelTiltStrength, randomizeColor]);
 
   const labelTranslateX = useTransform(labelX, (v) => v + (labelOffsetUseDefault ? size * 0.9 : labelOffsetX));
   const labelTranslateY = useTransform(labelY, (v) => v + (labelOffsetUseDefault ? size * 0.2 + 6 : labelOffsetY));
 
   const arrowContent = useMemo(() => {
-    if (typeof arrow === "function") return arrow(color);
+    if (typeof arrow === "function") return arrow(activeColor);
     if (arrow) return arrow;
     return (
       <svg
@@ -221,14 +255,18 @@ export function UserCursor(props: Props) {
       >
         <path
           d="M5 3 L23 14 L14 16 L11 24 Z"
-          fill={color}
-          stroke="rgba(0,0,0,0.25)"
-          strokeWidth={1}
+          fill={activeColor}
+          stroke="rgba(0,0,0,0.3)"
+          strokeWidth={1.2}
           strokeLinejoin="round"
+          style={{
+            transition: "fill 250ms ease",
+            filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.18))",
+          }}
         />
       </svg>
     );
-  }, [arrow, color, size]);
+  }, [arrow, activeColor, size]);
 
   if (isTouchDevice) return null;
 
@@ -246,13 +284,13 @@ export function UserCursor(props: Props) {
             y: labelTranslateY,
             rotate: labelRotation,
             scale: scaleMV,
-            background: color,
+            background: activeColor,
             borderRadius: 999,
             padding: `${size * 0.18}px ${size * 0.36}px`,
-            boxShadow: "0 4px 14px rgba(0,0,0,0.2), 0 1px 3px rgba(0,0,0,0.1)",
+            boxShadow: `0 4px 14px ${activeColor}55, 0 1px 3px rgba(0,0,0,0.1)`,
             opacity: hovering ? 1 : 0,
             transformOrigin: "0% 50%",
-            transition: "opacity 140ms ease",
+            transition: "background 250ms ease, box-shadow 250ms ease, opacity 140ms ease",
             willChange: "transform, opacity",
             userSelect: "none",
             pointerEvents: "none",
@@ -261,13 +299,14 @@ export function UserCursor(props: Props) {
           <div
             className={classNames?.labelText}
             style={{
-              color: textColor,
+              color: activeTextColor,
               fontSize: Math.max(9, size * 0.42),
               lineHeight: 1.1,
               fontWeight: 700,
               fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               whiteSpace: "nowrap",
               letterSpacing: 0.2,
+              transition: "color 250ms ease",
             }}
           >
             {displayName}

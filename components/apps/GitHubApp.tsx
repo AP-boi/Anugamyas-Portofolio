@@ -29,8 +29,19 @@ import {
   ArrowUpRight,
   FileText,
   Bookmark,
+  ShieldCheck,
   X,
 } from 'lucide-react';
+import { useOSStore } from '@/store/useOSStore';
+
+interface DuckDuckGoInstantAnswer {
+  heading?: string;
+  abstract?: string;
+  abstractSource?: string;
+  abstractUrl?: string;
+  image?: string;
+  relatedTopics?: Array<{ text: string; firstUrl: string }>;
+}
 
 interface RepoItem {
   name: string;
@@ -253,6 +264,7 @@ export const GitHubApp: React.FC = () => {
   const [searchResults, setSearchResults] = useState<
     Array<{ title: string; snippet: string; url: string; wordcount?: number; timestamp?: string }>
   >([]);
+  const [ddgAnswer, setDdgAnswer] = useState<DuckDuckGoInstantAnswer | null>(null);
   const [isSearching, setIsSearching] = useState<boolean>(false);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [searchStats, setSearchStats] = useState<{ count: number; timeMs: number } | null>(null);
@@ -264,6 +276,8 @@ export const GitHubApp: React.FC = () => {
     url: string;
   } | null>(null);
   const [webViewerUrl, setWebViewerUrl] = useState<string>('https://en.wikipedia.org');
+
+  const { safariSearchQuery, setSafariSearchQuery } = useOSStore();
 
   const [userProfile, setUserProfile] = useState<{
     public_repos: number;
@@ -334,6 +348,17 @@ export const GitHubApp: React.FC = () => {
     fetchLiveGitHubData();
   }, []);
 
+  // Listen for global Safari search queries dispatched from Spotlight
+  useEffect(() => {
+    if (safariSearchQuery && safariSearchQuery.trim()) {
+      const q = safariSearchQuery.trim();
+      setSearchQuery(q);
+      setActiveTab('search');
+      executeSearch(q);
+      setSafariSearchQuery('');
+    }
+  }, [safariSearchQuery, setSafariSearchQuery]);
+
   const heatmapWeeks = useMemo(() => generateHeatmap(), []);
 
   const switchTab = (tab: TabType, pushHistory = true) => {
@@ -367,39 +392,88 @@ export const GitHubApp: React.FC = () => {
     }
   };
 
-  // Real-life Free & Open-Source Web Search Execution
+  // Real-life Free & Open-Source DuckDuckGo + Wikipedia Search Execution
   const executeSearch = async (query: string) => {
     if (!query.trim()) return;
     setIsSearching(true);
     setHasSearched(true);
     setReaderArticle(null);
+    setDdgAnswer(null);
     const startTime = performance.now();
     setUrlInput(`https://duckduckgo.com/?q=${encodeURIComponent(query)}`);
 
     try {
-      // 1. Wikipedia Open Search API (100% Free & Open-Source, CORS-friendly, zero rate-limit blocks)
-      const wikiRes = await fetch(
-        `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
-          query
-        )}&utf8=&format=json&origin=*`
-      );
-      const wikiData = await wikiRes.json();
-      const endTime = performance.now();
+      // 1. DuckDuckGo Instant Answers API
+      const ddgPromise = (async () => {
+        try {
+          const ddgRes = await fetch(
+            `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_redirect=1&no_html=1&skip_disambig=1`
+          );
+          if (ddgRes.ok) {
+            const ddgData = await ddgRes.json();
+            const related: Array<{ text: string; firstUrl: string }> = [];
+            if (Array.isArray(ddgData.RelatedTopics)) {
+              for (const item of ddgData.RelatedTopics.slice(0, 8)) {
+                if (item.Text && item.FirstURL) {
+                  related.push({ text: item.Text, firstUrl: item.FirstURL });
+                } else if (Array.isArray(item.Topics)) {
+                  for (const sub of item.Topics.slice(0, 3)) {
+                    if (sub.Text && sub.FirstURL) {
+                      related.push({ text: sub.Text, firstUrl: sub.FirstURL });
+                    }
+                  }
+                }
+              }
+            }
 
-      if (wikiData?.query?.search) {
-        const results = wikiData.query.search.map((item: any) => ({
-          title: item.title,
-          snippet: item.snippet.replace(/<[^>]*>?/gm, ''),
-          url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
-          wordcount: item.wordcount,
-          timestamp: item.timestamp,
-        }));
-        setSearchResults(results);
-        setSearchStats({ count: results.length, timeMs: Math.round(endTime - startTime) });
-      } else {
-        setSearchResults([]);
-        setSearchStats({ count: 0, timeMs: Math.round(endTime - startTime) });
-      }
+            const abstractText =
+              ddgData.AbstractText || (ddgData.Abstract ? ddgData.Abstract.replace(/<[^>]*>?/gm, '') : '');
+
+            if (abstractText || ddgData.Heading || related.length > 0) {
+              setDdgAnswer({
+                heading: ddgData.Heading || query,
+                abstract: abstractText,
+                abstractSource: ddgData.AbstractSource || 'DuckDuckGo Knowledge',
+                abstractUrl: ddgData.AbstractURL || `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
+                image: ddgData.Image || undefined,
+                relatedTopics: related,
+              });
+            }
+          }
+        } catch (ddgErr) {
+          console.warn('DuckDuckGo API fetch error:', ddgErr);
+        }
+      })();
+
+      // 2. Wikipedia Open Search API
+      const wikiPromise = (async () => {
+        try {
+          const wikiRes = await fetch(
+            `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(
+              query
+            )}&utf8=&format=json&origin=*`
+          );
+          const wikiData = await wikiRes.json();
+          if (wikiData?.query?.search) {
+            const results = wikiData.query.search.map((item: any) => ({
+              title: item.title,
+              snippet: item.snippet.replace(/<[^>]*>?/gm, ''),
+              url: `https://en.wikipedia.org/wiki/${encodeURIComponent(item.title.replace(/ /g, '_'))}`,
+              wordcount: item.wordcount,
+              timestamp: item.timestamp,
+            }));
+            setSearchResults(results);
+            setSearchStats({ count: results.length, timeMs: Math.round(performance.now() - startTime) });
+          } else {
+            setSearchResults([]);
+            setSearchStats({ count: 0, timeMs: Math.round(performance.now() - startTime) });
+          }
+        } catch (wErr) {
+          console.warn('Wiki API fetch error:', wErr);
+        }
+      })();
+
+      await Promise.allSettled([ddgPromise, wikiPromise]);
     } catch (err) {
       console.error('Search error:', err);
       setSearchResults([]);
@@ -599,12 +673,12 @@ export const GitHubApp: React.FC = () => {
           onClick={() => switchTab('search')}
           className={`px-3 py-1 rounded-t-lg font-medium transition-colors flex items-center space-x-1.5 cursor-pointer ${
             activeTab === 'search'
-              ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
+              ? 'bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-400 border-t border-x border-slate-300 dark:border-slate-700 shadow-xs font-semibold'
               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
           }`}
         >
-          <Compass className="w-3.5 h-3.5 text-blue-500" />
-          <span>Search Engine</span>
+          <span className="text-xs select-none">🦆</span>
+          <span>DuckDuckGo</span>
         </button>
 
         <button
@@ -656,23 +730,33 @@ export const GitHubApp: React.FC = () => {
 
       {/* Web Page Viewport Content */}
       <div className="flex-1 overflow-auto space-y-4 pt-1 pr-1">
-        {/* ================= TAB 0: OPEN-SOURCE SEARCH ENGINE ================= */}
+        {/* ================= TAB 0: DUCKDUCKGO SEARCH ENGINE ================= */}
         {activeTab === 'search' && (
           <div className="space-y-4 max-w-3xl mx-auto py-2">
-            {/* Search Input Banner */}
-            <div className="text-center space-y-2">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 text-xs font-semibold">
-                <Globe className="w-3.5 h-3.5" />
-                <span>Free & Open-Source Web Search</span>
-                <span className="text-[10px] text-slate-400 font-mono">• DuckDuckGo & Wikipedia Engine</span>
+            {/* DuckDuckGo Official Search Banner */}
+            <div className="text-center space-y-2.5 pb-1">
+              <div className="flex items-center justify-center space-x-2.5">
+                <span className="text-3xl filter drop-shadow-xs select-none">🦆</span>
+                <span className="text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+                  DuckDuck<span className="text-[#DE5833]">Go</span>
+                </span>
               </div>
-
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                Safari Open Search
-              </h1>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Search open web knowledge, articles, algorithms, code & documentation
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                Privacy, simplified. The search engine that doesn&apos;t track you.
               </p>
+
+              {/* Privacy Guarantee Badges */}
+              <div className="flex items-center justify-center flex-wrap gap-1.5 pt-0.5">
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 font-semibold flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" /> Private Search
+                </span>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-orange-50 dark:bg-orange-950/40 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800 font-semibold flex items-center gap-1">
+                  <Zap className="w-3 h-3" /> Instant Answers
+                </span>
+                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 font-semibold flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> !Bangs Enabled
+                </span>
+              </div>
 
               {/* Instant Search Bar */}
               <form
@@ -680,28 +764,131 @@ export const GitHubApp: React.FC = () => {
                   e.preventDefault();
                   executeSearch(searchQuery);
                 }}
-                className="flex items-center space-x-2 max-w-xl mx-auto mt-3 bg-slate-50 dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700 focus-within:border-blue-600 rounded-2xl px-4 py-2 shadow-sm transition-colors"
+                className="flex items-center space-x-2 max-w-xl mx-auto mt-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-orange-300 dark:border-orange-600/50 focus-within:border-[#DE5833] dark:focus-within:border-[#DE5833] rounded-2xl px-4 py-2.5 shadow-sm transition-colors"
               >
-                <Search className="w-4 h-4 text-slate-400" />
+                <span className="text-base select-none">🦆</span>
                 <input
                   type="text"
-                  placeholder="Search anything (e.g. Three.js, Next.js, AI, macOS, Physics)..."
+                  placeholder="Search DuckDuckGo or enter URL..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="flex-1 bg-transparent border-none outline-none text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
                 />
                 {isSearching ? (
-                  <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                  <Loader2 className="w-4 h-4 text-[#DE5833] animate-spin" />
                 ) : (
                   <button
                     type="submit"
-                    className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                    className="px-3.5 py-1.5 rounded-xl bg-[#DE5833] hover:bg-[#c44926] text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs"
                   >
                     Search
                   </button>
                 )}
               </form>
+
+              {/* DuckDuckGo Quick !Bangs bar */}
+              <div className="flex items-center justify-center flex-wrap gap-1.5 pt-1 max-w-xl mx-auto">
+                <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 mr-1">
+                  !Bangs:
+                </span>
+                {[
+                  { bang: '!w', label: 'Wikipedia' },
+                  { bang: '!gh', label: 'GitHub' },
+                  { bang: '!yt', label: 'YouTube' },
+                  { bang: '!r', label: 'Reddit' },
+                  { bang: '!npm', label: 'NPM' },
+                  { bang: '!so', label: 'StackOverflow' },
+                ].map((b, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      const nextQ = searchQuery.startsWith(b.bang) ? searchQuery : `${b.bang} ${searchQuery}`.trim();
+                      setSearchQuery(nextQ);
+                    }}
+                    className="text-[10px] font-mono px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-orange-600 dark:hover:text-orange-400 border border-slate-200 dark:border-slate-700 transition-colors"
+                    title={`DuckDuckGo Bang for ${b.label}`}
+                  >
+                    {b.bang} <span className="font-sans text-[9px] opacity-75">({b.label})</span>
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {/* DuckDuckGo Instant Answer Card (if available) */}
+            {ddgAnswer && (
+              <div className="bg-gradient-to-br from-orange-50/90 to-amber-50/70 dark:from-slate-900 dark:to-orange-950/30 p-4 rounded-2xl border-2 border-orange-300 dark:border-orange-600/50 shadow-md space-y-3">
+                <div className="flex items-center justify-between border-b border-orange-200 dark:border-orange-800/60 pb-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-base select-none">🦆</span>
+                    <span className="text-xs font-bold text-orange-900 dark:text-orange-300 font-mono uppercase tracking-wider">
+                      DuckDuckGo Instant Answer
+                    </span>
+                  </div>
+                  {ddgAnswer.abstractSource && (
+                    <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-orange-100 dark:bg-orange-900/60 text-orange-800 dark:text-orange-200 font-semibold border border-orange-200 dark:border-orange-700">
+                      Source: {ddgAnswer.abstractSource}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 items-start">
+                  {ddgAnswer.image && (
+                    <img
+                      src={ddgAnswer.image}
+                      alt={ddgAnswer.heading}
+                      className="w-16 h-16 object-contain rounded-xl bg-white p-1 border border-orange-200 dark:border-orange-800 shadow-xs flex-shrink-0"
+                    />
+                  )}
+                  <div className="space-y-1 flex-1">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white">{ddgAnswer.heading}</h3>
+                    {ddgAnswer.abstract && (
+                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
+                        {ddgAnswer.abstract}
+                      </p>
+                    )}
+                    {ddgAnswer.abstractUrl && (
+                      <div className="pt-1">
+                        <a
+                          href={ddgAnswer.abstractUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center space-x-1 text-xs font-semibold text-orange-600 dark:text-orange-400 hover:underline"
+                        >
+                          <span>Full source on {ddgAnswer.abstractSource || 'DuckDuckGo'}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* DuckDuckGo Related Quick Topics */}
+                {ddgAnswer.relatedTopics && ddgAnswer.relatedTopics.length > 0 && (
+                  <div className="pt-2 border-t border-orange-200/70 dark:border-orange-800/40">
+                    <p className="text-[10px] uppercase font-bold text-slate-500 dark:text-slate-400 mb-1.5 font-mono">
+                      DuckDuckGo Related Topics
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {ddgAnswer.relatedTopics.map((topic, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => {
+                            const cleanTopic = topic.text.split(' - ')[0] || topic.text.slice(0, 32);
+                            setSearchQuery(cleanTopic);
+                            executeSearch(cleanTopic);
+                          }}
+                          className="text-[11px] px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-orange-200 dark:border-orange-800/80 text-slate-800 dark:text-slate-200 hover:border-orange-400 dark:hover:border-orange-500 hover:bg-orange-50/50 dark:hover:bg-slate-700/50 transition-colors shadow-2xs truncate max-w-xs text-left cursor-pointer"
+                          title={topic.text}
+                        >
+                          {topic.text.slice(0, 48)}...
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Reader Article Preview Modal/Card (if selected) */}
             {readerArticle && (
@@ -760,11 +947,28 @@ export const GitHubApp: React.FC = () => {
               <div className="space-y-3 pt-2">
                 <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 pb-1.5">
                   <span>
-                    About {searchStats?.count || 0} open-source results ({searchStats?.timeMs || 0} ms)
+                    About {searchResults.length + (ddgAnswer ? 1 : 0)} open results ({searchStats?.timeMs || 0} ms)
                   </span>
-                  <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                    ✓ Verified Open Knowledge API
+                  <span className="font-mono text-[10px] text-[#DE5833] font-semibold flex items-center gap-1">
+                    🦆 DuckDuckGo + Open Search Engine
                   </span>
+                </div>
+
+                {/* DuckDuckGo Web Live Search Callout */}
+                <div className="flex items-center justify-between gap-3 p-3 bg-orange-50/80 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/80 rounded-xl text-xs">
+                  <div className="flex items-center space-x-2 text-slate-700 dark:text-slate-300">
+                    <span className="text-base select-none">🦆</span>
+                    <span>Want live results across the entire web without tracking?</span>
+                  </div>
+                  <a
+                    href={`https://duckduckgo.com/?q=${encodeURIComponent(searchQuery)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-[#DE5833] hover:bg-[#c44926] text-white rounded-lg font-semibold transition-colors shadow-xs flex-shrink-0 cursor-pointer"
+                  >
+                    <span>Search on DuckDuckGo.com</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </div>
 
                 {searchResults.length === 0 && !isSearching && (

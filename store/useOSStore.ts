@@ -131,6 +131,8 @@ interface OSStoreState {
   setAccentColor: (color: string) => void;
   nightShift: boolean;
   setNightShift: (enabled: boolean) => void;
+  safariSearchQuery: string;
+  setSafariSearchQuery: (query: string) => void;
   updateTelemetry: (data: Partial<TelemetryData>) => void;
   updateAmbientLight: (data: Partial<AmbientLightState>) => void;
 }
@@ -404,6 +406,11 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
   nightShift: false,
   setNightShift: (nightShift: boolean) => {
     set({ nightShift });
+  },
+
+  safariSearchQuery: '',
+  setSafariSearchQuery: (safariSearchQuery: string) => {
+    set({ safariSearchQuery });
   },
 
   updateTelemetry: (data: Partial<TelemetryData>) => {

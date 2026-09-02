@@ -9,7 +9,7 @@ import { Search, ArrowRight, CornerDownLeft, Folder, FileText, Terminal, Activit
 interface SearchResult {
   id: string;
   title: string;
-  category: 'Applications' | 'Projects' | 'System Actions';
+  category: 'Applications' | 'Projects' | 'System Actions' | 'Web Search';
   subtitle: string;
   iconSrc?: string;
   iconComponent?: React.ReactNode;
@@ -22,7 +22,7 @@ interface SpotlightSearchProps {
 }
 
 export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClose }) => {
-  const { openWindow, lockScreen } = useOSStore();
+  const { openWindow, lockScreen, setSafariSearchQuery } = useOSStore();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -146,7 +146,8 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
     },
   ];
 
-  const filteredResults = allItems.filter((item) => {
+  const trimmed = query.trim();
+  const matched = allItems.filter((item) => {
     const q = query.toLowerCase().trim();
     if (!q) return true;
     return (
@@ -155,6 +156,24 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
       item.category.toLowerCase().includes(q)
     );
   });
+
+  const filteredResults: SearchResult[] = trimmed
+    ? [
+        {
+          id: 'ddg-live-search',
+          title: `Search "${trimmed}" on DuckDuckGo`,
+          category: 'Web Search',
+          subtitle: 'Search the open web privately with instant answers in Safari',
+          iconSrc: '/icons/safari.png',
+          action: () => {
+            setSafariSearchQuery(trimmed);
+            openWindow('github');
+            onClose();
+          },
+        },
+        ...matched,
+      ]
+    : matched;
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
