@@ -140,13 +140,7 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           dragListener={false}
           dragControls={dragControls}
           dragMomentum={false}
-          dragElastic={0}
-          dragConstraints={{
-            top: 34,
-            left: 0,
-            right: typeof window !== 'undefined' ? window.innerWidth - 200 : 800,
-            bottom: typeof window !== 'undefined' ? window.innerHeight - 120 : 600,
-          }}
+          dragElastic={false}
           className={`flex flex-col rounded-2xl overflow-hidden liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${isActive
               ? 'ring-1 ring-white/60 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)]'
               : 'opacity-95 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),0_14px_40px_rgba(0,0,0,0.22)]'

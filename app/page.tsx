@@ -105,12 +105,26 @@ export default function Home() {
     onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),
   });
 
+  // Global listener to prevent browser default context menu and viewport shift
+  useEffect(() => {
+    const preventDefaultContextMenu = (e: MouseEvent) => {
+      // Allow inputs/text selection if needed, otherwise prevent default
+      const target = e.target as HTMLElement;
+      if (!target.closest('input') && !target.closest('textarea')) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener('contextmenu', preventDefaultContextMenu, { passive: false });
+    return () => window.removeEventListener('contextmenu', preventDefaultContextMenu);
+  }, []);
+
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const target = e.target as HTMLElement;
     if (target.closest('.liquid-glass-surface') || target.closest('button') || target.closest('input')) {
       return;
     }
-    e.preventDefault();
     setContextMenu({
       x: e.clientX,
       y: e.clientY,
@@ -119,7 +133,6 @@ export default function Home() {
   }, []);
 
   const handleCycleWallpaper = () => {
-    sounds.playClick();
     setWallpaperIndex((prev) => (prev + 1) % WALLPAPERS.length);
   };
 
@@ -133,7 +146,7 @@ export default function Home() {
   return (
     <main
       onContextMenu={handleContextMenu}
-      className="relative w-screen h-screen overflow-hidden select-none bg-slate-100"
+      className="fixed inset-0 w-full h-full overflow-hidden select-none bg-slate-100"
     >
       {/* Authentic Anugamya OS Startup Boot Screen */}
       <BootScreen
@@ -194,7 +207,6 @@ export default function Home() {
                 text={folder.name}
                 images={folder.images}
                 onClick={() => {
-                  sounds.playWindowOpen();
                   openWindow('projects');
                 }}
                 folderSize={{ width: 52, height: 38 }}

@@ -10,9 +10,19 @@
 
 
 @layer base {
+  html,
   body {
     @apply bg-slate-950 text-slate-100 antialiased overflow-hidden select-none font-sans;
     background-color: #0a0a0c;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    position: fixed;
+    inset: 0;
   }
 
   /* GPU-accelerate all motion- and framer-motion elements */
