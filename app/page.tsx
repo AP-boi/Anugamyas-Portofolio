@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MenuBar } from '@/components/macOS/MenuBar';
 import { Dock } from '@/components/macOS/Dock';
@@ -113,6 +113,10 @@ export default function Home() {
 
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
+
+  // Moveable Desktop Workspace Ref & Drag Tracker
+  const desktopWorkspaceRef = useRef<HTMLDivElement>(null);
+  const isDraggingFolderRef = useRef<boolean>(false);
 
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; isOpen: boolean }>({
     x: 0,
@@ -253,30 +257,51 @@ export default function Home() {
       <MacOSLockScreen />
 
       {/* Desktop Main Workspace Surface Area */}
-      <div className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between">
+      <div
+        ref={desktopWorkspaceRef}
+        className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between overflow-hidden"
+      >
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
           
-          {/* Left Desktop Folders Column - Fully Moveable & Draggable */}
-          <div className="col-span-3 hidden md:flex flex-col space-y-6 pt-2 pointer-events-auto z-10">
+          {/* Left Desktop Folders Column - Truly Moveable & Draggable Across Screen */}
+          <div className="col-span-4 sm:col-span-3 flex flex-col space-y-5 pt-2 pointer-events-auto z-20">
             {DESKTOP_FOLDERS.map((folder) => (
               <motion.div
                 key={folder.id}
                 drag
+                dragConstraints={desktopWorkspaceRef}
                 dragMomentum={false}
                 dragElastic={0}
-                whileDrag={{ scale: 1.06, zIndex: 60 }}
-                className="w-fit cursor-grab active:cursor-grabbing select-none"
+                whileDrag={{
+                  scale: 1.12,
+                  zIndex: 9999,
+                  filter: 'drop-shadow(0 14px 28px rgba(0,0,0,0.35))',
+                }}
+                onDragStart={() => {
+                  isDraggingFolderRef.current = true;
+                }}
+                onDragEnd={() => {
+                  setTimeout(() => {
+                    isDraggingFolderRef.current = false;
+                  }, 150);
+                  sounds.playClick();
+                }}
+                className="w-fit cursor-grab active:cursor-grabbing select-none touch-none"
               >
-                <ImagesBadge
-                  text={folder.name}
-                  images={folder.images}
-                  onClick={() => {
-                    openWindow('projects');
-                  }}
-                  folderSize={{ width: 52, height: 38 }}
-                  hoverImageSize={{ width: 84, height: 56 }}
-                  className="hover:scale-105 transition-transform"
-                />
+                <div className="p-1 rounded-2xl hover:bg-black/5 dark:hover:bg-white/10 transition-colors border border-transparent hover:border-black/10 dark:hover:border-white/10">
+                  <ImagesBadge
+                    text={folder.name}
+                    images={folder.images}
+                    onClick={() => {
+                      if (isDraggingFolderRef.current) return;
+                      sounds.playClick();
+                      openWindow('projects');
+                    }}
+                    folderSize={{ width: 54, height: 40 }}
+                    hoverImageSize={{ width: 88, height: 58 }}
+                    className="transition-transform"
+                  />
+                </div>
               </motion.div>
             ))}
           </div>

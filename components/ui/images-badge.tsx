@@ -144,7 +144,8 @@ export function ImagesBadge({
               <img
                 src={image}
                 alt={`Preview ${index + 1}`}
-                className="h-full w-full object-cover"
+                draggable={false}
+                className="h-full w-full object-cover pointer-events-none select-none"
               />
             </motion.div>
           );
@@ -173,7 +174,7 @@ export function ImagesBadge({
       </motion.div>
 
       {/* Text */}
-      <span className="text-xs font-semibold text-slate-900 drop-shadow-xs group-hover:text-blue-600 transition-colors max-w-[140px] leading-tight">
+      <span className="text-xs font-semibold text-slate-900 dark:text-white drop-shadow-xs group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors max-w-[140px] leading-tight select-none">
         {text}
       </span>
     </Component>
