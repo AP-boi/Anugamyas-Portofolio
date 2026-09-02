@@ -74,6 +74,16 @@ export const MenuBar: React.FC<MenuBarProps> = ({
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (!isSystemMenuOpen && !isUserMenuOpen) return;
+    const handleOutsideClick = () => {
+      setIsSystemMenuOpen(false);
+      setIsUserMenuOpen(false);
+    };
+    window.addEventListener('click', handleOutsideClick);
+    return () => window.removeEventListener('click', handleOutsideClick);
+  }, [isSystemMenuOpen, isUserMenuOpen]);
+
   return (
     <header className="fixed top-0 left-0 right-0 h-8 z-[9999] select-none flex items-center justify-between px-3 liquid-glass-surface rounded-none border-t-0 border-x-0 border-b border-white/25 backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]">
       {/* Left AP Menu & App Navigation */}

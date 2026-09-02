@@ -10,11 +10,10 @@ import { sounds } from '@/lib/soundEngine';
 import { MAC_SNAPPY_SPRING } from '@/lib/animations';
 
 interface DockIconConfig {
-  id: AppId | 'launchpad';
+  id: AppId | 'launchpad' | 'trash';
   label: string;
   iconSrc?: string;
   isSpecial?: boolean;
-  customIcon?: 'activity';
 }
 
 interface DockProps {
@@ -74,9 +73,10 @@ const DOCK_ITEMS: DockIconConfig[] = [
     iconSrc: '/icons/settings.png',
   },
   {
-    id: 'system-info',
+    id: 'trash',
     label: 'Trash',
     iconSrc: '/icons/trash.png',
+    isSpecial: true,
   },
 ];
 
@@ -114,6 +114,11 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
     if (onOpenLaunchpad) onOpenLaunchpad();
   }, [onOpenLaunchpad, triggerBounce]);
 
+  const handleTrashClick = useCallback(() => {
+    sounds.playTrash();
+    triggerBounce('dock-trash');
+  }, [triggerBounce]);
+
   const handleAppClick = useCallback(
     (appId: AppId) => {
       sounds.playClick();
@@ -148,7 +153,7 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
           className="liquid-glass-surface mt-0 h-[78px] rounded-[30px] px-4 py-2.5 gap-2.5 overflow-visible border border-white/30 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)] backdrop-blur-[22px] backdrop-saturate-[150%]"
         >
           {DOCK_ITEMS.map((item, index) => {
-            const itemKey = item.id === 'launchpad' ? 'dock-launchpad' : `${appIdKey(item.id as AppId, index)}`;
+            const itemKey = item.id === 'launchpad' ? 'dock-launchpad' : item.id === 'trash' ? 'dock-trash' : `${appIdKey(item.id as AppId, index)}`;
             const isBouncing = bouncingApps.has(itemKey);
 
             if (item.id === 'launchpad') {
@@ -171,6 +176,32 @@ export const Dock: React.FC<DockProps> = memo(({ onOpenLaunchpad }) => {
                     />
                   </motion.div>
                 </DockIcon>
+              );
+            }
+
+            if (item.id === 'trash') {
+              return (
+                <React.Fragment key="dock-trash-group">
+                  <div className="h-9 w-px bg-white/20 self-center mx-0.5" />
+                  <DockIcon
+                    key="dock-trash"
+                    className="relative group flex flex-col items-center justify-center p-0.5 rounded-2xl overflow-visible aspect-square cursor-pointer"
+                    onClick={handleTrashClick}
+                  >
+                    <DockTooltip label={item.label} />
+                    <motion.div
+                      animate={isBouncing ? bounceKeyframes : { y: 0, scaleX: 1, scaleY: 1 }}
+                      className="relative w-full h-full flex items-center justify-center group/icon drop-shadow-[0_6px_14px_rgba(0,0,0,0.18)] hover:drop-shadow-[0_10px_22px_rgba(0,0,0,0.26)] transition-all origin-bottom"
+                    >
+                      <img
+                        src="/icons/trash.png"
+                        alt={item.label}
+                        className="w-full h-full object-contain select-none pointer-events-none transform transition-transform group-hover/icon:scale-105 rounded-[14px]"
+                        draggable={false}
+                      />
+                    </motion.div>
+                  </DockIcon>
+                </React.Fragment>
               );
             }
 

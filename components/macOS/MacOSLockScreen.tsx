@@ -128,7 +128,23 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
       if (onUnlock) onUnlock();
     } catch (err: any) {
       console.error('Login error:', err);
-      setError('Connection failed. Please retry.');
+      // Offline fallback session to ensure seamless entrance
+      const fallbackSession = {
+        id: `visitor-local-${Date.now()}`,
+        name: name.trim() || (loginMode === 'guest' ? 'Guest Explorer' : 'Visitor'),
+        role: role.trim() || 'Tech Enthusiast',
+        company: company.trim() || 'Community',
+        contact: contact.trim() || '',
+        message: message.trim() || '',
+        isGuest: loginMode === 'guest',
+        isAdmin: false,
+        loginTime: new Date().toISOString(),
+        lastActive: new Date().toISOString(),
+      };
+      sounds.playUnlockChime();
+      setCurrentUser(fallbackSession);
+      unlockScreen();
+      if (onUnlock) onUnlock();
     } finally {
       setIsLoading(false);
     }
