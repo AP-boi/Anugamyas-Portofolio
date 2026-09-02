@@ -113,6 +113,8 @@ interface OSStoreState {
   logout: () => void;
 
   // System Settings Actions
+  brightness: number;
+  setBrightness: (b: number) => void;
   updateTelemetry: (data: Partial<TelemetryData>) => void;
   updateAmbientLight: (data: Partial<AmbientLightState>) => void;
 }
@@ -325,6 +327,11 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
         },
       },
     });
+  },
+
+  brightness: 100,
+  setBrightness: (brightness: number) => {
+    set({ brightness: Math.max(20, Math.min(100, brightness)) });
   },
 
   updateTelemetry: (data: Partial<TelemetryData>) => {

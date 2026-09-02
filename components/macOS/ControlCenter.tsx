@@ -34,11 +34,10 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
   onSelectWallpaper,
   currentWallpaper,
 }) => {
-  const { telemetry, lockScreen, openWindow } = useOSStore();
+  const { telemetry, lockScreen, openWindow, brightness, setBrightness } = useOSStore();
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
   const [focusEnabled, setFocusEnabled] = useState(false);
-  const [brightness, setBrightness] = useState(90);
 
   if (!isOpen) return null;
 

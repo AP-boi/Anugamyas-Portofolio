@@ -50,11 +50,13 @@ export const AIAssistantDrawer: React.FC = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, [messages, isTyping]);
 
   useEffect(() => {
@@ -220,7 +222,7 @@ export const AIAssistantDrawer: React.FC = () => {
       </div>
 
       {/* Chat Messages Feed */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-700">
+      <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-slate-700">
         {messages.map((msg) => {
           const isUser = msg.sender === 'user';
           return (
@@ -290,8 +292,6 @@ export const AIAssistantDrawer: React.FC = () => {
             </div>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Suggested Quick Prompt Chips */}

@@ -9,14 +9,22 @@ export const DesktopMarquee: React.FC = () => {
 
   useEffect(() => {
     const handleMouseDown = (e: MouseEvent) => {
-      // Ignore if clicking on windows, docks, menubar, buttons, inputs
+      // Ignore if clicking on windows, docks, menubar, buttons, inputs, widgets, or moveable folders
       const target = e.target as HTMLElement;
       if (
+        target.closest('[data-window]') ||
+        target.closest('[data-no-marquee]') ||
+        target.closest('[data-dock]') ||
+        target.closest('.cursor-grab') ||
+        target.closest('.cursor-grabbing') ||
         target.closest('.liquid-glass-surface') ||
+        target.closest('.liquid-glass-card') ||
         target.closest('button') ||
         target.closest('input') ||
+        target.closest('textarea') ||
         target.closest('header') ||
-        target.closest('.liquid-glass-card')
+        target.closest('nav') ||
+        target.closest('a')
       ) {
         return;
       }

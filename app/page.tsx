@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { MenuBar } from '@/components/macOS/MenuBar';
 import { Dock } from '@/components/macOS/Dock';
 import { Window } from '@/components/macOS/Window';
@@ -89,7 +90,7 @@ const DESKTOP_FOLDERS = [
 const WALLPAPERS = ['/custom-wallpaper.jpg', '/spiderman-wallpaper.jpg'];
 
 export default function Home() {
-  const { openWindow, telemetry, currentUser, isLocked, lockScreen } = useOSStore();
+  const { openWindow, telemetry, currentUser, isLocked, lockScreen, brightness } = useOSStore();
   const [wallpaperIndex, setWallpaperIndex] = useState(0);
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [isControlCenterOpen, setIsControlCenterOpen] = useState(false);
@@ -105,17 +106,31 @@ export default function Home() {
     onToggleSpotlight: () => setIsSpotlightOpen((prev) => !prev),
   });
 
-  // Global listener to prevent browser default context menu and viewport shift
+  // Global listeners: lock viewport scroll to prevent any header or screen shift on right-click or window open
   useEffect(() => {
     const preventDefaultContextMenu = (e: MouseEvent) => {
-      // Allow inputs/text selection if needed, otherwise prevent default
       const target = e.target as HTMLElement;
       if (!target.closest('input') && !target.closest('textarea')) {
         e.preventDefault();
       }
     };
+
+    const lockViewportScroll = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0);
+      }
+      const main = document.querySelector('main');
+      if (main && main.scrollTop !== 0) {
+        main.scrollTop = 0;
+      }
+    };
+
     window.addEventListener('contextmenu', preventDefaultContextMenu, { passive: false });
-    return () => window.removeEventListener('contextmenu', preventDefaultContextMenu);
+    window.addEventListener('scroll', lockViewportScroll, { passive: true });
+    return () => {
+      window.removeEventListener('contextmenu', preventDefaultContextMenu);
+      window.removeEventListener('scroll', lockViewportScroll);
+    };
   }, []);
 
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
@@ -189,6 +204,14 @@ export default function Home() {
       {/* Main Desktop Background: Animated Wallpaper */}
       <AnimatedWallpaper imageSrc={WALLPAPERS[wallpaperIndex]} />
 
+      {/* Dynamic Display Dimmer Overlay for Live Brightness Control */}
+      {brightness < 100 && (
+        <div
+          className="pointer-events-none fixed inset-0 z-[99990] bg-black transition-opacity duration-200"
+          style={{ opacity: ((100 - brightness) / 100) * 0.72 }}
+        />
+      )}
+
       {/* Top System Menu Bar with Dynamic Island */}
       <MenuBar
         onToggleSpotlight={() => setIsSpotlightOpen((prev) => !prev)}
@@ -199,20 +222,28 @@ export default function Home() {
       <div className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between">
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
           
-          {/* Left Desktop Folders Column */}
+          {/* Left Desktop Folders Column - Fully Moveable & Draggable */}
           <div className="col-span-3 hidden md:flex flex-col space-y-6 pt-2 pointer-events-auto z-10">
             {DESKTOP_FOLDERS.map((folder) => (
-              <ImagesBadge
+              <motion.div
                 key={folder.id}
-                text={folder.name}
-                images={folder.images}
-                onClick={() => {
-                  openWindow('projects');
-                }}
-                folderSize={{ width: 52, height: 38 }}
-                hoverImageSize={{ width: 84, height: 56 }}
-                className="hover:scale-105 transition-transform cursor-pointer"
-              />
+                drag
+                dragMomentum={false}
+                dragElastic={0}
+                whileDrag={{ scale: 1.06, zIndex: 60 }}
+                className="w-fit cursor-grab active:cursor-grabbing select-none"
+              >
+                <ImagesBadge
+                  text={folder.name}
+                  images={folder.images}
+                  onClick={() => {
+                    openWindow('projects');
+                  }}
+                  folderSize={{ width: 52, height: 38 }}
+                  hoverImageSize={{ width: 84, height: 56 }}
+                  className="hover:scale-105 transition-transform"
+                />
+              </motion.div>
             ))}
           </div>
 

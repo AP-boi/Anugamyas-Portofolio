@@ -72,17 +72,43 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
     [id, toggleMaximizeWindow]
   );
 
+  // Compute dynamic sweep vector towards the app's Dock icon
+  const getDockSweepOffset = () => {
+    if (typeof window === 'undefined') return { x: 0, y: 360 };
+    const dockIcon = document.getElementById(`dock-icon-${id}`);
+    if (dockIcon && windowState) {
+      const rect = dockIcon.getBoundingClientRect();
+      const winCenterX = windowState.position.x + windowState.size.width / 2;
+      const winCenterY = windowState.position.y + windowState.size.height / 2;
+      const iconCenterX = rect.left + rect.width / 2;
+      const iconCenterY = rect.top + rect.height / 2;
+      return {
+        x: iconCenterX - winCenterX,
+        y: iconCenterY - winCenterY,
+      };
+    }
+    return {
+      x: 0,
+      y: (typeof window !== 'undefined' ? window.innerHeight : 800) - (windowState?.position.y ?? 100),
+    };
+  };
+
+  const sweepOffset = getDockSweepOffset();
+
   return (
     <AnimatePresence mode="wait">
       {isVisible && windowState && (
         <motion.div
           key={`window-${id}`}
           ref={windowRef}
-          initial={
-            windowState.lastAction === 'minimize'
-              ? { scale: 0.1, y: 350, opacity: 0 }
-              : { scale: 0.95, opacity: 0, y: 15 }
-          }
+          data-window="true"
+          data-no-marquee="true"
+          initial={{
+            x: sweepOffset.x,
+            y: sweepOffset.y,
+            scale: 0.12,
+            opacity: 0,
+          }}
           animate={{
             scale: 1,
             opacity: 1,
@@ -95,39 +121,33 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             borderRadius: isMaximized ? 0 : 16,
             filter: 'blur(0px)',
           }}
-          exit={
-            windowState.lastAction === 'minimize'
-              ? {
-                  scale: 0.15,
-                  y: 350,
-                  opacity: 0,
-                  filter: 'blur(4px)',
-                  transition: { duration: 0.35, ease: [0.32, 0.72, 0, 1] },
-                }
-              : {
-                  scale: 0.94,
-                  opacity: 0,
-                  y: 10,
-                  filter: 'blur(3px)',
-                  transition: { duration: 0.15, ease: 'easeOut' },
-                }
-          }
+          exit={{
+            x: sweepOffset.x,
+            y: sweepOffset.y,
+            scale: 0.12,
+            opacity: 0,
+            filter: 'blur(3px)',
+            transition: { duration: 0.32, ease: [0.32, 0.72, 0, 1] },
+          }}
           transition={{
             width: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
             height: { type: 'spring', stiffness: 320, damping: 30, mass: 0.8 },
-            filter: { duration: 0.2 },
+            scale: { type: 'spring', stiffness: 280, damping: 26, mass: 0.8 },
+            x: { type: 'spring', stiffness: 280, damping: 26, mass: 0.8 },
+            y: { type: 'spring', stiffness: 280, damping: 26, mass: 0.8 },
+            opacity: { duration: 0.22 },
           }}
           style={{
             zIndex: windowState.zIndex,
             position: 'fixed',
           }}
           onMouseDown={() => focusWindow(id)}
-          drag={!isMaximized}
+          drag={true}
           dragListener={false}
           dragControls={dragControls}
           dragMomentum={false}
           dragElastic={false}
-          className={`flex flex-col rounded-2xl overflow-hidden max-w-[calc(100vw-16px)] max-h-[calc(100vh-48px)] ${
+          className={`flex flex-col rounded-2xl overflow-hidden select-none max-w-[calc(100vw-16px)] max-h-[calc(100vh-48px)] ${
             isDarkApp
               ? `border border-slate-700/80 bg-slate-900 text-slate-100 backdrop-blur-[24px] shadow-2xl`
               : `liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${
@@ -137,10 +157,13 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
                 }`
           }`}
         >
-          {/* macOS Window Titlebar with double-click maximize */}
+          {/* macOS Window Titlebar with double-click maximize and drag */}
           <div
             onPointerDown={(e) => {
               focusWindow(id);
+              if (isMaximized) {
+                toggleMaximizeWindow(id);
+              }
               dragControls.start(e);
             }}
             onDoubleClick={handleMaximize}
