@@ -97,8 +97,24 @@ export const AIAssistantDrawer: React.FC = () => {
       return `⚡ Gravity Client is a modular Java performance engine featuring runtime bytecode transformation (ASM), OpenGL HUD rendering, dynamic event dispatch bus, and smooth trajectory optimization.`;
     }
 
+    if (q.includes('physx') || q.includes('physics') || q.includes('rapier')) {
+      return `🔬 PhysX Studio is a real-time 3D physics sandbox & CAD playground.\n\n• Tech Stack: React Three Fiber, Three.js, Rapier 3D WebAssembly physics engine, and Tailwind CSS.\n• Highlights: Spawn 3D dynamic rigidbodies, tweak gravity & friction, simulate rigid collisions, and trigger chain-reaction physics explosions at 60 FPS.`;
+    }
+
+    if (q.includes('flow') || q.includes('flow-os') || q.includes('flowos')) {
+      return `🌊 Flow OS is a web-based desktop operating system engineered for deep work, flow sessions, and focus.\n\n• Tech Stack: JavaScript, React, Web OS State Machines, and Vercel.\n• Highlights: Distraction-free workspace, customized productivity suites, and instant web app execution (Live at https://flowosv1.vercel.app).`;
+    }
+
+    if (q.includes('omnis')) {
+      return `☁️ OMNIS is a modern cloud application & web interface platform engineered in Next.js and TypeScript, deployed live on Vercel.`;
+    }
+
+    if (q.includes('pen fight') || q.includes('pen-fight') || q.includes('pen')) {
+      return `🖊️ Classroom Pen Fight 3D is a nostalgic 3D WebGL physics action game recreating desktop pen flicking battles with custom Three.js trajectory mechanics and camera orbits.`;
+    }
+
     if (q.includes('skills') || q.includes('stack') || q.includes('tech') || q.includes('technologies')) {
-      return `🛠️ Anugamya's Core Tech Stack:\n\n• Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS, Framer Motion, Lenis Scroll.\n• 3D & Graphics: Three.js, WebGL Shaders (GLSL), HTML5 Canvas 2D/3D, 3D Asset Optimization (GLTF/GLB).\n• Backend & Systems: Node.js, REST & GraphQL APIs, Python, Java, WebSockets, File-backed JSON & SQL databases.\n• AI Integration: Google Gemini AI, LangChain, Vision & LLM streaming architectures.`;
+      return `🛠️ Anugamya's Core Tech Stack:\n\n• Frontend: Next.js (App Router), React, TypeScript, Tailwind CSS, Framer Motion, Lenis Scroll.\n• 3D & Graphics: Three.js, WebGL Shaders (GLSL), Rapier 3D WASM, HTML5 Canvas 2D/3D, 3D Asset Optimization (GLTF/GLB).\n• Backend & Systems: Node.js, REST & GraphQL APIs, Python, Java, WebSockets, File-backed JSON & SQL databases.\n• AI Integration: Google Gemini AI, LangChain, Vision & LLM streaming architectures.`;
     }
 
     if (q.includes('contact') || q.includes('email') || q.includes('hire') || q.includes('reach') || q.includes('github')) {
