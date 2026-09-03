@@ -61,7 +61,7 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
         top: `${adjustedY}px`,
         zIndex: 99999,
       }}
-      className="liquid-glass-card w-56 rounded-2xl shadow-2xl p-1.5 text-slate-800 border border-white/40 backdrop-blur-[24px] bg-white/80 select-none text-xs font-medium"
+      className="glass liquid-glass-card w-56 rounded-2xl shadow-2xl p-1.5 text-slate-800 border border-white/40 bg-white/80 select-none text-xs font-medium"
       onClick={(e) => e.stopPropagation()}
       onContextMenu={(e) => {
         e.preventDefault();

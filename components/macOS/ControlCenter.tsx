@@ -50,7 +50,7 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
         exit={{ opacity: 0, scale: 0.95, y: -10 }}
         transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
         onClick={(e) => e.stopPropagation()}
-        className="liquid-glass-card fixed top-10 right-4 w-80 rounded-3xl shadow-2xl p-3.5 z-[99995] border border-white/40 backdrop-blur-[30px] bg-white/80 text-slate-800 select-none space-y-3"
+        className="glass liquid-glass-card fixed top-10 right-4 w-80 rounded-3xl shadow-2xl p-3.5 z-[99995] border border-white/40 bg-white/80 text-slate-800 select-none space-y-3"
       >
         {/* Top Toggles Grid (Wi-Fi, Bluetooth, Focus, Lock) */}
         <div className="grid grid-cols-2 gap-2.5">

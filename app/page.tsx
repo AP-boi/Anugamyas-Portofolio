@@ -332,7 +332,7 @@ export default function Home() {
           <div className="col-span-3 hidden lg:flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
             <AnalogClockWidget />
 
-            <div className="liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 flex flex-col justify-between select-none transition-colors">
+            <div className="glass liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 flex flex-col justify-between select-none transition-colors">
               <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <span className="text-2xl font-light text-slate-900 dark:text-white">30°</span>

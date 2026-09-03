@@ -60,7 +60,7 @@ export const CalendarWidget: React.FC = () => {
   };
 
   return (
-    <div className="liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 select-none flex flex-col justify-between transition-colors">
+    <div className="glass liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 select-none flex flex-col justify-between transition-colors">
       {/* Header: Month & Navigation */}
       <div className="relative z-10 flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-700">
         <div className="flex items-center space-x-1.5">

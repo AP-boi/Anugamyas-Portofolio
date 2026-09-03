@@ -89,9 +89,9 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   return (
     <header
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999 }}
-      className={`h-8 select-none flex items-center justify-between px-3 rounded-none border-t-0 border-x-0 border-b backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium transition-colors ${theme === 'dark'
+      className={`h-8 select-none flex items-center justify-between px-3 rounded-none border-t-0 border-x-0 border-b text-xs font-medium transition-colors glass liquid-glass-surface ${theme === 'dark'
           ? 'bg-slate-900/85 border-slate-800/80 text-slate-200 shadow-md'
-          : 'liquid-glass-surface border-white/25 text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]'
+          : 'border-white/25 text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]'
         }`}
     >
       {/* Left AP Menu & App Navigation */}

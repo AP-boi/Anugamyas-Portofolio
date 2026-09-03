@@ -70,7 +70,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Liquid Glass Core Surface & Layered Refraction */
+/* Liquid Glass Core Surface & Layered Refraction with SVG #lg Filter */
 .liquid-glass-surface {
   isolation: isolate;
   border: 1px solid rgba(255, 255, 255, 0.28);
@@ -84,7 +84,26 @@
     inset 0 -1px 1px rgba(255, 255, 255, 0.1),
     0 24px 60px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: url(#lg) blur(22px) saturate(150%);
   -webkit-backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: url(#lg) blur(22px) saturate(150%);
+}
+
+.dark .liquid-glass-surface {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8),
+    rgba(15, 23, 42, 0.55)
+  );
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.14),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.45),
+    0 24px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: url(#lg) blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: url(#lg) blur(24px) saturate(160%);
 }
 
 .liquid-glass-surface:not(.fixed):not(.absolute) {
@@ -126,7 +145,26 @@
     inset 0 -1px 1px rgba(255, 255, 255, 0.08),
     0 26px 70px rgba(0, 0, 0, 0.38);
   backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: url(#lg) blur(22px) saturate(150%);
   -webkit-backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: url(#lg) blur(22px) saturate(150%);
+}
+
+.dark .liquid-glass-card {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8),
+    rgba(15, 23, 42, 0.55)
+  );
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.14),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.45),
+    0 26px 70px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: url(#lg) blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: url(#lg) blur(24px) saturate(160%);
 }
 
 .liquid-glass-card:not(.fixed):not(.absolute) {
@@ -149,6 +187,62 @@
   pointer-events: none;
 }
 
+/* Canonical .glass class using the #lg SVG filter */
+.glass {
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.24),
+    rgba(255, 255, 255, 0.08)
+  );
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.12),
+    0 20px 50px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: url(#lg) blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: url(#lg) blur(20px) saturate(160%);
+}
+
+.glass:not(.fixed):not(.absolute) {
+  position: relative;
+}
+
+.glass::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.35),
+    transparent 32%,
+    transparent 66%,
+    rgba(255, 255, 255, 0.12)
+  );
+  pointer-events: none;
+}
+
+.dark .glass {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.8),
+    rgba(15, 23, 42, 0.55)
+  );
+  box-shadow:
+    inset 0 1px 1.5px rgba(255, 255, 255, 0.14),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.45),
+    0 24px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: url(#lg) blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: url(#lg) blur(24px) saturate(160%);
+}
+
 /* Glass Button Styles */
 .glass-button-wrap {
   position: relative;
@@ -162,7 +256,9 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.5), inset 0 -1px 1px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.18);
   backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: url(#lg) blur(18px) saturate(150%);
   -webkit-backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: url(#lg) blur(18px) saturate(150%);
   color: inherit;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -191,7 +287,9 @@
 .liquid-glass {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
+  backdrop-filter: url(#lg) blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: url(#lg) blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
 }

@@ -56,7 +56,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassProps> = memo(({
       whileTap={interactive ? { scale: 0.98 } : undefined}
       transition={{ type: 'spring', stiffness: 350, damping: 25 }}
       className={cn(
-        'liquid-glass-card relative overflow-hidden rounded-3xl',
+        'glass liquid-glass-card relative overflow-hidden rounded-3xl',
         className
       )}
       {...(props as any)}
@@ -86,7 +86,7 @@ export const LiquidGlassContainer: React.FC<LiquidGlassProps> = memo(({
   return (
     <div
       className={cn(
-        'liquid-glass-surface relative overflow-hidden rounded-3xl',
+        'glass liquid-glass-surface relative overflow-hidden rounded-3xl',
         className
       )}
       style={{ willChange: 'transform', transform: 'translateZ(0)' }}

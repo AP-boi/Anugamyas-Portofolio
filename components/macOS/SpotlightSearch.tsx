@@ -207,7 +207,7 @@ export const SpotlightSearch: React.FC<SpotlightSearchProps> = ({ isOpen, onClos
           exit={{ opacity: 0, scale: 0.95, y: -15 }}
           transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
           onClick={(e) => e.stopPropagation()}
-          className="liquid-glass-card w-full max-w-[620px] rounded-2xl shadow-2xl border border-white/50 bg-white/85 backdrop-blur-[30px] overflow-hidden text-slate-900"
+          className="glass liquid-glass-card w-full max-w-[620px] rounded-2xl shadow-2xl border border-white/50 bg-white/85 overflow-hidden text-slate-900"
         >
           {/* Spotlight Input Header */}
           <div className="flex items-center px-4 py-3 border-b border-slate-200/80">
