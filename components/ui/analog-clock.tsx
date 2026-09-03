@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, memo } from 'react';
+import { LiquidGlassCard } from '@/components/ui/liquid-glass';
 
 export const AnalogClockWidget: React.FC = memo(() => {
   const [time, setTime] = useState<Date | null>(null);
@@ -12,8 +13,6 @@ export const AnalogClockWidget: React.FC = memo(() => {
   useEffect(() => {
     setTime(new Date());
 
-    // Use rAF-driven updates for the second hand (smooth sweep)
-    // and only update state once per minute for the digital readout
     let lastMinute = -1;
 
     const tick = () => {
@@ -26,41 +25,38 @@ export const AnalogClockWidget: React.FC = memo(() => {
       const minuteDeg = minutes * 6;
       const hourDeg = (hours % 12) * 30;
 
-      // Direct DOM mutations — bypasses React reconciliation entirely
-      if (secondHandRef.current) secondHandRef.current.style.transform = `rotate(${secondDeg}deg)`;
-      if (minuteHandRef.current) minuteHandRef.current.style.transform = `rotate(${minuteDeg}deg)`;
-      if (hourHandRef.current) hourHandRef.current.style.transform = `rotate(${hourDeg}deg)`;
+      if (secondHandRef.current) {
+        secondHandRef.current.style.transform = `rotate(${secondDeg}deg)`;
+      }
+      if (minuteHandRef.current) {
+        minuteHandRef.current.style.transform = `rotate(${minuteDeg}deg)`;
+      }
+      if (hourHandRef.current) {
+        hourHandRef.current.style.transform = `rotate(${hourDeg}deg)`;
+      }
 
-      // Only trigger React re-render when minute changes (for digital readout)
-      const currentMinute = now.getMinutes();
-      if (currentMinute !== lastMinute) {
-        lastMinute = currentMinute;
-        setTime(new Date());
+      if (now.getMinutes() !== lastMinute) {
+        lastMinute = now.getMinutes();
+        setTime(new Date(now));
       }
 
       rafRef.current = requestAnimationFrame(tick);
     };
 
     rafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
   if (!time) {
     return (
-      <div className="w-48 h-48 bg-white/70 backdrop-blur-xl border border-white/80 rounded-2xl p-4 shadow-xl flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" />
-      </div>
+      <div className="w-48 h-48 rounded-3xl bg-slate-200/50 dark:bg-slate-800/50 animate-pulse" />
     );
   }
 
   const hours = time.getHours();
-  const minutes = time.getMinutes();
-
+  const mins = time.getMinutes();
   const formattedHours = hours % 12 || 12;
-  const formattedMins = minutes < 10 ? `0${minutes}` : minutes;
+  const formattedMins = mins < 10 ? `0${mins}` : mins;
   const ampm = hours >= 12 ? 'PM' : 'AM';
 
   const dayShorts = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -68,7 +64,15 @@ export const AnalogClockWidget: React.FC = memo(() => {
   const dateStr = `${dayShorts[time.getDay()]}, ${monthShorts[time.getMonth()]} ${time.getDate()}`;
 
   return (
-    <div className="glass liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-4 text-slate-900 dark:text-slate-100 select-none flex flex-col items-center justify-between transition-colors">
+    <LiquidGlassCard
+      cornerRadius={28}
+      displacementScale={65}
+      blurAmount={0.08}
+      saturation={140}
+      aberrationIntensity={1.8}
+      elasticity={0.2}
+      className="w-48 p-4 text-slate-900 dark:text-slate-100 select-none flex flex-col items-center justify-between transition-colors dark:bg-slate-900/80 dark:border-slate-700/80"
+    >
       {/* Analog Clock Dial */}
       <div className="relative z-10 w-28 h-28 rounded-full bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700 shadow-inner flex items-center justify-center">
         {/* Hour Markers (12, 3, 6, 9 emphasized) */}
@@ -133,7 +137,7 @@ export const AnalogClockWidget: React.FC = memo(() => {
           {dateStr}
         </div>
       </div>
-    </div>
+    </LiquidGlassCard>
   );
 });
 

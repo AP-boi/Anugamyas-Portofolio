@@ -2,22 +2,19 @@
 
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { LiquidGlassCard } from '@/components/ui/liquid-glass';
 
 export const CalendarWidget: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
   const [viewDate, setViewDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    const now = new Date();
-    setCurrentDate(now);
-    setViewDate(now);
+    setCurrentDate(new Date());
   }, []);
 
   if (!currentDate) {
     return (
-      <div className="w-48 h-48 bg-white/70 backdrop-blur-2xl border border-white/80 rounded-2xl p-4 shadow-xl flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-red-500 border-t-transparent animate-spin" />
-      </div>
+      <div className="w-48 h-48 rounded-3xl bg-slate-200/50 dark:bg-slate-800/50 animate-pulse" />
     );
   }
 
@@ -30,17 +27,20 @@ export const CalendarWidget: React.FC = () => {
   ];
 
   // Days calculation
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
   const firstDayIndex = new Date(year, month, 1).getDay();
-  const totalDaysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevMonthDays = new Date(year, month, 0).getDate();
 
-  // Prev month padding days
-  const prevPadding = Array.from({ length: firstDayIndex }, (_, i) => prevMonthDays - firstDayIndex + 1 + i);
+  // Previous month padding days
+  const prevMonthDays = new Date(year, month, 0).getDate();
+  const prevPadding = Array.from({ length: firstDayIndex }, (_, i) => prevMonthDays - firstDayIndex + i + 1);
+
   // Current month days
-  const currentMonthDays = Array.from({ length: totalDaysInMonth }, (_, i) => i + 1);
-  // Next month padding days to fill 35 grid slots (5 rows x 7 cols)
-  const totalSlots = Math.ceil((firstDayIndex + totalDaysInMonth) / 7) * 7;
-  const nextPadding = Array.from({ length: totalSlots - (prevPadding.length + currentMonthDays.length) }, (_, i) => i + 1);
+  const currentMonthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  // Next month padding to fill out a 35 or 42 grid
+  const totalCells = Math.ceil((firstDayIndex + daysInMonth) / 7) * 7;
+  const nextPaddingCount = totalCells - (firstDayIndex + daysInMonth);
+  const nextPadding = Array.from({ length: nextPaddingCount }, (_, i) => i + 1);
 
   const isToday = (day: number) => {
     const today = new Date();
@@ -60,7 +60,15 @@ export const CalendarWidget: React.FC = () => {
   };
 
   return (
-    <div className="glass liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 select-none flex flex-col justify-between transition-colors">
+    <LiquidGlassCard
+      cornerRadius={28}
+      displacementScale={65}
+      blurAmount={0.08}
+      saturation={140}
+      aberrationIntensity={1.8}
+      elasticity={0.2}
+      className="w-48 p-3.5 text-slate-900 dark:text-slate-100 select-none flex flex-col justify-between transition-colors dark:bg-slate-900/80 dark:border-slate-700/80"
+    >
       {/* Header: Month & Navigation */}
       <div className="relative z-10 flex items-center justify-between pb-1.5 border-b border-slate-200/60 dark:border-slate-700">
         <div className="flex items-center space-x-1.5">
@@ -134,7 +142,7 @@ export const CalendarWidget: React.FC = () => {
           </div>
         ))}
       </div>
-    </div>
+    </LiquidGlassCard>
   );
 };
 

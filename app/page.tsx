@@ -25,6 +25,7 @@ import { DesktopContextMenu } from '@/components/macOS/DesktopContextMenu';
 import { DesktopMarquee } from '@/components/ui/DesktopMarquee';
 import { AnalogClockWidget } from '@/components/ui/analog-clock';
 import { CalendarWidget } from '@/components/ui/calendar-widget';
+import { LiquidGlassCard } from '@/components/ui/liquid-glass';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -332,7 +333,15 @@ export default function Home() {
           <div className="col-span-3 hidden lg:flex flex-col items-end space-y-4 pt-2 pointer-events-auto z-10">
             <AnalogClockWidget />
 
-            <div className="glass liquid-glass-card dark:bg-slate-900/80 dark:border-slate-700/80 w-48 p-3.5 text-slate-900 dark:text-slate-100 flex flex-col justify-between select-none transition-colors">
+            <LiquidGlassCard
+              cornerRadius={28}
+              displacementScale={65}
+              blurAmount={0.08}
+              saturation={140}
+              aberrationIntensity={1.8}
+              elasticity={0.2}
+              className="w-48 p-3.5 text-slate-900 dark:text-slate-100 flex flex-col justify-between select-none transition-colors dark:bg-slate-900/80 dark:border-slate-700/80"
+            >
               <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <span className="text-2xl font-light text-slate-900 dark:text-white">30°</span>
@@ -341,7 +350,7 @@ export default function Home() {
                 <Sun className="w-7 h-7 text-amber-500 drop-shadow" />
               </div>
               <span className="relative z-10 text-[9px] text-slate-500 dark:text-slate-400 font-mono mt-2">New Delhi, India</span>
-            </div>
+            </LiquidGlassCard>
 
             <CalendarWidget />
           </div>
