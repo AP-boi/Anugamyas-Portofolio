@@ -89,11 +89,10 @@ export const MenuBar: React.FC<MenuBarProps> = ({
   return (
     <header
       style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999 }}
-      className={`h-8 select-none flex items-center justify-between px-3 rounded-none border-t-0 border-x-0 border-b backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium transition-colors ${
-        theme === 'dark'
+      className={`h-8 select-none flex items-center justify-between px-3 rounded-none border-t-0 border-x-0 border-b backdrop-blur-[22px] backdrop-saturate-[150%] text-xs font-medium transition-colors ${theme === 'dark'
           ? 'bg-slate-900/85 border-slate-800/80 text-slate-200 shadow-md'
           : 'liquid-glass-surface border-white/25 text-slate-800 shadow-[inset_0_-1px_1px_rgba(255,255,255,0.3),0_4px_20px_rgba(0,0,0,0.06)]'
-      }`}
+        }`}
     >
       {/* Left AP Menu & App Navigation */}
       <div className="flex items-center space-x-3.5 relative z-10">
@@ -112,11 +111,10 @@ export const MenuBar: React.FC<MenuBarProps> = ({
 
           {isSystemMenuOpen && (
             <div
-              className={`absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1 z-[10000] border backdrop-blur-[24px] text-xs transition-colors ${
-                theme === 'dark'
+              className={`absolute top-7 left-0 w-60 rounded-2xl shadow-2xl p-1 z-[10000] border backdrop-blur-[24px] text-xs transition-colors ${theme === 'dark'
                   ? 'bg-slate-900/95 border-slate-700/80 text-slate-100 shadow-black/60'
                   : 'liquid-glass-card border-white/30 bg-white/85 text-slate-800'
-              }`}
+                }`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="px-3 py-1.5 border-b border-slate-200 dark:border-slate-800">

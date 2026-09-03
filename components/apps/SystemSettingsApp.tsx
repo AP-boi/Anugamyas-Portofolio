@@ -149,11 +149,10 @@ export const SystemSettingsApp: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center space-x-2.5 cursor-pointer ${
-                  isSelected
+                className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center space-x-2.5 cursor-pointer ${isSelected
                     ? 'bg-blue-600 text-white font-semibold shadow-xs'
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/70 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
-                }`}
+                  }`}
               >
                 <div className={`w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 ${item.color}`}>
                   <Icon className="w-3 h-3" />
@@ -229,9 +228,8 @@ export const SystemSettingsApp: React.FC = () => {
                     <button
                       key={c.id}
                       onClick={() => setAccentColor(c.id)}
-                      className={`w-6 h-6 rounded-full ${c.class} flex items-center justify-center transition-transform hover:scale-110 cursor-pointer ${
-                        isSelected ? 'ring-2 ring-offset-2 ring-blue-500 ring-offset-white dark:ring-offset-slate-900 shadow-md' : 'opacity-85'
-                      }`}
+                      className={`w-6 h-6 rounded-full ${c.class} flex items-center justify-center transition-transform hover:scale-110 cursor-pointer ${isSelected ? 'ring-2 ring-offset-2 ring-blue-500 ring-offset-white dark:ring-offset-slate-900 shadow-md' : 'opacity-85'
+                        }`}
                       title={c.name}
                     >
                       {isSelected && <Check className="w-3 h-3 text-white font-bold" />}
@@ -297,11 +295,10 @@ export const SystemSettingsApp: React.FC = () => {
                     <div
                       key={wp.id}
                       onClick={() => setWallpaper(wp.src)}
-                      className={`group cursor-pointer rounded-xl overflow-hidden border-2 transition-all shadow-xs ${
-                        isSelected
+                      className={`group cursor-pointer rounded-xl overflow-hidden border-2 transition-all shadow-xs ${isSelected
                           ? 'border-blue-600 ring-2 ring-blue-500/40 scale-[1.02]'
                           : 'border-slate-200 dark:border-slate-800 hover:border-blue-400'
-                      }`}
+                        }`}
                     >
                       <div className="h-24 overflow-hidden relative">
                         <img

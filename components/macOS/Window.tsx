@@ -148,15 +148,13 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           dragControls={dragControls}
           dragMomentum={false}
           dragElastic={false}
-          className={`flex flex-col rounded-2xl overflow-hidden select-none max-w-[calc(100vw-16px)] max-h-[calc(100vh-48px)] ${
-            isDarkApp
+          className={`flex flex-col rounded-2xl overflow-hidden select-none max-w-[calc(100vw-16px)] max-h-[calc(100vh-48px)] ${isDarkApp
               ? `border border-slate-700/80 bg-slate-900 text-slate-100 backdrop-blur-[24px] shadow-2xl`
-              : `liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${
-                  isActive
-                    ? 'ring-1 ring-white/60 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)]'
-                    : 'opacity-95 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),0_14px_40px_rgba(0,0,0,0.22)]'
-                }`
-          }`}
+              : `liquid-glass-surface border border-white/40 bg-white/85 text-slate-900 backdrop-blur-[24px] ${isActive
+                ? 'ring-1 ring-white/60 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),inset_0_-1px_1px_rgba(255,255,255,0.1),0_26px_70px_rgba(0,0,0,0.38)]'
+                : 'opacity-95 shadow-[inset_0_1px_1.5px_rgba(255,255,255,0.45),0_14px_40px_rgba(0,0,0,0.22)]'
+              }`
+            }`}
         >
           {/* macOS Window Titlebar with double-click maximize and drag */}
           <div
@@ -168,11 +166,10 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
               dragControls.start(e);
             }}
             onDoubleClick={handleMaximize}
-            className={`relative z-10 h-9 px-3 flex items-center justify-between select-none cursor-grab active:cursor-grabbing border-b flex-shrink-0 ${
-              isDarkApp
+            className={`relative z-10 h-9 px-3 flex items-center justify-between select-none cursor-grab active:cursor-grabbing border-b flex-shrink-0 ${isDarkApp
                 ? 'border-slate-800 bg-slate-900 text-slate-200'
                 : 'border-slate-200/80 bg-white/70 text-slate-800'
-            }`}
+              }`}
           >
             {/* macOS Traffic Light Controls */}
             <div className="flex items-center space-x-2 group w-24">
@@ -209,9 +206,8 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
             </div>
 
             {/* Window Title Header with authentic macOS app icon */}
-            <div className={`flex items-center space-x-2 text-xs font-semibold tracking-wide pointer-events-none truncate ${
-              isDarkApp ? 'text-slate-200' : 'text-slate-800'
-            }`}>
+            <div className={`flex items-center space-x-2 text-xs font-semibold tracking-wide pointer-events-none truncate ${isDarkApp ? 'text-slate-200' : 'text-slate-800'
+              }`}>
               {windowState.iconSrc && (
                 <img
                   src={windowState.iconSrc}
@@ -227,9 +223,8 @@ export const Window: React.FC<WindowProps> = memo(({ id, children }) => {
           </div>
 
           {/* Window Content Body */}
-          <div className={`flex-1 min-h-0 w-full overflow-hidden flex flex-col ${
-            isDarkApp ? 'bg-slate-950 text-slate-100' : 'bg-white/95 text-slate-900'
-          }`}>
+          <div className={`flex-1 min-h-0 w-full overflow-hidden flex flex-col ${isDarkApp ? 'bg-slate-950 text-slate-100' : 'bg-white/95 text-slate-900'
+            }`}>
             {children}
           </div>
         </motion.div>

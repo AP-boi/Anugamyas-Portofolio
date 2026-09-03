@@ -894,7 +894,7 @@ export const GitHubApp: React.FC = () => {
           <div className="min-h-full p-8 max-w-4xl mx-auto space-y-8 animate-fadeIn">
             {/* Safari Greeting */}
             <div className="text-center space-y-2 pt-4">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-serif font-medium tracking-tight text-slate-900 dark:text-white">
                 Favorites
               </h1>
             </div>
@@ -1090,7 +1090,7 @@ export const GitHubApp: React.FC = () => {
 
         {/* ---------------- C. SAFARI READER MODE VIEW ---------------- */}
         {activeTab.pageType === 'reader' && activeTab.readerData && (
-          <div className="min-h-full bg-[#fbfbfa] dark:bg-[#1a1a1a] p-8 max-w-2xl mx-auto space-y-6 animate-fadeIn">
+          <div className="min-h-full bg-[#fbfbfa] dark:bg-[#151515] p-8 max-w-reading mx-auto space-y-6 animate-fadeIn selection:bg-amber-500/20 selection:text-amber-900 dark:selection:text-amber-200">
             {/* Reader Header */}
             <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3 text-xs">
               <span className="font-mono text-[10px] uppercase font-bold text-slate-400">

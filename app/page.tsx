@@ -262,7 +262,7 @@ export default function Home() {
         className="relative w-full h-[calc(100vh-80px)] top-8 z-10 p-6 flex flex-col justify-between overflow-hidden"
       >
         <div className="grid grid-cols-12 h-full w-full pointer-events-none gap-4">
-          
+
           {/* Left Desktop Folders Column - Truly Moveable & Draggable Across Screen */}
           <div className="col-span-4 sm:col-span-3 flex flex-col space-y-5 pt-2 pointer-events-auto z-20">
             {DESKTOP_FOLDERS.map((folder) => (

@@ -25,10 +25,17 @@ module.exports = {
         '2xl': '40px',
         '3xl': '64px',
       },
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Newsreader', 'Playfair Display', 'Georgia', 'serif'],
+        mono: ['var(--font-mono)', 'JetBrains Mono', 'ui-monospace', 'monospace'],
+      },
       boxShadow: {
         'liquid-glow': '0 0 30px -5px rgba(59, 130, 246, 0.3)',
         'glass-edge': 'inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 20px 50px rgba(0, 0, 0, 0.5)',
         'dock': '0 20px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
+        'tactile': 'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05)',
+        'tactile-dark': 'inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 4px rgba(0, 0, 0, 0.4)',
       },
       keyframes: {
         shimmer: {

@@ -128,7 +128,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
       if (onUnlock) onUnlock();
     } catch (err: any) {
       console.error('Login error:', err);
-      // Offline fallback session to ensure seamless entrance
+      // Offline fallback session for deterministic access when offline
       const fallbackSession = {
         id: `visitor-local-${Date.now()}`,
         name: name.trim() || (loginMode === 'guest' ? 'Guest Explorer' : 'Visitor'),
@@ -231,8 +231,8 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
           <div className="liquid-glass-card w-full max-w-[440px] p-6 text-slate-900 border border-white/40 shadow-2xl backdrop-blur-2xl bg-white/75 rounded-3xl">
             {/* Profile Avatar & Header */}
             <div className="relative z-10 flex flex-col items-center text-center mb-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-500 p-0.5 shadow-xl flex items-center justify-center mb-2">
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+              <div className="w-16 h-16 rounded-full bg-slate-200/90 dark:bg-slate-700/80 p-0.5 shadow-tactile border border-slate-300 dark:border-slate-600 flex items-center justify-center mb-2">
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden shadow-inner">
                   <APLogo className="w-10 h-7" variant="dark" />
                 </div>
               </div>
