@@ -11,6 +11,7 @@ import {
   Layers,
   Info,
   ExternalLink,
+  Sparkles,
 } from 'lucide-react';
 
 import { APLogo } from '@/components/ui/APLogo';
@@ -31,7 +32,14 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
   onClose,
   onChangeWallpaper,
 }) => {
-  const { openWindow, lockScreen, theme, toggleTheme } = useOSStore();
+  const {
+    openWindow,
+    lockScreen,
+    theme,
+    toggleTheme,
+    showShuDingLens,
+    toggleShuDingLens,
+  } = useOSStore();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -113,6 +121,20 @@ export const DesktopContextMenu: React.FC<DesktopContextMenuProps> = ({
           <span>{theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}</span>
         </div>
       </div>
+
+      <button
+        onClick={() => {
+          toggleShuDingLens();
+          onClose();
+        }}
+        className="w-full text-left px-2.5 py-1.5 hover:bg-blue-600 hover:text-white rounded-lg text-xs flex items-center justify-between transition-colors group"
+      >
+        <div className="flex items-center space-x-2">
+          <Sparkles className="w-3.5 h-3.5 text-amber-500 group-hover:text-white" />
+          <span>{showShuDingLens ? 'Hide Shu Ding Liquid Lens' : 'Show Shu Ding Liquid Lens'}</span>
+        </div>
+        <span className="text-[10px] opacity-60 font-mono">SDF</span>
+      </button>
 
       <div className="my-1 border-t border-slate-200/80" />
 

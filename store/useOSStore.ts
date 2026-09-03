@@ -135,6 +135,9 @@ interface OSStoreState {
   setSafariSearchQuery: (query: string) => void;
   updateTelemetry: (data: Partial<TelemetryData>) => void;
   updateAmbientLight: (data: Partial<AmbientLightState>) => void;
+  showShuDingLens: boolean;
+  setShowShuDingLens: (show: boolean) => void;
+  toggleShuDingLens: () => void;
 }
 
 const initialWindows: Record<AppId, WindowState> = Object.keys(APP_REGISTRY).reduce(
@@ -433,5 +436,13 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
     set((state) => ({
       ambientLight: { ...state.ambientLight, ...data },
     }));
+  },
+
+  showShuDingLens: false,
+  setShowShuDingLens: (show: boolean) => {
+    set({ showShuDingLens: show });
+  },
+  toggleShuDingLens: () => {
+    set((state) => ({ showShuDingLens: !state.showShuDingLens }));
   },
 }));

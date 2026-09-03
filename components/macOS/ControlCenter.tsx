@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Activity,
   Sliders,
+  Sparkles,
 } from 'lucide-react';
 import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
@@ -35,7 +36,17 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
   onSelectWallpaper,
   currentWallpaper,
 }) => {
-  const { telemetry, lockScreen, openWindow, brightness, setBrightness, theme, toggleTheme } = useOSStore();
+  const {
+    telemetry,
+    lockScreen,
+    openWindow,
+    brightness,
+    setBrightness,
+    theme,
+    toggleTheme,
+    showShuDingLens,
+    toggleShuDingLens,
+  } = useOSStore();
   const [wifiEnabled, setWifiEnabled] = useState(true);
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
   const [focusEnabled, setFocusEnabled] = useState(false);
@@ -180,6 +191,29 @@ export const ControlCenter: React.FC<ControlCenterProps> = ({
               );
             })}
           </div>
+        </div>
+
+        {/* Shu Ding Liquid Glass Lens Toggle */}
+        <div
+          onClick={toggleShuDingLens}
+          className={`p-2.5 rounded-2xl border flex items-center justify-between transition-all cursor-pointer shadow-xs ${
+            showShuDingLens
+              ? 'bg-blue-600 text-white border-blue-500'
+              : 'bg-slate-100/80 hover:bg-slate-200/80 border-slate-200/80 text-slate-800'
+          }`}
+        >
+          <div className="flex items-center space-x-2.5">
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center ${showShuDingLens ? 'bg-white/20 text-white' : 'bg-amber-500/10 text-amber-600'}`}>
+              <Sparkles className="w-3.5 h-3.5" />
+            </div>
+            <div className="leading-tight text-left">
+              <p className="text-xs font-bold">Shu Ding Liquid Lens</p>
+              <span className={`text-[10px] ${showShuDingLens ? 'text-white/80' : 'text-slate-500'}`}>
+                {showShuDingLens ? 'Active (Draggable Lens)' : 'Inactive (Click to Enable)'}
+              </span>
+            </div>
+          </div>
+          <span className="text-[10px] font-mono opacity-70">SDF</span>
         </div>
 
         {/* System Status Footer */}

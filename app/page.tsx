@@ -26,6 +26,7 @@ import { DesktopMarquee } from '@/components/ui/DesktopMarquee';
 import { AnalogClockWidget } from '@/components/ui/analog-clock';
 import { CalendarWidget } from '@/components/ui/calendar-widget';
 import { LiquidGlassCard } from '@/components/ui/liquid-glass';
+import { ShuDingLiquidGlassLens } from '@/components/ui/ShuDingLiquidGlass';
 import UserCursor from '@/components/originkit/ui/usercursor-custom-style';
 import MeshText from '@/components/originkit/ui/meshtexthover';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -110,6 +111,8 @@ export default function Home() {
     wallpaper,
     setWallpaper,
     nightShift,
+    showShuDingLens,
+    setShowShuDingLens,
   } = useOSStore();
 
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
@@ -401,6 +404,13 @@ export default function Home() {
 
       {/* Dock */}
       <Dock />
+
+      {/* Interactive Shu Ding Liquid Glass SDF Lens */}
+      {showShuDingLens && (
+        <ShuDingLiquidGlassLens
+          onClose={() => setShowShuDingLens(false)}
+        />
+      )}
 
       {/* Custom User Cursor Follower */}
       <UserCursor name={currentUser?.name || "Anugamya"} />

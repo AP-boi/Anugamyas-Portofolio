@@ -4,8 +4,16 @@ import React, { memo, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import LiquidGlassComponent from 'liquid-glass-react';
-
 export { LiquidGlassComponent as LiquidGlass };
+
+export {
+  generateShuDingDisplacementMap,
+  defaultShuDingFragment,
+  roundedRectSDF,
+  smoothStep,
+  ShuDingLiquidGlassController,
+} from '@/lib/shudingLiquidGlass';
+export { ShuDingLiquidGlassLens } from '@/components/ui/ShuDingLiquidGlass';
 
 export interface LiquidGlassProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
