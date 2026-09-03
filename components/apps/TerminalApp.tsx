@@ -78,13 +78,15 @@ Type "help" to view available system commands.`;
             )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 pt-1 font-mono text-[11px]">
               <p><span className="text-emerald-400 font-bold w-24 inline-block">help</span> Display available commands</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">check</span> View real-time visitor database</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">guestbook</span> Read / sign Cloud guestbook</p>
+              <p><span className="text-emerald-400 font-bold w-24 inline-block">dbstatus</span> Supabase database ping</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">neofetch</span> System info summary & ASCII</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">ls</span> List files and directories</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">whoami</span> Developer biography</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">projects</span> Open Projects Finder</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">settings</span> Open System Settings</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">ai &lt;query&gt;</span> Query AP Intelligence</p>
-              <p><span className="text-emerald-400 font-bold w-24 inline-block">cat &lt;file&gt;</span> Print file contents</p>
               <p><span className="text-emerald-400 font-bold w-24 inline-block">clear</span> Clear terminal screen</p>
             </div>
           </div>
@@ -218,6 +220,151 @@ Type "help" to view available system commands.`;
           </div>
         );
         break;
+
+      case 'check':
+      case 'visitors': {
+        try {
+          const res = await fetch('/api/visitors?limit=8');
+          const data = await res.json();
+          if (data.success && Array.isArray(data.visitors)) {
+            outputResult = (
+              <div className="space-y-2 font-mono text-xs py-1">
+                <div className="flex items-center justify-between text-neutral-400 border-b border-neutral-700/60 pb-1 text-[11px]">
+                  <span className="text-emerald-400 font-bold">[ SUPABASE VISITOR LOGS & TELEMETRY ]</span>
+                  <span>TOTAL: {data.totalCount} SESSIONS ({data.provider.toUpperCase()})</span>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-[11px]">
+                    <thead className="text-neutral-500 border-b border-neutral-800">
+                      <tr>
+                        <th className="pb-1 pr-3">NAME</th>
+                        <th className="pb-1 pr-3">ROLE & COMPANY</th>
+                        <th className="pb-1 pr-3">LOCATION</th>
+                        <th className="pb-1 pr-3">DEVICE / OS</th>
+                        <th className="pb-1">LAST ACTIVE</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-neutral-800/60">
+                      {data.visitors.map((v: any) => (
+                        <tr key={v.id} className="text-neutral-300">
+                          <td className="py-1 pr-3 font-semibold text-neutral-100">{v.name}</td>
+                          <td className="py-1 pr-3 text-neutral-400">{v.role} ({v.company})</td>
+                          <td className="py-1 pr-3 text-neutral-400">{v.city}, {v.country}</td>
+                          <td className="py-1 pr-3 text-neutral-400">{v.device} • {v.os}</td>
+                          <td className="py-1 text-emerald-400">{new Date(v.lastActive).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          } else {
+            outputResult = `Failed to fetch visitor records: ${data.error || 'Unknown error'}`;
+            outputType = 'error';
+          }
+        } catch (e: any) {
+          outputResult = `Network error connecting to /api/visitors: ${e.message}`;
+          outputType = 'error';
+        }
+        break;
+      }
+
+      case 'guestbook': {
+        const trimmedArgs = args.trim();
+        if (trimmedArgs.startsWith('sign ') || (trimmedArgs && !trimmedArgs.startsWith('list'))) {
+          const messageText = trimmedArgs.startsWith('sign ') ? trimmedArgs.slice(5).trim() : trimmedArgs;
+          try {
+            const authorName = currentUser?.name || 'Terminal Explorer';
+            const res = await fetch('/api/guestbook', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                author: authorName,
+                role: currentUser?.role || 'Developer',
+                company: currentUser?.company || 'Community',
+                message: messageText,
+              }),
+            });
+            const data = await res.json();
+            if (data.success) {
+              outputResult = (
+                <div className="font-mono text-xs py-1 space-y-1">
+                  <p className="text-emerald-400 font-semibold">✓ Guestbook signature verified & persisted to Supabase database!</p>
+                  <p className="text-neutral-400 text-[11px]">Author: {authorName} | Entry ID: {data.entry.id}</p>
+                  <p className="text-neutral-300 italic text-[11px]">"{messageText}"</p>
+                </div>
+              );
+            } else {
+              outputResult = `Guestbook submission rejected: ${data.error}`;
+              outputType = 'error';
+            }
+          } catch (e: any) {
+            outputResult = `Failed to submit signature: ${e.message}`;
+            outputType = 'error';
+          }
+        } else {
+          try {
+            const res = await fetch('/api/guestbook');
+            const data = await res.json();
+            if (data.success && Array.isArray(data.entries)) {
+              outputResult = (
+                <div className="space-y-2 font-mono text-xs py-1">
+                  <div className="flex items-center justify-between text-neutral-400 border-b border-neutral-700/60 pb-1 text-[11px]">
+                    <span className="text-emerald-400 font-bold">[ SUPABASE CLOUD GUESTBOOK — SIGNATURES ]</span>
+                    <span className="text-[10px] text-neutral-500">Sign command: "guestbook sign &lt;message&gt;"</span>
+                  </div>
+                  <div className="space-y-1.5 pt-1">
+                    {data.entries.slice(0, 5).map((e: any) => (
+                      <div key={e.id} className="p-2 rounded bg-neutral-900/80 border border-neutral-800 text-[11px] space-y-0.5">
+                        <div className="flex items-center justify-between text-neutral-400">
+                          <span className="font-semibold text-neutral-200">{e.author} {e.company ? `(${e.company})` : ''}</span>
+                          <span className="text-[10px] text-neutral-500">{new Date(e.timestamp).toLocaleDateString()}</span>
+                        </div>
+                        <p className="text-neutral-300">"{e.message}"</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+          } catch (e: any) {
+            outputResult = `Failed to query guestbook: ${e.message}`;
+            outputType = 'error';
+          }
+        }
+        break;
+      }
+
+      case 'dbstatus':
+      case 'supabase': {
+        try {
+          const res = await fetch('/api/telemetry');
+          const data = await res.json();
+          outputResult = (
+            <div className="space-y-1.5 font-mono text-xs py-1">
+              <div className="text-emerald-400 font-bold flex items-center justify-between border-b border-neutral-700/60 pb-1">
+                <span>[ Supabase PostgreSQL Node Telemetry ]</span>
+                <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                  {data.database.status}
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] text-neutral-300 pt-1">
+                <p><span className="text-neutral-500 w-28 inline-block">Provider:</span> {data.database.provider.toUpperCase()}</p>
+                <p><span className="text-neutral-500 w-28 inline-block">Query Ping:</span> {data.database.latencyMs} ms</p>
+                <p><span className="text-neutral-500 w-28 inline-block">Cloud Config:</span> {data.database.isCloudConfigured ? 'PRODUCTION' : 'LOCAL FALLBACK'}</p>
+                <p><span className="text-neutral-500 w-28 inline-block">Edge Region:</span> {data.telemetry.region}</p>
+                <p><span className="text-neutral-500 w-28 inline-block">Total Visitors:</span> {data.telemetry.totalVisitors}</p>
+                <p><span className="text-neutral-500 w-28 inline-block">Guestbook Rows:</span> {data.telemetry.totalGuestbookEntries}</p>
+              </div>
+            </div>
+          );
+        } catch (e: any) {
+          outputResult = `Error pinging telemetry: ${e.message}`;
+          outputType = 'error';
+        }
+        break;
+      }
 
       case 'clear':
         setHistory([]);

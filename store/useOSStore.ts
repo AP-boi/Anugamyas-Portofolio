@@ -227,6 +227,16 @@ export const useOSStore = create<OSStoreState>((set, get) => ({
       activeAppId: id,
       maxZIndex: nextZ,
     });
+
+    // Fire-and-forget telemetry update to Supabase
+    const session = get().currentUser;
+    if (typeof window !== 'undefined' && session?.id) {
+      fetch('/api/visitors', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: session.id, pageVisited: id }),
+      }).catch(() => {});
+    }
   },
 
   closeWindow: (id: AppId) => {

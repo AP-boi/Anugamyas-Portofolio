@@ -20,6 +20,10 @@ import {
   ShieldCheck,
   Moon,
   VolumeX,
+  Database,
+  RefreshCw,
+  Send,
+  MessageSquare,
 } from 'lucide-react';
 import { ThemeToggleButton1 } from '@/components/ui/skiper-ui/skiper4';
 
@@ -79,7 +83,7 @@ const ACCENT_COLORS = [
   { id: 'slate', name: 'Graphite', class: 'bg-slate-600' },
 ];
 
-type SettingsSection = 'appearance' | 'wallpaper' | 'displays' | 'network' | 'sound' | 'battery' | 'general';
+type SettingsSection = 'appearance' | 'wallpaper' | 'displays' | 'network' | 'sound' | 'battery' | 'general' | 'database';
 
 export const SystemSettingsApp: React.FC = () => {
   const {
@@ -100,6 +104,7 @@ export const SystemSettingsApp: React.FC = () => {
     setAccentColor,
     nightShift,
     setNightShift,
+    currentUser,
   } = useOSStore();
 
   const [activeSection, setActiveSection] = useState<SettingsSection>('appearance');
@@ -108,6 +113,71 @@ export const SystemSettingsApp: React.FC = () => {
   const [trueTone, setTrueTone] = useState(true);
   const [autoTheme, setAutoTheme] = useState(false);
 
+  // Cloud & Supabase DB State
+  const [dbTelemetry, setDbTelemetry] = useState<any>(null);
+  const [guestbookEntries, setGuestbookEntries] = useState<any[]>([]);
+  const [isLoadingDb, setIsLoadingDb] = useState(false);
+  const [gbAuthor, setGbAuthor] = useState('');
+  const [gbMessage, setGbMessage] = useState('');
+  const [isSubmittingGb, setIsSubmittingGb] = useState(false);
+  const [gbStatusMessage, setGbStatusMessage] = useState<string | null>(null);
+
+  const fetchDatabaseInfo = async () => {
+    setIsLoadingDb(true);
+    try {
+      const [telemetryRes, guestbookRes] = await Promise.all([
+        fetch('/api/telemetry'),
+        fetch('/api/guestbook'),
+      ]);
+      const tData = await telemetryRes.json();
+      const gData = await guestbookRes.json();
+      if (tData.success) setDbTelemetry(tData);
+      if (gData.success) setGuestbookEntries(gData.entries || []);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoadingDb(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeSection === 'database') {
+      fetchDatabaseInfo();
+    }
+  }, [activeSection]);
+
+  const handleSignGuestbook = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!gbMessage.trim() || isSubmittingGb) return;
+    setIsSubmittingGb(true);
+    setGbStatusMessage(null);
+    try {
+      const res = await fetch('/api/guestbook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          author: gbAuthor.trim() || currentUser?.name || 'Portfolio Explorer',
+          role: currentUser?.role || 'Visitor',
+          company: currentUser?.company || 'Community',
+          message: gbMessage.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setGbMessage('');
+        setGbStatusMessage('✓ Signature recorded in Supabase database!');
+        fetchDatabaseInfo();
+        setTimeout(() => setGbStatusMessage(null), 3500);
+      } else {
+        setGbStatusMessage(`Error: ${data.error}`);
+      }
+    } catch (err: any) {
+      setGbStatusMessage(`Error: ${err.message}`);
+    } finally {
+      setIsSubmittingGb(false);
+    }
+  };
+
   const navItems = [
     { id: 'appearance' as SettingsSection, label: 'Appearance', icon: Sun, color: 'bg-blue-500 text-white' },
     { id: 'wallpaper' as SettingsSection, label: 'Wallpaper', icon: ImageIcon, color: 'bg-cyan-500 text-white' },
@@ -115,6 +185,7 @@ export const SystemSettingsApp: React.FC = () => {
     { id: 'network' as SettingsSection, label: 'Wi-Fi & Network', icon: Wifi, color: 'bg-blue-600 text-white' },
     { id: 'sound' as SettingsSection, label: 'Sound', icon: Volume2, color: 'bg-red-500 text-white' },
     { id: 'battery' as SettingsSection, label: 'Battery', icon: Battery, color: 'bg-emerald-500 text-white' },
+    { id: 'database' as SettingsSection, label: 'Cloud & Supabase DB', icon: Database, color: 'bg-emerald-600 text-white' },
     { id: 'general' as SettingsSection, label: 'General / About', icon: Settings, color: 'bg-slate-500 text-white' },
   ];
 
@@ -642,6 +713,157 @@ export const SystemSettingsApp: React.FC = () => {
                 <span>GitHub</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
+            </div>
+          </div>
+        )}
+
+        {/* 8. Cloud & Supabase DB Section */}
+        {activeSection === 'database' && (
+          <div className="space-y-4 max-w-2xl animate-fadeIn">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <div>
+                <h3 className="text-xl font-serif font-medium tracking-tight text-slate-900 dark:text-white">
+                  Cloud &amp; Supabase Database
+                </h3>
+                <p className="text-xs text-slate-500 font-mono mt-0.5">
+                  Live PostgreSQL persistence, session telemetry, and public guestbook
+                </p>
+              </div>
+              <button
+                onClick={fetchDatabaseInfo}
+                disabled={isLoadingDb}
+                className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-mono flex items-center gap-1.5 border border-slate-300 dark:border-slate-700 btn-tactile"
+                title="Refresh Cloud Telemetry"
+              >
+                <RefreshCw className={`w-3 h-3 ${isLoadingDb ? 'animate-spin' : ''}`} />
+                <span>Refresh</span>
+              </button>
+            </div>
+
+            {/* Cloud Connection Status Card */}
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-tactile space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-xs font-bold font-mono text-slate-900 dark:text-white uppercase">
+                    Status: {dbTelemetry?.database?.status || 'CONNECTED'}
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                  {dbTelemetry?.database?.isCloudConfigured ? 'SUPABASE POSTGRESQL' : 'LOCAL RESILIENT FALLBACK'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs">
+                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[9px] text-slate-500 uppercase">QUERY PING</span>
+                  <div className="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+                    {dbTelemetry?.database?.latencyMs ?? 2} ms
+                  </div>
+                </div>
+                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[9px] text-slate-500 uppercase">TOTAL VISITORS</span>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">
+                    {dbTelemetry?.telemetry?.totalVisitors || 0}
+                  </div>
+                </div>
+                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[9px] text-slate-500 uppercase">TODAY VISITS</span>
+                  <div className="text-xs font-bold text-blue-600 dark:text-blue-400 mt-0.5">
+                    {dbTelemetry?.telemetry?.todayVisits || 0}
+                  </div>
+                </div>
+                <div className="p-2 bg-slate-50 dark:bg-slate-800/60 rounded-lg border border-slate-200 dark:border-slate-700">
+                  <span className="text-[9px] text-slate-500 uppercase">GUESTBOOK ROWS</span>
+                  <div className="text-xs font-bold text-amber-600 dark:text-amber-400 mt-0.5">
+                    {guestbookEntries.length}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sign Guestbook Form */}
+            <form
+              onSubmit={handleSignGuestbook}
+              className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-tactile space-y-3"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <MessageSquare className="w-3.5 h-3.5 text-blue-500" />
+                  <span>Leave a Guestbook Signature</span>
+                </span>
+                {gbStatusMessage && (
+                  <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold animate-fadeIn">
+                    {gbStatusMessage}
+                  </span>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <input
+                  type="text"
+                  placeholder="Your Name (e.g. Sundar Pichai)"
+                  value={gbAuthor}
+                  onChange={(e) => setGbAuthor(e.target.value)}
+                  className="sm:col-span-1 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none text-slate-900 dark:text-white placeholder:text-slate-400"
+                />
+                <input
+                  type="text"
+                  placeholder="Write a message or impression on the portfolio..."
+                  value={gbMessage}
+                  onChange={(e) => setGbMessage(e.target.value)}
+                  className="sm:col-span-2 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none text-slate-900 dark:text-white placeholder:text-slate-400"
+                  required
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-slate-500 font-mono">
+                  Stored directly in Supabase public.guestbook table
+                </span>
+                <button
+                  type="submit"
+                  disabled={!gbMessage.trim() || isSubmittingGb}
+                  className="px-3.5 py-1.5 rounded-lg bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-950 text-xs font-semibold hover:bg-neutral-800 dark:hover:bg-neutral-200 disabled:opacity-40 transition-all btn-tactile flex items-center gap-1.5 shadow-tactile"
+                >
+                  <Send className="w-3 h-3" />
+                  <span>{isSubmittingGb ? 'Submitting...' : 'Sign Guestbook'}</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Verified Signatures Feed */}
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200/90 dark:border-slate-800 shadow-tactile space-y-3">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 font-mono">
+                  Recent Verified Signatures ({guestbookEntries.length})
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono">Real-time feed</span>
+              </div>
+
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                {guestbookEntries.length === 0 ? (
+                  <p className="text-xs text-slate-500 py-4 text-center">No signatures found. Be the first to sign!</p>
+                ) : (
+                  guestbookEntries.map((item: any) => (
+                    <div
+                      key={item.id}
+                      className="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-1 text-xs"
+                    >
+                      <div className="flex items-center justify-between text-slate-500 font-mono text-[11px]">
+                        <span className="font-semibold text-slate-900 dark:text-white">
+                          {item.author} {item.company ? `(${item.company})` : ''}
+                        </span>
+                        <span>{new Date(item.timestamp).toLocaleDateString()}</span>
+                      </div>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
+                        "{item.message}"
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         )}
