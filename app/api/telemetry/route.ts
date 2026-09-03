@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
       const store = getMockStore();
       totalVisitors = store.visitors.length;
       totalGuestbook = store.guestbook.length;
-      todayVisits = store.dailyAnalytics[todayKey]?.visits || 48;
-      todayLogins = store.dailyAnalytics[todayKey]?.logins || 14;
+      todayVisits = store.dailyAnalytics[todayKey]?.visits || 0;
+      todayLogins = store.dailyAnalytics[todayKey]?.logins || 0;
     }
 
     return NextResponse.json({

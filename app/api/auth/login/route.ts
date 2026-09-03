@@ -3,7 +3,7 @@ import { VisitorSession, VisitorRecord } from '@/types/os';
 import { getClientIp, checkRateLimit, createRateLimitResponse } from '@/lib/rateLimit';
 import { getSupabaseAdminClient, getSupabaseClient, getMockStore, isSupabaseConfigured } from '@/lib/supabaseClient';
 
-const ADMIN_SECRET = process.env.ADMIN_SECRET || '2026';
+const ADMIN_SECRET = process.env.ADMIN_SECRET || '175039';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const { name, role, company, contact, message, isGuest, adminPassword, pagesVisited } = body;
 
-    const isAdmin = adminPassword === ADMIN_SECRET || adminPassword === 'anugamya2026';
+    const isAdmin = adminPassword === ADMIN_SECRET;
 
     if (adminPassword && !isAdmin) {
       return NextResponse.json(

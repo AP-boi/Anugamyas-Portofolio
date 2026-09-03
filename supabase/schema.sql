@@ -76,17 +76,13 @@ CREATE POLICY "Allow public insert on guestbook" ON public.guestbook FOR INSERT 
 
 CREATE POLICY "Allow public all on daily_analytics" ON public.daily_analytics FOR ALL USING (true);
 
--- 7. Insert Seed Data
-INSERT INTO public.visitors (id, name, role, company, contact, message, is_guest, is_admin, device, os, browser, city, country, pages_visited, session_count)
-VALUES
-  ('seed-1', 'Sundar Pichai', 'CEO', 'Alphabet & Google', 'sundar@google.com', 'Remarkable WebGL engineering on the portfolio OS!', false, false, 'Desktop', 'macOS', 'Chrome', 'Mountain View', 'United States', ARRAY['projects', 'github', 'achievements', 'terminal'], 3),
-  ('seed-2', 'Tech Recruiter', 'Staff Technical Recruiter', 'Microsoft AI', 'recruiter@microsoft.com', 'Impressed by the Bharat Dekho Gemini AI integration.', false, false, 'Desktop', 'Windows', 'Edge', 'Seattle', 'United States', ARRAY['projects', 'achievements', 'ai-assistant'], 2),
-  ('seed-3', 'Open Source Contributor', 'Full Stack Engineer', 'Vercel Ecosystem', 'github.com/developer', 'Smooth 60 FPS liquid glass physics. Loved the Tetris AI!', false, false, 'Mobile', 'iOS', 'Safari', 'San Francisco', 'United States', ARRAY['github', 'tetris', 'camera'], 1)
-ON CONFLICT (id) DO NOTHING;
+-- 7. Purge any mock/placeholder records from previous seeds
+DELETE FROM public.visitors 
+WHERE name IN ('Sundar Pichai', 'Tech Recruiter', 'Open Source Contributor', 'Guillermo Rauch', 'Linus Torvalds', 'Alex River')
+   OR company IN ('Alphabet & Google', 'Microsoft AI', 'Vercel Ecosystem', 'Apple CoreOS');
 
-INSERT INTO public.guestbook (id, author, role, company, message, verified)
-VALUES
-  ('gb-1', 'Sundar Pichai', 'CEO', 'Alphabet', 'Love the creativity and clean Next.js architecture. Great work Anugamya!', true),
-  ('gb-2', 'Tech Recruiter', 'Recruiter', 'Microsoft AI', 'Great portfolio! Excited to discuss potential AI software engineering opportunities.', true),
-  ('gb-3', 'Guillermo Rauch', 'CEO', 'Vercel', 'Incredible desktop simulator crafted on Next.js 14 and edge rendering.', true)
-ON CONFLICT (id) DO NOTHING;
+DELETE FROM public.guestbook 
+WHERE author IN ('Sundar Pichai', 'Tech Recruiter', 'Open Source Contributor', 'Guillermo Rauch', 'Linus Torvalds', 'Alex River')
+   OR company IN ('Alphabet & Google', 'Microsoft AI', 'Vercel Ecosystem', 'Apple CoreOS');
+
+

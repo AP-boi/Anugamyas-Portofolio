@@ -14,12 +14,32 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = Math.min(parseInt(searchParams.get('limit') || '25', 10), 100);
 
+    const FAKE_NAMES = ['sundar pichai', 'tech recruiter', 'open source contributor', 'guillermo rauch', 'linus torvalds', 'alex river'];
+    const FAKE_COMPANIES = ['alphabet & google', 'microsoft ai', 'vercel ecosystem', 'apple coreos'];
+
+    const isFake = (name?: string, company?: string) => {
+      const n = (name || '').trim().toLowerCase();
+      const c = (company || '').trim().toLowerCase();
+      return FAKE_NAMES.some((fake) => n.includes(fake)) || FAKE_COMPANIES.some((fake) => c.includes(fake));
+    };
+
     let visitorsList: VisitorRecord[] = [];
     let totalCount = 0;
 
     if (isSupabaseConfigured()) {
       const supabase = getSupabaseAdminClient() || getSupabaseClient();
       if (supabase) {
+        // Asynchronously purge any legacy mock records from database
+        const adminClient = getSupabaseAdminClient();
+        if (adminClient) {
+          Promise.resolve(
+            adminClient
+              .from('visitors')
+              .delete()
+              .in('name', ['Sundar Pichai', 'Tech Recruiter', 'Open Source Contributor', 'Guillermo Rauch', 'Linus Torvalds', 'Alex River'])
+          ).catch(() => {});
+        }
+
         const { data, count, error } = await supabase
           .from('visitors')
           .select('*', { count: 'exact' })
@@ -27,35 +47,39 @@ export async function GET(req: NextRequest) {
           .limit(limit);
 
         if (!error && data) {
-          visitorsList = data.map((v: any) => ({
-            id: v.id,
-            name: v.name,
-            role: v.role,
-            company: v.company,
-            contact: v.contact || undefined,
-            message: v.message || undefined,
-            isGuest: v.is_guest,
-            isAdmin: v.is_admin,
-            loginTime: v.login_time,
-            lastActive: v.last_active,
-            device: v.device || 'Desktop',
-            os: v.os || 'macOS',
-            browser: v.browser || 'Chrome',
-            city: v.city || 'Global',
-            country: v.country || 'Global',
-            pagesVisited: v.pages_visited || [],
-            sessionCount: v.session_count || 1,
-          }));
-          totalCount = count || visitorsList.length;
+          visitorsList = data
+            .filter((v: any) => !isFake(v.name, v.company))
+            .map((v: any) => ({
+              id: v.id,
+              name: v.name,
+              role: v.role,
+              company: v.company,
+              contact: v.contact || undefined,
+              message: v.message || undefined,
+              isGuest: v.is_guest,
+              isAdmin: v.is_admin,
+              loginTime: v.login_time,
+              lastActive: v.last_active,
+              device: v.device || 'Desktop',
+              os: v.os || 'macOS',
+              browser: v.browser || 'Chrome',
+              city: v.city || 'Global',
+              country: v.country || 'Global',
+              pagesVisited: v.pages_visited || [],
+              sessionCount: v.session_count || 1,
+            }));
+          totalCount = visitorsList.length;
         }
       }
     }
 
     if (visitorsList.length === 0) {
-      // Use fallback store
+      // Use fallback store and filter out any accidental mock entries
       const store = getMockStore();
-      visitorsList = store.visitors.slice(0, limit);
-      totalCount = store.visitors.length;
+      visitorsList = store.visitors
+        .filter((v) => !isFake(v.name, v.company))
+        .slice(0, limit);
+      totalCount = visitorsList.length;
     }
 
     // Compute basic telemetry breakdowns

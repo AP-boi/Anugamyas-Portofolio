@@ -18,11 +18,28 @@ export async function GET(req: NextRequest) {
     const rateLimit = checkRateLimit(`guestbook-get:${ip}`, { limit: 60, windowMs: 60000 });
     if (!rateLimit.success) return createRateLimitResponse(rateLimit);
 
+    const FAKE_AUTHORS = ['sundar pichai', 'tech recruiter', 'open source contributor', 'guillermo rauch', 'linus torvalds', 'alex river'];
+    const isFake = (author?: string, company?: string) => {
+      const a = (author || '').trim().toLowerCase();
+      const c = (company || '').trim().toLowerCase();
+      return FAKE_AUTHORS.some((fake) => a.includes(fake)) || ['alphabet', 'google', 'microsoft', 'vercel ecosystem'].some((fake) => c.includes(fake));
+    };
+
     let entries: GuestbookEntry[] = [];
 
     if (isSupabaseConfigured()) {
       const supabase = getSupabaseAdminClient() || getSupabaseClient();
       if (supabase) {
+        const adminClient = getSupabaseAdminClient();
+        if (adminClient) {
+          Promise.resolve(
+            adminClient
+              .from('guestbook')
+              .delete()
+              .in('author', ['Sundar Pichai', 'Tech Recruiter', 'Open Source Contributor', 'Guillermo Rauch', 'Linus Torvalds', 'Alex River'])
+          ).catch(() => {});
+        }
+
         const { data, error } = await supabase
           .from('guestbook')
           .select('*')
@@ -30,22 +47,24 @@ export async function GET(req: NextRequest) {
           .limit(50);
 
         if (!error && data) {
-          entries = data.map((item: any) => ({
-            id: item.id,
-            author: item.author,
-            role: item.role || undefined,
-            company: item.company || undefined,
-            message: item.message,
-            timestamp: item.timestamp,
-            verified: item.verified ?? true,
-          }));
+          entries = data
+            .filter((item: any) => !isFake(item.author, item.company))
+            .map((item: any) => ({
+              id: item.id,
+              author: item.author,
+              role: item.role || undefined,
+              company: item.company || undefined,
+              message: item.message,
+              timestamp: item.timestamp,
+              verified: item.verified ?? true,
+            }));
         }
       }
     }
 
     if (entries.length === 0) {
       const store = getMockStore();
-      entries = [...store.guestbook];
+      entries = store.guestbook.filter((item) => !isFake(item.author, item.company));
     }
 
     return NextResponse.json({

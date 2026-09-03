@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { ProjectItem } from '@/types/os';
 import {
   Folder,
@@ -18,6 +18,7 @@ import {
   Copy,
   LayoutGrid,
   Table as TableIcon,
+  RotateCw,
 } from 'lucide-react';
 import { sounds } from '@/lib/soundEngine';
 
@@ -26,6 +27,10 @@ interface ProjectSpecItem extends ProjectItem {
   runtimeEngine?: string;
   memoryFootprint?: string;
   benchmarkMetric?: string;
+  stars?: number;
+  forks?: number;
+  updatedAt?: string;
+  source?: string;
 }
 
 const PROJECTS_DATA: ProjectSpecItem[] = [
@@ -372,26 +377,71 @@ export interface MeshTelemetryFrame {
 ];
 
 export const ProjectsApp: React.FC = () => {
+  const [projects, setProjects] = useState<ProjectSpecItem[]>(PROJECTS_DATA);
   const [selectedCategory, setSelectedCategory] = useState<string>('All Projects');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'bento' | 'table'>('bento');
   const [activeProjectId, setActiveProjectId] = useState<string>('proj-1');
   const [copiedSnippet, setCopiedSnippet] = useState<boolean>(false);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [syncSource, setSyncSource] = useState<string>('github-live');
+  const [lastSynced, setLastSynced] = useState<string>('');
 
-  const categories = ['All Projects', 'AI & WebGL', 'Game Development', 'Full-Stack & WebGL', 'Systems & Java', 'UI/UX & Web'];
+  const fetchLiveProjects = useCallback(async (forceRefresh = false) => {
+    try {
+      setIsSyncing(true);
+      const res = await fetch(`/api/projects${forceRefresh ? '?refresh=true' : ''}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success && Array.isArray(data.projects) && data.projects.length > 0) {
+          setProjects(data.projects);
+          setSyncSource(data.source || 'github-live');
+          if (data.lastSynced) {
+            setLastSynced(
+              new Date(data.lastSynced).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            );
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Backend /api/projects request failed, using baseline:', err);
+    } finally {
+      setIsSyncing(false);
+    }
+  }, []);
 
-  const filteredProjects = PROJECTS_DATA.filter((proj) => {
-    const matchesCategory = selectedCategory === 'All Projects' || proj.category === selectedCategory;
-    const matchesSearch =
-      proj.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      proj.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      proj.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  useEffect(() => {
+    fetchLiveProjects();
+  }, [fetchLiveProjects]);
+
+  const categories = useMemo(() => {
+    const defaultCats = [
+      'All Projects',
+      'AI & WebGL',
+      'Game Development',
+      'Full-Stack & WebGL',
+      'Systems & Java',
+      'UI/UX & Web',
+    ];
+    const dynamicCats = Array.from(new Set(projects.map((p) => p.category))).filter(Boolean);
+    return Array.from(new Set(['All Projects', ...dynamicCats, ...defaultCats]));
+  }, [projects]);
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((proj) => {
+      const matchesCategory = selectedCategory === 'All Projects' || proj.category === selectedCategory;
+      const matchesSearch =
+        proj.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        proj.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        proj.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchesCategory && matchesSearch;
+    });
+  }, [projects, selectedCategory, searchQuery]);
 
   const activeProject =
     filteredProjects.find((p) => p.id === activeProjectId) ||
     filteredProjects[0] ||
+    projects[0] ||
     PROJECTS_DATA[0];
 
   const handleCopyCode = (code?: string) => {
@@ -444,6 +494,25 @@ export const ProjectsApp: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
+          {/* Live GitHub Sync Indicator */}
+          <div className="flex items-center space-x-1.5 px-2 py-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700/80 rounded-md text-[11px] font-mono text-neutral-600 dark:text-neutral-300 shadow-tactile">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="hidden sm:inline">GitHub: @AP-boi</span>
+            <button
+              type="button"
+              onClick={() => fetchLiveProjects(true)}
+              disabled={isSyncing}
+              className="p-0.5 rounded hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              title={
+                lastSynced
+                  ? `Synced at ${lastSynced}. Click to re-fetch directly from GitHub.`
+                  : 'Click to re-fetch directly from GitHub.'
+              }
+            >
+              <RotateCw className={`w-3 h-3 ${isSyncing ? 'animate-spin text-blue-500' : ''}`} />
+            </button>
+          </div>
+
           {/* View Toggle */}
           <div className="flex items-center bg-neutral-200/70 dark:bg-neutral-900 p-0.5 rounded-lg border border-neutral-300 dark:border-neutral-800 text-xs">
             <button
@@ -507,8 +576,8 @@ export const ProjectsApp: React.FC = () => {
               const isSelected = selectedCategory === cat;
               const count =
                 cat === 'All Projects'
-                  ? PROJECTS_DATA.length
-                  : PROJECTS_DATA.filter((p) => p.category === cat).length;
+                  ? projects.length
+                  : projects.filter((p) => p.category === cat).length;
 
               return (
                 <button
@@ -537,16 +606,6 @@ export const ProjectsApp: React.FC = () => {
             })}
           </div>
 
-          <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800/80 px-2 space-y-1 text-[11px] font-mono text-neutral-500">
-            <div className="flex justify-between">
-              <span>WCAG RATIO:</span>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold">AAA</span>
-            </div>
-            <div className="flex justify-between">
-              <span>ZERO AI SLOP:</span>
-              <span className="text-neutral-800 dark:text-neutral-200 font-bold">ACTIVE</span>
-            </div>
-          </div>
         </div>
 
         {/* Right Scrollable Viewport */}

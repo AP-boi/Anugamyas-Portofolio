@@ -113,7 +113,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
 
       if (!res.ok || !data.success) {
         if (loginMode === 'admin') {
-          setError('Incorrect passcode. Try "2026".');
+          setError('Incorrect passcode. Access denied.');
         } else {
           setError(data.error || 'Failed to sign in');
         }
@@ -313,7 +313,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                     <User className="w-3.5 h-3.5 text-slate-400 mr-2 flex-shrink-0" />
                     <SmoothInput
                       type="text"
-                      placeholder="e.g. Sundar Pichai, Jane Doe"
+                      placeholder="e.g. Jane Doe, Alex Smith"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"
@@ -409,7 +409,7 @@ export const MacOSLockScreen: React.FC<MacOSLockScreenProps> = ({ onUnlock }) =>
                     <KeyRound className="w-4 h-4 text-slate-400 mr-2 flex-shrink-0" />
                     <SmoothInput
                       type="password"
-                      placeholder="Enter owner passcode ('2026')"
+                      placeholder="Enter owner passcode"
                       value={adminPassword}
                       onChange={(e) => setAdminPassword(e.target.value)}
                       wrapperClassName="bg-transparent dark:bg-transparent border-none p-0 rounded-none shadow-none flex-1"

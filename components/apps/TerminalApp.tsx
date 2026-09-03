@@ -227,11 +227,18 @@ Type "help" to view available system commands.`;
           const res = await fetch('/api/visitors?limit=8');
           const data = await res.json();
           if (data.success && Array.isArray(data.visitors)) {
+            const FAKE_LIST = ['sundar pichai', 'tech recruiter', 'open source contributor', 'guillermo rauch', 'alphabet & google', 'microsoft ai', 'vercel ecosystem'];
+            const cleanVisitors = data.visitors.filter((v: any) => {
+              const n = (v.name || '').toLowerCase();
+              const c = (v.company || '').toLowerCase();
+              return !FAKE_LIST.some((f) => n.includes(f) || c.includes(f));
+            });
+
             outputResult = (
               <div className="space-y-2 font-mono text-xs py-1">
                 <div className="flex items-center justify-between text-neutral-400 border-b border-neutral-700/60 pb-1 text-[11px]">
                   <span className="text-emerald-400 font-bold">[ SUPABASE VISITOR LOGS & TELEMETRY ]</span>
-                  <span>TOTAL: {data.totalCount} SESSIONS ({data.provider.toUpperCase()})</span>
+                  <span>TOTAL: {cleanVisitors.length} SESSIONS ({data.provider.toUpperCase()})</span>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-[11px]">
@@ -245,15 +252,23 @@ Type "help" to view available system commands.`;
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-neutral-800/60">
-                      {data.visitors.map((v: any) => (
-                        <tr key={v.id} className="text-neutral-300">
-                          <td className="py-1 pr-3 font-semibold text-neutral-100">{v.name}</td>
-                          <td className="py-1 pr-3 text-neutral-400">{v.role} ({v.company})</td>
-                          <td className="py-1 pr-3 text-neutral-400">{v.city}, {v.country}</td>
-                          <td className="py-1 pr-3 text-neutral-400">{v.device} • {v.os}</td>
-                          <td className="py-1 text-emerald-400">{new Date(v.lastActive).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                      {cleanVisitors.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="py-4 text-center text-neutral-500 font-mono text-[11px] italic">
+                            No visitor sessions recorded yet. Fresh sessions will appear here as visitors arrive.
+                          </td>
                         </tr>
-                      ))}
+                      ) : (
+                        cleanVisitors.map((v: any) => (
+                          <tr key={v.id} className="text-neutral-300">
+                            <td className="py-1 pr-3 font-semibold text-neutral-100">{v.name}</td>
+                            <td className="py-1 pr-3 text-neutral-400">{v.role} ({v.company})</td>
+                            <td className="py-1 pr-3 text-neutral-400">{v.city}, {v.country}</td>
+                            <td className="py-1 pr-3 text-neutral-400">{v.device} • {v.os}</td>
+                            <td className="py-1 text-emerald-400">{new Date(v.lastActive).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -315,15 +330,21 @@ Type "help" to view available system commands.`;
                     <span className="text-[10px] text-neutral-500">Sign command: "guestbook sign &lt;message&gt;"</span>
                   </div>
                   <div className="space-y-1.5 pt-1">
-                    {data.entries.slice(0, 5).map((e: any) => (
-                      <div key={e.id} className="p-2 rounded bg-neutral-900/80 border border-neutral-800 text-[11px] space-y-0.5">
-                        <div className="flex items-center justify-between text-neutral-400">
-                          <span className="font-semibold text-neutral-200">{e.author} {e.company ? `(${e.company})` : ''}</span>
-                          <span className="text-[10px] text-neutral-500">{new Date(e.timestamp).toLocaleDateString()}</span>
+                    {data.entries.length === 0 ? (
+                      <p className="text-neutral-500 py-1.5 italic text-[11px]">
+                        No signatures recorded yet. Type <span className="text-emerald-400">guestbook sign &lt;message&gt;</span> to leave the first verified entry!
+                      </p>
+                    ) : (
+                      data.entries.slice(0, 5).map((e: any) => (
+                        <div key={e.id} className="p-2 rounded bg-neutral-900/80 border border-neutral-800 text-[11px] space-y-0.5">
+                          <div className="flex items-center justify-between text-neutral-400">
+                            <span className="font-semibold text-neutral-200">{e.author} {e.company ? `(${e.company})` : ''}</span>
+                            <span className="text-[10px] text-neutral-500">{new Date(e.timestamp).toLocaleDateString()}</span>
+                          </div>
+                          <p className="text-neutral-300">"{e.message}"</p>
                         </div>
-                        <p className="text-neutral-300">"{e.message}"</p>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                 </div>
               );

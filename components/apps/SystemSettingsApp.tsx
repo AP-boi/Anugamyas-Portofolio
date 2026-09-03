@@ -803,7 +803,7 @@ export const SystemSettingsApp: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <input
                   type="text"
-                  placeholder="Your Name (e.g. Sundar Pichai)"
+                  placeholder="Your Name (e.g. Jane Doe)"
                   value={gbAuthor}
                   onChange={(e) => setGbAuthor(e.target.value)}
                   className="sm:col-span-1 p-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg outline-none text-slate-900 dark:text-white placeholder:text-slate-400"
